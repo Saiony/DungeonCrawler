@@ -1,0 +1,16 @@
+﻿  SimpleServer.cpp
+  The contents of <optional> are available only with C++17 or later.
+C:\Users\cauec\SimpleMessageSystem\SimpleOnline\NetCommon\net_message.h(45,1): warning C4267: '=': conversion from 'size_t' to 'uint32_t', possible loss of data
+C:\Users\cauec\SimpleMessageSystem\SimpleOnline\NetServer\SimpleServer.cpp(58): message : see reference to function template instantiation 'olc::net::message<T> &olc::net::operator <<<char[386]>(olc::net::message<T> &,const DataType (&))' being compiled
+          with
+          [
+              T=CustomMsgTypes,
+              DataType=char [386]
+          ]
+C:\Users\cauec\SimpleMessageSystem\SimpleOnline\NetServer\SimpleServer.cpp(58): message : see reference to function template instantiation 'olc::net::message<T> &olc::net::operator <<<char[386]>(olc::net::message<T> &,const DataType (&))' being compiled
+          with
+          [
+              T=CustomMsgTypes,
+              DataType=char [386]
+          ]
+  NetServer.vcxproj -> C:\Users\cauec\SimpleMessageSystem\SimpleOnline\x64\Debug\NetServer.exe
