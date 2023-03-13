@@ -142,7 +142,7 @@ namespace dungeon
                 return false;
             }
 
-            virtual auto OnClientDisconnect(std::shared_ptr<connection<T>> client) -> void
+            virtual auto on_client_disconnect(std::shared_ptr<connection<T>> client) -> void
             {
             }
 

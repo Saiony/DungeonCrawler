@@ -30,7 +30,7 @@ protected:
 		return true;
 	}
 
-	virtual void OnClientDisconnect(std::shared_ptr<dungeon::network::connection<CustomMsgTypes>> client) override
+	virtual void on_client_disconnect(std::shared_ptr<dungeon::network::connection<CustomMsgTypes>> client) override
 	{
 		std::cout << "Removing client [" << client->get_id() << "]\n";
 	}

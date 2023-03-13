@@ -56,7 +56,7 @@ namespace dungeon
                     return;
 
                 asio::async_connect(socket_, endpoints,
-                                    [this](std::error_code ec, asio::ip::tcp::endpoint endpoint)
+                                    [this](std::error_code ec, asio::ip::tcp::endpoint const endpoint)
                                     {
                                         if (!ec)
                                         {
