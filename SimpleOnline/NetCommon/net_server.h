@@ -63,11 +63,11 @@ namespace dungeon
                         std::shared_ptr<connection<T>> new_con = std::make_shared<connection<T>>(
                             connection<T>::owner::server, asio_context_, std::move(socket), messages_in_);
 
-                        if (OnClientConnect(new_con))
+                        if (on_client_connect(new_con))
                         {
                             deq_connections_.push_back(std::move(new_con));
-                            deq_connections_.back()->ConnectToClient(id_counter_++);
-                            std::cout << "[" << deq_connections_.back()->GetID() << "] Connection Approved\n";
+                            deq_connections_.back()->connect_to_client(id_counter_++);
+                            std::cout << "[" << deq_connections_.back()->get_id() << "] Connection Approved\n";
                         }
                         else
                         {
@@ -130,7 +130,7 @@ namespace dungeon
                 while (message_count < max_messages && !messages_in_.empty())
                 {
                     auto msg = messages_in_.pop_front();
-                    OnMessage(msg.remote, msg.msg);
+                    on_message(msg.remote, msg.msg);
 
                     message_count++;
                 }

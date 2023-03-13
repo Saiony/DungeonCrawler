@@ -30,7 +30,7 @@ namespace dungeon
 
                     con = std::make_unique<connection<T>>(connection<T>::owner::client, ioContext,
                                                           asio::ip::tcp::socket(ioContext), messagesIn);
-                    con->ConnectToServer(endpoints);
+                    con->connect_to_server(endpoints);
                     threadContext = std::thread([this]() { ioContext.run(); });
                 }
                 catch (std::exception& e)
@@ -45,7 +45,7 @@ namespace dungeon
             void disconnect()
             {
                 if (is_connected())
-                    con->Disconnect();
+                    con->disconnect();
 
                 //Make sure we're done with the asio context and the thread
                 ioContext.stop();
@@ -59,7 +59,7 @@ namespace dungeon
             bool is_connected()
             {
                 if (con)
-                    return con->IsConnected();
+                    return con->is_connected();
                 else
                     return false;
             }
@@ -68,7 +68,7 @@ namespace dungeon
             void send(const message<T>& msg)
             {
                 if (is_connected())
-                    con->Send(msg);
+                    con->send(msg);
             }
 
             //Retrieve queue of messages from server
