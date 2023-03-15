@@ -11,13 +11,13 @@ enum class CustomMsgTypes : uint32_t
 	ServerMessage,
 };
 
-class CustomClient : public dungeon::network::client_interface<CustomMsgTypes>
+class CustomClient : public dungeon::server::client_interface<CustomMsgTypes>
 {
 public:
 	void ConsultSpell(const char* spell)
 	{
 		std::cout << "\nRetrieving knowledge from the Arcane realm for [" << spell << "] spell...\n";
-		dungeon::network::message<CustomMsgTypes> msg;
+		dungeon::server::message<CustomMsgTypes> msg;
 		msg.header.id = CustomMsgTypes::SpellConsult;
 
 		//Copying to an array because we can't simply copy char* data
@@ -47,8 +47,8 @@ int main()
 	{
 		handle_messages(client);
 
-		if (inputEnabled)
-			handle_input(client);
+		// if (inputEnabled)
+		// 	handle_input(client);
 	}
 
 	return 0;
@@ -103,7 +103,7 @@ void handle_messages(CustomClient& client)
 		{
 		case CustomMsgTypes::ServerMessage:
 
-			std::cout << "\the oracle says...\n\n_______________________\n" << msg.body.data() << "\n_______________________\n\n";
+			std::cout << "the oracle says...\n\n_______________________\n" << msg.body.data() << "\n_______________________\n\n";
 			inputEnabled = true;
 			break;
 		default:

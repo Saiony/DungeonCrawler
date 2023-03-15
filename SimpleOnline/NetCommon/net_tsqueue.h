@@ -3,7 +3,7 @@
 
 namespace dungeon
 {
-    namespace network
+    namespace server
     {
         template <typename T>
         class tsqueue

@@ -3,7 +3,7 @@
 
 namespace dungeon
 {
-    namespace network
+    namespace server
     {
         template <typename T>
         struct message_header

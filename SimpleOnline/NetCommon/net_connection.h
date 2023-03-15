@@ -6,7 +6,7 @@
 
 namespace dungeon
 {
-    namespace network
+    namespace server
     {
         template <typename T>
         class connection : public std::enable_shared_from_this<connection<T>>
@@ -19,9 +19,8 @@ namespace dungeon
             };
 
         public:
-            connection(owner parent, asio::io_context& asioContext, asio::ip::tcp::socket socket,
-                       tsqueue<owned_message<T>>& qIn)
-                : asio_context_(asioContext), socket_(std::move(socket)), messages_in_(qIn)
+            connection(owner parent, asio::io_context& asioContext, asio::ip::tcp::socket socket, tsqueue<owned_message<T>>& qIn)
+                        : asio_context_(asioContext), socket_(std::move(socket)), messages_in_(qIn)
             {
                 owner_type_ = parent;
             }
