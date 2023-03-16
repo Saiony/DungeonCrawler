@@ -28,7 +28,7 @@ namespace dungeon
                     asio::ip::tcp::resolver resolver(ioContext);
                     asio::ip::tcp::resolver::results_type endpoints = resolver.resolve(host, std::to_string(port));
 
-                    con = std::make_unique<connection<T>>(connection<T>::owner::client, ioContext,
+                    con = std::make_unique<connection<T>>(owner::client, ioContext,
                                                           asio::ip::tcp::socket(ioContext), messagesIn);
                     con->connect_to_server(endpoints);
                     threadContext = std::thread([this]() { ioContext.run(); });

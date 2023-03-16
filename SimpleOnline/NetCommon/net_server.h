@@ -116,7 +116,7 @@ namespace dungeon
                                              return con->get_id() == client_id;
                                          });
                 auto client = *client_it;
-                if (client && client->is_connected())
+                if (client_it != end(connections_) && client->is_connected())
                 {
                     client->send(msg);
                 }
@@ -129,28 +129,21 @@ namespace dungeon
                 }
             }
 
-            void message_all_clients(const message<T>& msg, std::shared_ptr<connection<T>> ignore_client = nullptr)
-            {
-                bool invalid_client_exists = false;
-
-                for (auto& client : connections_)
+            void multicast_message(const message<T>& msg, vector<uint32_t> client_ids)
+            {                
+                for_each(begin(connections_), end(connections_), [client_ids, msg](shared_ptr<connection<T>> con)
                 {
-                    if (client && client->is_connected())
-                    {
-                        if (client != ignore_client)
-                            client->send(msg);
-                    }
-                    else
-                    {
-                        on_client_disconnect(client);
-                        client.reset();
-                        invalid_client_exists = true;
-                    }
+                    if(any_of(begin(client_ids), end(client_ids), [con](uint32_t client_id){ return con->id_ == client_id;}))
+                        con->send(msg);
+                });
+            }
 
-                    if (invalid_client_exists)
-                        connections_.erase(std::remove(connections_.begin(), connections_.end(), client),
-                                           connections_.end());
-                }
+            void broadcast_message(const message<T>& msg)
+            {
+                for_each(begin(connections_), end(connections_), [msg](shared_ptr<connection<T>> con)
+                {
+                    con->send(msg);
+                });
             }
 
             void update(const size_t max_messages = -1, const bool wait = false)

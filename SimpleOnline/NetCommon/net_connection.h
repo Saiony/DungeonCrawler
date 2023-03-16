@@ -8,17 +8,25 @@ namespace dungeon
 {
     namespace server
     {
+        enum class owner
+        {
+            server,
+            client
+        };
+        
         template <typename T>
         class connection : public std::enable_shared_from_this<connection<T>>
-        {
+        {            
+        protected:
+            asio::ip::tcp::socket socket_;
+            asio::io_context& asio_context_;
+            tsqueue<message<T>> messages_out_;
+            tsqueue<owned_message<T>>& messages_in_;
+            message<T> temporary_message_in_;
+            owner owner_type_ = owner::server;
         public:
-            enum class owner
-            {
-                server,
-                client
-            };
+            uint32_t id_ = 0;
 
-        public:
             connection(owner parent, asio::io_context& asioContext, asio::ip::tcp::socket socket, tsqueue<owned_message<T>>& qIn)
                         : asio_context_(asioContext), socket_(std::move(socket)), messages_in_(qIn)
             {
@@ -77,7 +85,7 @@ namespace dungeon
             }
 
         public:
-            void send(const message<T>& msg)
+            void send(const message<T> &msg)
             {
                 asio::post(asio_context_,
                            [this, msg]()
@@ -189,15 +197,6 @@ namespace dungeon
 
                 read_header();
             }
-
-        protected:
-            asio::ip::tcp::socket socket_;
-            asio::io_context& asio_context_;
-            tsqueue<message<T>> messages_out_;
-            tsqueue<owned_message<T>>& messages_in_;
-            message<T> temporary_message_in_;
-            owner owner_type_ = owner::server;
-            uint32_t id_ = 0;
         };
     }
 }

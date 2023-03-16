@@ -20,11 +20,11 @@ private:
 
 public:
     vector<player> players_;
+
     custom_server(const uint16_t n_port) : server_interface<CustomMsgTypes>(n_port)
     {
     }
 
-    
 
 protected:
     bool can_client_connect(shared_ptr<connection<CustomMsgTypes>> client) override
@@ -42,13 +42,12 @@ protected:
         players_.push_back(player);
     }
 
-    void on_client_disconnect(shared_ptr<dungeon::server::connection<CustomMsgTypes>> client) override
+    void on_client_disconnect(shared_ptr<connection<CustomMsgTypes>> client) override
     {
         cout << "Removing client [" << client->get_id() << "]\n";
     }
 
-    void on_message(const shared_ptr<dungeon::server::connection<CustomMsgTypes>> client,
-                    dungeon::server::message<CustomMsgTypes>& msg) override
+    void on_message(const shared_ptr<connection<CustomMsgTypes>> client, message<CustomMsgTypes>& msg) override
     {
         switch (msg.header.id)
         {
@@ -66,7 +65,7 @@ protected:
                     msg_body += msg.body[i];
                 }
 
-                dungeon::server::message<CustomMsgTypes> answer;
+                message<CustomMsgTypes> answer;
 
                 if (msg_body == spells_[0])
                     answer <<
@@ -112,17 +111,21 @@ int main()
 
         if (GetKeyState('A') & 0x8000)
         {
-            dungeon::server::message<CustomMsgTypes> msg;
+            message<CustomMsgTypes> msg;
             msg.header.id = CustomMsgTypes::ServerMessage;
             msg << "Msg automatica";
-            server.message_client(server.players_[0].id, msg);
+            //server.message_client(server.players_[0].private_id, msg);
+            server.broadcast_message(msg);
         }
         if (GetKeyState('B') & 0x8000)
         {
-            dungeon::server::message<CustomMsgTypes> msg;
+            message<CustomMsgTypes> msg;
             msg.header.id = CustomMsgTypes::ServerMessage;
-            msg << "Msg automatica ";
-            server.message_client(server.players_[1].id, msg);
+            msg << "Msg automatica";
+            // server.message_client(server.players_[1].private_id, msg);
+
+            const vector<uint32_t> clients {10'000, 10'001};
+            server.multicast_message(msg, clients);
         }
     }
 }
