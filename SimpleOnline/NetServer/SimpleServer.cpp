@@ -105,6 +105,8 @@ int main()
     custom_server server(60000);
     server.start();
 
+    const player player(10'000);
+
     while (true)
     {
         server.update(150, false);
@@ -113,7 +115,7 @@ int main()
         {
             message<CustomMsgTypes> msg;
             msg.header.id = CustomMsgTypes::ServerMessage;
-            msg << "Msg automatica";
+            msg << player;
             //server.message_client(server.players_[0].private_id, msg);
             server.broadcast_message(msg);
         }

@@ -1,6 +1,9 @@
 #include<iostream>
 #include<dungeon_network.h>
-#include <iomanip>
+
+#include "Player.h"
+
+using namespace dungeon::server;
 
 enum class CustomMsgTypes : uint32_t
 {
@@ -98,12 +101,14 @@ void handle_messages(CustomClient& client)
 	if (!client.incoming().empty())
 	{
 		const auto msg = client.incoming().pop_front().msg;
+		player player;
 
 		switch (msg.header.id)
 		{
 		case CustomMsgTypes::ServerMessage:
 
 			std::cout << "the oracle says...\n\n_______________________\n" << msg.body.data() << "\n_______________________\n\n";
+			memcpy(&player, msg.body.data(), msg.header.body_size);
 			inputEnabled = true;
 			break;
 		default:

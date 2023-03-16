@@ -39,8 +39,7 @@ namespace dungeon
             }
 
         public:
-            server_interface(const uint16_t port) : asio_acceptor_(asio_context_,
-                                                                   asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
+            server_interface(const uint16_t port) : asio_acceptor_(asio_context_, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
             {
             }
 
@@ -89,7 +88,7 @@ namespace dungeon
                     else
                     {
                         cout << "[SERVER] New Connection: " << socket.remote_endpoint() << "\n";
-                        shared_ptr<connection<T>> new_con = make_shared<connection<T>>(connection<T>::owner::server, asio_context_, std::move(socket), messages_in_);
+                        shared_ptr<connection<T>> new_con = make_shared<connection<T>>(owner::server, asio_context_, std::move(socket), messages_in_);
 
                         if (can_client_connect(new_con))
                         {

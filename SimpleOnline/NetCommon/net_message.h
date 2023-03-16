@@ -40,7 +40,7 @@ namespace dungeon
 
                 size_t messageSize = msg.body.size();
                 msg.body.resize(messageSize + sizeof(DataType));
-                std::memcpy(msg.body.data() + messageSize, &data, sizeof(DataType));
+                memcpy(msg.body.data() + messageSize, &data, sizeof(DataType));
                 msg.header.body_size = msg.body.size();
 
                 return msg;
