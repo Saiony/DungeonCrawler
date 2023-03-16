@@ -58,7 +58,7 @@ namespace dungeon
 
             void connect_to_server(const asio::ip::tcp::resolver::results_type& endpoints)
             {
-                std::cout << "\nConnectToServer\n";
+                std::cout << "\nCaonnectToServer\n";
                 if (owner_type_ != owner::client)
                     return;
 

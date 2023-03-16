@@ -12,4 +12,5 @@ void player::do_something()
 player::player(const uint32_t player_id)
 {
     private_id = player_id;
+    health = 27;
 }
