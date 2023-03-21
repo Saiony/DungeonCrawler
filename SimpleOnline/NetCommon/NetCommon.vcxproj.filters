@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="olc_net.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="net_common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -36,5 +33,16 @@
     <ClInclude Include="net_client.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Models\PlayerModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dungeon_network.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Models\PlayerModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

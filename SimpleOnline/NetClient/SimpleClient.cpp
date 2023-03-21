@@ -2,6 +2,8 @@
 #include<dungeon_network.h>
 
 #include "Player.h"
+#include "Models/PlayerModel.h"
+#include "Models/PlayerModel.cpp";
 
 using namespace dungeon::server;
 
@@ -14,7 +16,7 @@ enum class CustomMsgTypes : uint32_t
 	ServerMessage,
 };
 
-class CustomClient : public dungeon::server::client_interface<CustomMsgTypes>
+class CustomClient : public client_interface<CustomMsgTypes>
 {
 public:
 	void ConsultSpell(const char* spell)
@@ -100,15 +102,16 @@ void handle_messages(CustomClient& client)
 
 	if (!client.incoming().empty())
 	{
-		const auto msg = client.incoming().pop_front().msg;
-		player player;
+		auto msg = client.incoming().pop_front().msg;
+		dungeon::model::player_model player{};
 
 		switch (msg.header.id)
 		{
 		case CustomMsgTypes::ServerMessage:
 
 			std::cout << "the oracle says...\n\n_______________________\n" << msg.body.data() << "\n_______________________\n\n";
-			memcpy(&player, msg.body.data(), msg.header.body_size);
+			//memcpy(&player_model, msg.body.data(), msg.header.body_size);
+			msg >> player;
 			inputEnabled = true;
 			break;
 		default:

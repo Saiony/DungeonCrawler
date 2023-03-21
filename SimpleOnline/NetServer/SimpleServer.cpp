@@ -1,6 +1,9 @@
 #include<iostream>
 #include<dungeon_network.h>
 #include "Player.h"
+#include "Models/PlayerModel.h"
+#include "Models/PlayerModel.cpp";
+
 
 using namespace dungeon::server;
 
@@ -105,7 +108,8 @@ int main()
     custom_server server(60000);
     server.start();
 
-    const player player(10'000);
+    char name[40]("Jefferson Caminhoes");
+    dungeon::model::player_model player_model(10'000, name,27);
 
     while (true)
     {
@@ -115,7 +119,7 @@ int main()
         {
             message<CustomMsgTypes> msg;
             msg.header.id = CustomMsgTypes::ServerMessage;
-            msg << player;
+            msg << player_model;
             //server.message_client(server.players_[0].private_id, msg);
             server.broadcast_message(msg);
         }

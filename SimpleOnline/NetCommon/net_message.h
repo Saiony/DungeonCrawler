@@ -1,5 +1,6 @@
 #pragma once
 #include "net_common.h"
+#include "Models/PlayerModel.h"
 
 namespace dungeon
 {
@@ -17,7 +18,7 @@ namespace dungeon
         {
         public:
             message_header<T> header{};
-            std::vector<uint8_t> body;
+            vector<uint8_t> body;
 
             size_t size() const
             {
@@ -33,10 +34,9 @@ namespace dungeon
 
             // << operator override
             template <typename DataType>
-            friend message<T>& operator <<(message<T>& msg, const DataType& data)
+            friend message<T>& operator <<(message<T> &msg, const DataType &data)
             {
-                //Check that the type of the data being pushed is trivially copyable
-                static_assert(std::is_standard_layout<DataType>::value, "Data is too complex to be pushed into vector");
+                static_assert(std::is_standard_layout_v<DataType>, "Data is too complex to be pushed into vector");
 
                 size_t messageSize = msg.body.size();
                 msg.body.resize(messageSize + sizeof(DataType));
@@ -48,19 +48,16 @@ namespace dungeon
 
             // >> operator override
             template <typename DataType>
-            friend message<T>& operator >>(message<T>& msg, DataType& data)
+            friend message<T>& operator >>(message<T> &msg, DataType &data)
             {
-                //Check that the type of the data being pushed is trivially copyable
-                static_assert(std::is_standard_layout<DataType>::value, "Data is too complex to be pushed into vector");
+                static_assert(std::is_standard_layout_v<DataType>, "Data is too complex to be pushed into vector");
 
                 //Get the end of the message
                 //If we would read the message from the beginning, everytime you read something, you need to erase it and cause a huge unnecessary reallocation
-                size_t message_size = msg.body.size();
-
+                const auto message_size = msg.body.size();
                 msg.body.push_back(-1);
-                std::memcpy(&data, msg.body.data() + message_size, sizeof(DataType));
-                msg.body.resize(message_size);
-                msg.header.body_size = msg.body.size();
+                
+                std::memcpy(&data, msg.body.data(), message_size);
 
                 return msg;
             }
