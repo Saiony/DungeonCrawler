@@ -1,6 +1,6 @@
 #pragma once
 #include "net_common.h"
-#include "Models/PlayerModel.h"
+using namespace std;
 
 namespace dungeon
 {
@@ -26,7 +26,7 @@ namespace dungeon
             }
 
             //std::cout override
-            friend std::ostream& operator <<(std::ostream& os, const message<T>& msg)
+            friend ostream& operator <<(ostream& os, const message<T>& msg)
             {
                 os << "ID:" << int(msg.header.id) << " Size:" << msg.header.body_size;
                 return os;
@@ -36,7 +36,7 @@ namespace dungeon
             template <typename DataType>
             friend message<T>& operator <<(message<T> &msg, const DataType &data)
             {
-                static_assert(std::is_standard_layout_v<DataType>, "Data is too complex to be pushed into vector");
+                static_assert(is_standard_layout_v<DataType>, "Data is too complex to be pushed into vector");
 
                 size_t messageSize = msg.body.size();
                 msg.body.resize(messageSize + sizeof(DataType));
@@ -50,14 +50,14 @@ namespace dungeon
             template <typename DataType>
             friend message<T>& operator >>(message<T> &msg, DataType &data)
             {
-                static_assert(std::is_standard_layout_v<DataType>, "Data is too complex to be pushed into vector");
+                static_assert(is_standard_layout_v<DataType>, "Data is too complex to be pushed into vector");
 
                 //Get the end of the message
                 //If we would read the message from the beginning, everytime you read something, you need to erase it and cause a huge unnecessary reallocation
                 const auto message_size = msg.body.size();
                 msg.body.push_back(-1);
                 
-                std::memcpy(&data, msg.body.data(), message_size);
+                memcpy(&data, msg.body.data(), message_size);
 
                 return msg;
             }
@@ -69,11 +69,11 @@ namespace dungeon
         template <typename T>
         struct owned_message
         {
-            std::shared_ptr<connection<T>> remote = nullptr;
+            shared_ptr<connection<T>> remote = nullptr;
             message<T> msg;
 
             //friendly string maker
-            friend std::ostream& operator<<(std::ostream& os, const owned_message<T>& msg)
+            friend ostream& operator<<(ostream& os, const owned_message<T>& msg)
             {
                 os << msg.msg;
                 return os;

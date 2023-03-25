@@ -120,7 +120,7 @@ int main()
             message<CustomMsgTypes> msg;
             msg.header.id = CustomMsgTypes::ServerMessage;
             msg << player_model;
-            //server.message_client(server.players_[0].private_id, msg);
+            //server.message_client(server.players_[0].private_id, msg);b
             server.broadcast_message(msg);
         }
         if (GetKeyState('B') & 0x8000)

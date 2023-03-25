@@ -4,6 +4,8 @@
 #include "net_tsqueue.h"
 #include "net_connection.h"
 
+using namespace asio::ip;
+
 namespace dungeon
 {
     namespace server
@@ -11,6 +13,13 @@ namespace dungeon
         template <typename T>
         class client_interface
         {
+        private:
+            tsqueue<owned_message<T>> messages_in_;
+        protected:
+            asio::io_context io_context_; //handles data transfer
+            thread thread_context_; //...but it needs a thread of its own to execute its work commands
+            unique_ptr<connection<T>> con_;
+            
         public:
             client_interface() = default;
 
@@ -18,24 +27,25 @@ namespace dungeon
             {
                 disconnect();
             }
-
-        public:
-            bool connect(const std::string& host, const uint16_t port)
+            
+            bool connect(const string& host, const uint16_t port)
             {
                 try
                 {
                     //Resolve hostname/ip-address into tangible physical address
-                    asio::ip::tcp::resolver resolver(ioContext);
-                    asio::ip::tcp::resolver::results_type endpoints = resolver.resolve(host, std::to_string(port));
+                    tcp::resolver resolver(io_context_);
+                    tcp::resolver::results_type endpoints = resolver.resolve(host, to_string(port));
 
-                    con = std::make_unique<connection<T>>(owner::client, ioContext,
-                                                          asio::ip::tcp::socket(ioContext), messagesIn);
-                    con->connect_to_server(endpoints);
-                    threadContext = std::thread([this]() { ioContext.run(); });
+                    con_ = make_unique<connection<T>>(owner::client, io_context_, tcp::socket(io_context_), messages_in_);
+                    con_->connect_to_server(endpoints);
+                    thread_context_ = thread([this]()
+                    {
+                        io_context_.run();
+                    });
                 }
-                catch (std::exception& e)
+                catch (exception& e)
                 {
-                    std::cerr << "Client Exception: " << e.what() << "\n";
+                    cerr << "Client Exception: " << e.what() << "\n";
                     return false;
                 }
 
@@ -45,45 +55,33 @@ namespace dungeon
             void disconnect()
             {
                 if (is_connected())
-                    con->disconnect();
+                    con_->disconnect();
 
                 //Make sure we're done with the asio context and the thread
-                ioContext.stop();
-                if (threadContext.joinable())
-                    threadContext.join();
+                io_context_.stop();
+                if (thread_context_.joinable())
+                    thread_context_.join();
 
                 //Destroy the connection obj
-                con.release();
+                con_.release();
             }
 
             bool is_connected()
             {
-                if (con)
-                    return con->is_connected();
-                else
-                    return false;
+                return con_ ? con_->is_connected() : false;
             }
 
-        public:
             void send(const message<T>& msg)
             {
                 if (is_connected())
-                    con->send(msg);
+                    con_->send(msg);
             }
 
             //Retrieve queue of messages from server
             tsqueue<owned_message<T>>& incoming()
             {
-                return messagesIn;
+                return messages_in_;
             }
-
-        protected:
-            asio::io_context ioContext; //handles data transfer
-            std::thread threadContext; //...but it needs a thread of its own to execute its work commands
-            std::unique_ptr<connection<T>> con;
-
-        private:
-            tsqueue<owned_message<T>> messagesIn;
         };
     }
 }

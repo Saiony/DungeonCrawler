@@ -13,14 +13,14 @@ namespace dungeon
         template <typename T>
         class server_interface
         {
-        protected:            
+        protected:
             tsqueue<owned_message<T>> messages_in_;
-            std::deque<std::shared_ptr<connection<T>>> connections_;
+            deque<shared_ptr<connection<T>>> connections_;
             asio::io_context asio_context_;
-            std::thread thread_context_;
-            asio::ip::tcp::acceptor asio_acceptor_;
+            thread thread_context_;
+            tcp::acceptor asio_acceptor_;
             uint32_t id_counter_ = 10000;
-            
+
             virtual void on_client_connect(shared_ptr<connection<T>>)
             {
             }
@@ -39,7 +39,7 @@ namespace dungeon
             }
 
         public:
-            server_interface(const uint16_t port) : asio_acceptor_(asio_context_, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
+            server_interface(const uint16_t port) : asio_acceptor_(asio_context_, tcp::endpoint(tcp::v4(), port))
             {
             }
 
@@ -53,18 +53,18 @@ namespace dungeon
                 try
                 {
                     wait_for_client_connection();
-                    thread_context_ = std::thread([this]()
+                    thread_context_ = thread([this]()
                     {
                         asio_context_.run();
                     });
                 }
-                catch (std::exception& e)
+                catch (exception& e)
                 {
-                    std::cerr << "[SERVER] Exception: " << e.what() << "\n";
+                    cerr << "[SERVER] Exception: " << e.what() << "\n";
                     return false;
                 }
 
-                std::cout << "[SERVER] Started!\n";
+                cout << "[SERVER] Started!\n";
                 return true;
             }
 
@@ -81,20 +81,21 @@ namespace dungeon
 
             void wait_for_client_connection()
             {
-                asio_acceptor_.async_accept([this](const error_code error_code, asio::ip::tcp::socket socket)
+                asio_acceptor_.async_accept([this](const error_code error_code, tcp::socket socket)
                 {
                     if (error_code)
-                        cout << "[SERVER] New Connection Error: " << error_code.message() << "\n";
+                        cout << "[SERVER] New Connection Error: " << error_code.message() << endl;
                     else
                     {
-                        cout << "[SERVER] New Connection: " << socket.remote_endpoint() << "\n";
-                        shared_ptr<connection<T>> new_con = make_shared<connection<T>>(owner::server, asio_context_, std::move(socket), messages_in_);
+                        cout << "[SERVER] New Connection: " << socket.remote_endpoint() << endl;
+                        shared_ptr<connection<T>> new_con = make_shared<connection<T>>(
+                            owner::server, asio_context_, move(socket), messages_in_);
 
                         if (can_client_connect(new_con))
                         {
                             new_con->connect_to_client(id_counter_++);
                             on_client_connect(new_con);
-                            connections_.push_back(std::move(new_con));
+                            connections_.push_back(move(new_con));
                             cout << "[" << connections_.back()->get_id() << "] Connection Approved\n";
                         }
                         else
@@ -114,25 +115,27 @@ namespace dungeon
                                          {
                                              return con->get_id() == client_id;
                                          });
+
                 auto client = *client_it;
                 if (client_it != end(connections_) && client->is_connected())
                 {
                     client->send(msg);
+                    return;
                 }
-                else
-                {
-                    on_client_disconnect(client);
-                    client.reset();
-                    connections_.erase(std::remove(connections_.begin(), connections_.end(), client),
-                                       connections_.end());
-                }
+                
+                on_client_disconnect(client);
+                client.reset();
+                connections_.erase(remove(connections_.begin(), connections_.end(), client), connections_.end());
             }
 
             void multicast_message(const message<T>& msg, vector<uint32_t> client_ids)
-            {                
+            {
                 for_each(begin(connections_), end(connections_), [client_ids, msg](shared_ptr<connection<T>> con)
                 {
-                    if(any_of(begin(client_ids), end(client_ids), [con](uint32_t client_id){ return con->id_ == client_id;}))
+                    if (any_of(begin(client_ids), end(client_ids), [con](uint32_t client_id)
+                    {
+                        return con->id_ == client_id;
+                    }))
                         con->send(msg);
                 });
             }

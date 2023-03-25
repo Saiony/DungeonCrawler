@@ -1,4 +1,6 @@
 ﻿#include "PlayerModel.h"
+#include <string>
+
 using namespace dungeon::model;
 
 
