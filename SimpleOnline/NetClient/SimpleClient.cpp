@@ -1,51 +1,50 @@
 #include<iostream>
 #include<dungeon_network.h>
 
-#include "player_model.h"
+#include "Models/player_model.h"
 
 using namespace dungeon::server;
 
-enum class CustomMsgTypes : uint32_t
+enum class custom_msg_types : uint32_t
 {
-    ServerAccept,
-    ServerDeny,
-    SpellConsult,
-    MessageAll,
-    ServerMessage,
+    server_accept,
+    server_deny,
+    spell_consult,
+    message_all,
+    server_message,
 };
 
-class CustomClient : public client_interface<CustomMsgTypes>
+class custom_client : public client_interface<custom_msg_types>
 {
 public:
-    void ConsultSpell(const char* spell)
+    void consult_spell(const char* spell)
     {
-        std::cout << "\nRetrieving knowledge from the Arcane realm for [" << spell << "] spell...\n";
-        dungeon::server::message<CustomMsgTypes> msg;
-        msg.header.id = CustomMsgTypes::SpellConsult;
+        cout << "\nRetrieving knowledge from the Arcane realm for [" << spell << "] spell...\n";
+        message<custom_msg_types> msg;
+        msg.header.id = custom_msg_types::spell_consult;
 
         //Copying to an array because we can't simply copy char* data
-        char spellArray[40];
-        strcpy_s(spellArray, spell);
-        msg << spellArray;
+        char spell_array[40];
+        strcpy_s(spell_array, spell);
+        msg << spell_array;
 
         send(msg);
     }
 };
 
-void handle_input(CustomClient& client);
-void handle_messages(CustomClient& client);
-bool inputEnabled = true;
+void handle_input(custom_client& client);
+void handle_messages(custom_client& client);
+bool input_enabled = true;
 bool quit = false;
 
 int main()
 {
-    CustomClient client;
+    custom_client client;
 
     client.connect("192.168.18.30", 60000);
 
-    std::cout << "<-~- . - ~-> D&D SPELL CONSULT <-~- . - ~->";
-    std::cout <<
-        "\n1 - Burning Hands \n2 - Charm Person \n3 - Cure Wounds \n4 - Mage Armor \n5 - Thunderwave\n0 - Quit Application\n\n";
+    cout << "<-~- . - ~-> D&D SPELL CONSULT <-~- . - ~->";
+    cout << "\n1 - Burning Hands \n2 - Charm Person \n3 - Cure Wounds \n4 - Mage Armor \n5 - Thunderwave\n0 - Quit Application\n\n";
 
     while (!quit)
     {
@@ -58,12 +57,12 @@ int main()
     return 0;
 }
 
-void handle_input(CustomClient& client)
+void handle_input(custom_client& client)
 {
     int input;
-    std::cout << "[Type your wish] - ";
-    std::cin >> input;
-    inputEnabled = false;
+    cout << "[Type your wish] - ";
+    cin >> input;
+    input_enabled = false;
 
     switch (input)
     {
@@ -71,33 +70,33 @@ void handle_input(CustomClient& client)
         quit = true;
         break;
     case 1:
-        client.ConsultSpell("BurningHands");
+        client.consult_spell("BurningHands");
         break;
     case 2:
-        client.ConsultSpell("CharmPerson");
+        client.consult_spell("CharmPerson");
         break;
     case 3:
-        client.ConsultSpell("CureWounds");
+        client.consult_spell("CureWounds");
         break;
     case 4:
-        client.ConsultSpell("MageArmor");
+        client.consult_spell("MageArmor");
         break;
     case 5:
-        client.ConsultSpell("Thunderwave");
+        client.consult_spell("Thunderwave");
         break;
     default:
-        std::cout << "Please type a number between 1 and 5";
+        cout << "Please type a number between 1 and 5";
         break;
     }
 }
 
-void handle_messages(CustomClient& client)
+void handle_messages(custom_client& client)
 {
     player_model player{};
     
     if (!client.is_connected())
     {
-        std::cout << "Oracle is dead :(\n";
+        cout << "Oracle is dead :(\n";
         return;
     }
 
@@ -107,11 +106,11 @@ void handle_messages(CustomClient& client)
 
         switch (msg.header.id)
         {
-        case CustomMsgTypes::ServerMessage:
+        case custom_msg_types::server_message:
         
-        	std::cout << "the oracle says...\n\n_______________________\n" << msg.body.data() << "\n_______________________\n\n";
+        	cout << "the oracle says...\n\n_______________________\n" << msg.body.data() << "\n_______________________\n\n";
         	msg >> player;
-        	inputEnabled = true;
+        	input_enabled = true;
         	break;
         default:
         	break;

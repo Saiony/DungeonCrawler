@@ -11,4 +11,5 @@ private:
 public:
     player_model();
     player_model(uint16_t id, char name[],uint16_t health);
+    uint16_t get_id();
 };

@@ -11,7 +11,7 @@ namespace dungeon
     namespace server
     {
         template <typename T>
-        class server_interface
+        class base_server
         {
         protected:
             tsqueue<owned_message<T>> messages_in_;
@@ -39,11 +39,11 @@ namespace dungeon
             }
 
         public:
-            server_interface(const uint16_t port) : asio_acceptor_(asio_context_, tcp::endpoint(tcp::v4(), port))
+            base_server(const uint16_t port) : asio_acceptor_(asio_context_, tcp::endpoint(tcp::v4(), port))
             {
             }
 
-            virtual ~server_interface()
+            virtual ~base_server()
             {
                 stop();
             }
