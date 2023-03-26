@@ -11,7 +11,7 @@ namespace dungeon
     namespace server
     {
         template <typename T>
-        class client_interface
+        class base_client
         {
         private:
             tsqueue<owned_message<T>> messages_in_;
@@ -21,9 +21,9 @@ namespace dungeon
             unique_ptr<connection<T>> con_;
             
         public:
-            client_interface() = default;
+            base_client() = default;
 
-            virtual ~client_interface()
+            virtual ~base_client()
             {
                 disconnect();
             }

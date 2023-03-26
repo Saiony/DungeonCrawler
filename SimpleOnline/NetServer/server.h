@@ -1,7 +1,7 @@
 #pragma once
-#include<iostream>
 #include<dungeon_network.h>
-#include "Player.h"
+#include "Domain/Player.h"
+
 
 using namespace dungeon::server;
 

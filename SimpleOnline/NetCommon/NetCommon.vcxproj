@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Models\player_model.h" />
-    <ClInclude Include="net_client.h" />
+    <ClInclude Include="base_client.h" />
     <ClInclude Include="net_common.h" />
     <ClInclude Include="net_connection.h" />
     <ClInclude Include="net_message.h" />
