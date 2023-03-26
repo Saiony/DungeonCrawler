@@ -1,4 +1,5 @@
 ﻿#include "server.h"
+using namespace dungeon_server;
 
 server::server(const uint16_t n_port) : base_server<custom_msg_types>(n_port)
 {
@@ -15,7 +16,7 @@ void server::on_client_connect(shared_ptr<connection<custom_msg_types>> client)
     msg.header.id = custom_msg_types::server_accept;
     client->send(msg);
 
-    const player player(client->get_id());
+    const domain::player player(client->get_id());
     players_.push_back(player);
 }
 

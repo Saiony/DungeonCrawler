@@ -1,7 +1,7 @@
 ﻿#include "Player.h"
 
 #include <iostream>
-using namespace dungeon::server;
+using namespace dungeon_common::domain;
 using namespace std;
 
 void player::do_something()

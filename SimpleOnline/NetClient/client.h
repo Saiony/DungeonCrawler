@@ -10,7 +10,7 @@ enum class custom_msg_types : uint32_t
     server_message,
 };
 
-class client : public dungeon::server::base_client<custom_msg_types>
+class client : public dungeon_common::base_client<custom_msg_types>
 {
 public:
     void consult_spell(const char* spell);

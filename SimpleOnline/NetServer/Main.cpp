@@ -2,6 +2,9 @@
 #include "Models/player_model.h"
 #include "server.h"
 
+using namespace dungeon_server;
+using namespace dungeon_common::model;
+
 int main()
 {
     server server(60000);

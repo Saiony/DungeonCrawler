@@ -1,4 +1,7 @@
 ﻿#include "client.h"
+using namespace dungeon_common::model;
+
+
 bool input_enabled = true;
 bool quit = false;
 
