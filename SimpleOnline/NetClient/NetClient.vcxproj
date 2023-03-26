@@ -72,6 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\NetCommon;C:\sdk\asio-1.24.0\include;</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64); ..\NetCommon;</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -140,6 +141,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NetCommon\NetCommon.vcxproj">
+      <Project>{d0a14936-1784-48fd-b303-6ed0ae219f96}</Project>
+      <Name>NetCommon</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

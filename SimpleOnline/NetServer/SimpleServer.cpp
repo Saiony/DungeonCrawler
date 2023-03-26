@@ -1,8 +1,7 @@
 #include<iostream>
 #include<dungeon_network.h>
 #include "Player.h"
-#include "Models/PlayerModel.h"
-#include "Models/PlayerModel.cpp";
+#include "player_model.h"
 
 
 using namespace dungeon::server;
@@ -108,18 +107,19 @@ int main()
     custom_server server(60000);
     server.start();
 
+    //Debug Player Model
     char name[40]("Jefferson Caminhoes");
-    dungeon::model::player_model player_model(10'000, name,27);
-
+    const player_model player(10000, name, 27);
+    
     while (true)
     {
         server.update(150, false);
-
+    
         if (GetKeyState('A') & 0x8000)
         {
             message<CustomMsgTypes> msg;
             msg.header.id = CustomMsgTypes::ServerMessage;
-            msg << player_model;
+            msg << player;
             //server.message_client(server.players_[0].private_id, msg);b
             server.broadcast_message(msg);
         }
@@ -129,7 +129,7 @@ int main()
             msg.header.id = CustomMsgTypes::ServerMessage;
             msg << "Msg automatica";
             // server.message_client(server.players_[1].private_id, msg);
-
+    
             const vector<uint32_t> clients {10'000, 10'001};
             server.multicast_message(msg, clients);
         }

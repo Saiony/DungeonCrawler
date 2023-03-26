@@ -103,6 +103,10 @@
       <Project>{22749de1-ece9-4c53-beb7-c7ecb0c5a5fc}</Project>
       <Name>NetClient</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NetCommon\NetCommon.vcxproj">
+      <Project>{d0a14936-1784-48fd-b303-6ed0ae219f96}</Project>
+      <Name>NetCommon</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h" />
