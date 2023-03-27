@@ -5,40 +5,6 @@ using namespace dungeon_common::model;
 bool input_enabled = true;
 bool quit = false;
 
-
-void handle_input(client& client)
-{
-    int input;
-    cout << "[Type your wish] - ";
-    cin >> input;
-    input_enabled = false;
-
-    switch (input)
-    {
-    case 0:
-        quit = true;
-        break;
-    case 1:
-        client.consult_spell("BurningHands");
-        break;
-    case 2:
-        client.consult_spell("CharmPerson");
-        break;
-    case 3:
-        client.consult_spell("CureWounds");
-        break;
-    case 4:
-        client.consult_spell("MageArmor");
-        break;
-    case 5:
-        client.consult_spell("Thunderwave");
-        break;
-    default:
-        cout << "Please type a number between 1 and 5";
-        break;
-    }
-}
-
 void handle_messages(client& client)
 {
     player_model player{};
@@ -73,15 +39,26 @@ int main()
 
     client.connect("192.168.18.30", 60000);
 
-    cout << "<-~- . - ~-> D&D SPELL CONSULT <-~- . - ~->";
-    cout << "\n1 - Burning Hands \n2 - Charm Person \n3 - Cure Wounds \n4 - Mage Armor \n5 - Thunderwave\n0 - Quit Application\n\n";
+    cout << "<-~- . - ~-> DUNGEON CRAWLER <-~- . - ~->" << endl;
+    cout << "Adventurer, what's your name?" << endl;
+    
 
     while (!quit)
     {
         handle_messages(client);
 
-        // if (inputEnabled)
-        // 	handle_input(client);
+        if (input_enabled)
+        {
+            input_enabled = false;
+            string input;
+            cin >> input;
+
+            if(input.empty())
+                continue;
+
+            client.validate_name(input.c_str());
+            input_enabled = true;
+        }
     }
 
     return 0;

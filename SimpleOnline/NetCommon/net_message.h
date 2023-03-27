@@ -59,6 +59,12 @@ namespace dungeon_common
 
             return msg;
         }
+
+        string read_body()
+        {
+            string s(begin(body), end(body));
+            return s;
+        }
     };
 
     template <typename T>

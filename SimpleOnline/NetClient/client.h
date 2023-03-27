@@ -8,11 +8,13 @@ enum class custom_msg_types : uint32_t
     spell_consult,
     message_all,
     server_message,
+    validate_name,
 };
 
 class client : public dungeon_common::base_client<custom_msg_types>
 {
 public:
     void consult_spell(const char* spell);
+    void validate_name(const char* name);
 };
 

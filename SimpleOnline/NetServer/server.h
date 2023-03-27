@@ -10,9 +10,10 @@ namespace dungeon_server
     {
         server_accept,
         server_deny,
-        spell_consult,
         message_all,
         server_message,
+        spell_consult,
+        validate_name,
     };
 
     class server final : public base_server<custom_msg_types>

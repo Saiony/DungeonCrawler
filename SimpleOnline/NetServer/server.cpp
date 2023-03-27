@@ -29,19 +29,21 @@ void server::on_message(const shared_ptr<connection<custom_msg_types>> client, m
 {
     switch (msg.header.id)
     {
+    case custom_msg_types::validate_name:
+        {
+            const auto player_name = msg.read_body();
+            cout << "Validating name from player: " << player_name << endl;
+
+            const auto valid = none_of(begin(players_), end(players_), [player_name](domain::player player){ return player.name == player_name; });
+            cout << "Name validation: " << valid << endl;
+            
+            break;
+        }
     case custom_msg_types::spell_consult:
         {
             cout << "\n[" << client->get_id() << "]: Server Ping\n";
 
-            string msg_body;
-            //read msg body
-            for (size_t i = 0; i < msg.body.size() - 1; i++)
-            {
-                if (msg.body[i] == '\0')
-                    break;
-
-                msg_body += msg.body[i];
-            }
+            const auto msg_body = msg.read_body();
 
             message<custom_msg_types> answer;
 

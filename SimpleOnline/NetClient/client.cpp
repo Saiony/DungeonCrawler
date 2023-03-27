@@ -13,3 +13,16 @@ void client::consult_spell(const char* spell)
 
     send(msg);
 }
+
+void client::validate_name(const char* name)
+{
+    dungeon_common::message<custom_msg_types> msg;
+    msg.header.id = custom_msg_types::validate_name;
+
+    //Copying to an array because we can't simply copy char* data
+    char player_name[40] = "";
+    strcpy_s(player_name, name);
+    msg << player_name;
+
+    send(msg);
+}
