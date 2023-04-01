@@ -2,6 +2,7 @@
 #include <thread>
 
 #include "Models/simple_answer_model.h"
+using namespace dungeon_common;
 using namespace dungeon_common::model;
 
 bool input_enabled = true;
@@ -57,7 +58,12 @@ void confirm_character_creation(client& client, const string& player_name)
     cin >> answer;
 
     if (answer == "yes")
-        cout << "yes";
+    {
+        dungeon_common::message<custom_msg_types> msg(custom_msg_types::create_player);
+        msg << player_name.c_str();
+        
+        client.send(msg);
+    }
     else if (answer == "no")
         create_character(client);
     else
@@ -89,11 +95,12 @@ void create_character(client& client)
                          throw exception("Invalid message type");
                      case(error_code_type::name_already_taken):
                          {
-                             cout << "Sorry adventurer, the name is already taken";
-                             break;
+                             cout << "Sorry adventurer, the name is already taken" << endl;
+                             create_character(client);
+                             return;
                          }
                      default:
-                         break;
+                         return;
                      }
                  }
                  cout << "Hello " << name << endl;

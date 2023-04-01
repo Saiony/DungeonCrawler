@@ -5,17 +5,7 @@
 
 class simple_answer_model;
 
-enum class custom_msg_types : uint32_t
-{
-    server_accept,
-    server_deny,
-    message_all,
-    server_message,
-    spell_consult,
-    validate_name,
-};
-
-class client final : public dungeon_common::base_client<custom_msg_types>
+class client final : public dungeon_common::base_client<dungeon_common::custom_msg_types>
 {
 public:
     //void validate_name(const char* name, auto& callback);

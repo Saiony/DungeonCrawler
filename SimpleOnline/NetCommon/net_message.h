@@ -4,11 +4,27 @@ using namespace std;
 
 namespace dungeon_common
 {
+    enum class custom_msg_types : uint32_t
+    {
+        unknown,
+        server_accept,
+        server_deny,
+        message_all,
+        server_message,
+        spell_consult,
+        validate_name,
+        create_player,
+    };
+    
     template <typename T>
     struct message_header
     {
         T id{};
         uint32_t body_size = 0;
+        
+        message_header(custom_msg_types header_id) : id(header_id)
+        {            
+        }
     };
 
     template <typename T>
@@ -17,6 +33,14 @@ namespace dungeon_common
     public:
         message_header<T> header{};
         vector<uint8_t> body;
+
+        message() : header(custom_msg_types::unknown)
+        {
+        }
+
+        message(custom_msg_types msg_type) : header(msg_type)
+        {            
+        }
 
         size_t size() const
         {

@@ -6,15 +6,6 @@ using namespace dungeon_common;
 
 namespace dungeon_server
 {
-    enum class custom_msg_types : uint32_t
-    {
-        server_accept,
-        server_deny,
-        message_all,
-        server_message,
-        spell_consult,
-        validate_name,
-    };
 
     class server final : public base_server<custom_msg_types>
     {
