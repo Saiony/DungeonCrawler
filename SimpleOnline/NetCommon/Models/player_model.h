@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <cstdint>
+#include <string>
 
 namespace dungeon_common::model
 {
@@ -12,7 +13,7 @@ namespace dungeon_common::model
 
     public:
         player_model();
-        player_model(uint16_t id, char name[], uint16_t health);
+        player_model(uint16_t id, std::string name, uint16_t health);
         uint16_t get_id();
     };
 }

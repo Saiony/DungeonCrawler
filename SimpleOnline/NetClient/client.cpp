@@ -1,5 +1,7 @@
 ﻿#include "client.h"
 
+#include "Models/simple_answer_model.h"
+
 void client::consult_spell(const char* spell)
 {
     cout << "\nRetrieving knowledge from the Arcane realm for [" << spell << "] spell...\n";
@@ -14,7 +16,7 @@ void client::consult_spell(const char* spell)
     send(msg);
 }
 
-void client::validate_name(const char* name)
+void client::validate_name(const char* name, function<void(simple_answer_model)> callback)
 {
     dungeon_common::message<custom_msg_types> msg;
     msg.header.id = custom_msg_types::validate_name;
@@ -24,5 +26,6 @@ void client::validate_name(const char* name)
     strcpy_s(player_name, name);
     msg << player_name;
 
+    validate_name_callback = callback;
     send(msg);
 }

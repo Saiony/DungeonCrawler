@@ -19,8 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="error_code_type.h" />
     <ClInclude Include="Models\player_model.h" />
     <ClInclude Include="base_client.h" />
+    <ClInclude Include="Models\simple_answer_model.h" />
     <ClInclude Include="net_common.h" />
     <ClInclude Include="net_connection.h" />
     <ClInclude Include="net_message.h" />
@@ -102,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <LibCompiled>true</LibCompiled>
     </ClCompile>
+    <ClCompile Include="Models\simple_answer_model.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -206,7 +209,7 @@
       <ConformanceMode>Default</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
