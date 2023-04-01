@@ -9,8 +9,6 @@ void player::do_something()
     cout << "My id is " << private_id << endl;
 }
 
-player::player(const uint32_t player_id)
+player::player(const uint16_t id, string name, uint16_t health) : private_id(id), health(health), name(std::move(name))
 {
-    private_id = player_id;
-    health = 27;
 }

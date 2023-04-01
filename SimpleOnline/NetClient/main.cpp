@@ -15,8 +15,6 @@ void handle_messages(client& client)
 {
     while (true)
     {
-        player_model player{};
-
         if (!client.is_connected())
         {
             cout << "Oracle is dead :(\n";
@@ -33,6 +31,8 @@ void handle_messages(client& client)
                 {
                     cout << "the oracle says...\n\n_______________________\n" << msg.body.data() <<
                         "\n_______________________\n\n";
+                    
+                    player_model player{};
                     msg >> player;
                     input_enabled = true;
                     break;
@@ -42,6 +42,14 @@ void handle_messages(client& client)
                     simple_answer_model answer;
                     msg >> answer;
                     client.validate_name_callback(answer);
+                    break;
+                }
+            case custom_msg_types::create_player:
+                {
+                    player_model player;
+                    msg >> player;
+                    cout << "dsa";
+                    break;
                 }
             default:
                 break;
@@ -59,10 +67,7 @@ void confirm_character_creation(client& client, const string& player_name)
 
     if (answer == "yes")
     {
-        dungeon_common::message<custom_msg_types> msg(custom_msg_types::create_player);
-        msg << player_name.c_str();
-        
-        client.send(msg);
+        client.create_player(player_name.c_str());
     }
     else if (answer == "no")
         create_character(client);

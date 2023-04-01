@@ -11,6 +11,7 @@ public:
     //void validate_name(const char* name, auto& callback);
     void consult_spell(const char* spell);
     void validate_name(const char* name, function<void(simple_answer_model)> callback);
+    void create_player(const char*name);
     
     function<void(simple_answer_model)> validate_name_callback;
 };

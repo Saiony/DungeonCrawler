@@ -1,13 +1,13 @@
 ﻿#include "server.h"
 #include<string>
 
+#include "Models/player_model.h"
 #include "Models/simple_answer_model.h"
 using namespace dungeon_server;
 
 server::server(const uint16_t n_port) : base_server<custom_msg_types>(n_port)
 {
-    domain::player debug_player(5);
-    debug_player.name = "saiony";
+    const domain::player debug_player(5, "saiony", 50);
     players_.push_back(debug_player);
 }
 
@@ -21,9 +21,6 @@ void server::on_client_connect(shared_ptr<connection<custom_msg_types>> client)
     message<custom_msg_types> msg;
     msg.header.id = custom_msg_types::server_accept;
     client->send(msg);
-
-    const domain::player player(client->get_id());
-    players_.push_back(player);
 }
 
 void server::on_client_disconnect(shared_ptr<connection<custom_msg_types>> client)
@@ -35,6 +32,21 @@ void server::on_message(const shared_ptr<connection<custom_msg_types>> client, m
 {
     switch (msg.header.id)
     {
+    case custom_msg_types::create_player:
+        {
+            const auto player_name = msg.read_body().substr(0, msg.read_body().find('\0', 0));   
+
+            //create player model and send to client
+            const model::player_model player_model(client->get_id(), player_name, 37);            
+            message<custom_msg_types> answer(custom_msg_types::create_player);
+            answer << player_model;            
+            message_client(client->get_id(), answer);
+
+            //create player domain and add to the list
+            const domain::player player_domain(player_model.id_, player_name, player_model.health_);
+            players_.push_back(player_domain);
+            break;
+        }
     case custom_msg_types::validate_name:
         {
             const auto player_name = msg.read_body().substr(0, msg.read_body().find('\0', 0));            
@@ -51,40 +63,6 @@ void server::on_message(const shared_ptr<connection<custom_msg_types>> client, m
             answer << body;
             
             message_client(client->get_id(), answer);            
-            break;
-        }
-    case custom_msg_types::spell_consult:
-        {
-            cout << "\n[" << client->get_id() << "]: Server Ping\n";
-
-            const auto msg_body = msg.read_body();
-
-            message<custom_msg_types> answer;
-
-            if (msg_body == spells_[0])
-                answer <<
-                    "As you hold your hands with thumbs touching and fingers spread, a thin sheet of flames shoots forth from your outstretched fingertips. Each creature in a 15-foot cone must make a dexterity saving throw. A creature takes 3d6 fire damage on a failed save, or half as much damage on a successful one. The fire ignites any flammable objects in the area that aren’t being worn or carried.";
-            else if (msg_body == spells_[1])
-                answer <<
-                    "You attempt to charm a humanoid you can see within range. It must make a wisdom saving throw, and does so with advantage if you or your companions are fighting it. If it fails the saving throw, it is charmed by you until the spell ends or until you or your companions do anything harmful to it. The charmed creature regards you as a friendly acquaintance. When the spell ends, the creature knows it was charmed by you.";
-            else if (msg_body == spells_[2])
-                answer <<
-                    "A creature you touch regains a number of hit points equal to 1d8 + your spellcasting ability modifier. This spell has no effect on undead or constructs.";
-            else if (msg_body == spells_[3])
-                answer <<
-                    "You touch a willing creature who isn’t wearing armor, and a protective magical force surrounds it until the spell ends. The target’s base AC becomes 13 + its Dexterity modifier. The spell ends if the target dons armor or if you dismiss the spell as an action.";
-            else if (msg_body == spells_[4])
-                answer <<
-                    "A wave of thunderous force sweeps out from you. Each creature in a 15-foot cube originating from you must make a constitution saving throw. On a failed save, a creature takes 2d8 thunder damage and is pushed 10 feet away from you. On a successful save, the creature takes half as much damage and isn’t pushed.In addition, unsecured objects that are completely within the area of effect are automatically pushed 10 feet away from you by the spell’s effect, and the spell emits a thunderous boom audible out to 300 feet.";
-            else
-            {
-                answer << "Unidentified spell";
-                cout << "Unidentified spell";
-            }
-
-            cout << "Player is requesting knowledge for " << msg_body.data() << " spell";
-            answer.header.id = custom_msg_types::server_message;
-            client->send(answer);
             break;
         }
     default:

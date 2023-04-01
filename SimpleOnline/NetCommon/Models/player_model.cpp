@@ -6,7 +6,7 @@ using namespace dungeon_common::model;
 
 player_model::player_model() = default;
 
-player_model::player_model(const uint16_t id, std::string name, const uint16_t health) : id_(id), health_(health)
+player_model::player_model(const uint32_t id, std::string name, const uint32_t health) : id_(id), health_(health)
 {
     std::copy(begin(name), end(name), name_);
 }

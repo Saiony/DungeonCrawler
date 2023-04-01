@@ -6,14 +6,12 @@ namespace dungeon_common::model
 {
     class player_model
     {
-    private:
-        uint16_t id_{};
-        char name_[40]{};
-        uint16_t health_{};
-
     public:
+        uint32_t id_{};
+        char name_[40]{};
+        uint32_t health_{};
+        
         player_model();
-        player_model(uint16_t id, std::string name, uint16_t health);
-        uint16_t get_id();
+        player_model(uint32_t id, std::string name, uint32_t health);
     };
 }

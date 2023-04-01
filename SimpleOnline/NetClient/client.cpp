@@ -5,7 +5,7 @@ using namespace dungeon_common;
 void client::consult_spell(const char* spell)
 {
     cout << "\nRetrieving knowledge from the Arcane realm for [" << spell << "] spell...\n";
-    dungeon_common::message<custom_msg_types> msg(custom_msg_types::spell_consult);
+    message<custom_msg_types> msg(custom_msg_types::spell_consult);
 
     //Copying to an array because we can't simply copy char* data
     char spell_array[40];
@@ -17,7 +17,7 @@ void client::consult_spell(const char* spell)
 
 void client::validate_name(const char* name, function<void(simple_answer_model)> callback)
 {
-    dungeon_common::message<custom_msg_types> msg(custom_msg_types::validate_name);
+    message<custom_msg_types> msg(custom_msg_types::validate_name);
 
     //Copying to an array because we can't simply copy char* data
     char player_name[40] = "";
@@ -25,5 +25,17 @@ void client::validate_name(const char* name, function<void(simple_answer_model)>
     msg << player_name;
 
     validate_name_callback = callback;
+    send(msg);
+}
+
+void client::create_player(const char* name)
+{
+    message<custom_msg_types> msg(custom_msg_types::create_player);
+
+    //Copying to an array because we can't simply copy char* data
+    char player_name[40] = "";
+    strcpy_s(player_name, name);
+    msg << player_name;
+    
     send(msg);
 }
