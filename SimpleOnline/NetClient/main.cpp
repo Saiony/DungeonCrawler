@@ -46,9 +46,11 @@ void handle_messages(client& client)
                 }
             case custom_msg_types::create_player:
                 {
-                    player_model player;
-                    msg >> player;
-                    cout << "dsa";
+                    player_model player_model;
+                    msg >> player_model;
+
+                    player player(player_model.id_, player_model.name_, player_model.health_);
+                    client.set_player(player);
                     break;
                 }
             default:
@@ -108,7 +110,7 @@ void create_character(client& client)
                          return;
                      }
                  }
-                 cout << "Hello " << name << endl;
+                 cout << "Hello, " << name << endl;
                  confirm_character_creation(client, name);
              });
 }

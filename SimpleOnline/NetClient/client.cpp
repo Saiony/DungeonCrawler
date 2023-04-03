@@ -39,3 +39,8 @@ void client::create_player(const char* name)
     
     send(msg);
 }
+
+void client::set_player(player& player)
+{
+     player_ = move(player);
+}
