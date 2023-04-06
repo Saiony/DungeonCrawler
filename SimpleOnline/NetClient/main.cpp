@@ -1,56 +1,45 @@
 ﻿#include "client.h"
 #include <thread>
 
-#include "Models/simple_answer_model.h"
+#include "Scenes/CharacterCreationScene.h"
+
 using namespace dungeon_common;
-using namespace dungeon_common::model;
+using namespace dungeon_client;
 
-bool input_enabled = true;
-bool quit = false;
-
-void confirm_character_creation(const client& client, const string& name);
-void create_character(client& client);
-
-void handle_messages(client& client)
+void handle_messages(const shared_ptr<client>& client_ptr)
 {
     while (true)
     {
-        if (!client.is_connected())
+        if (!client_ptr->is_connected())
         {
-            cout << "Oracle is dead :(\n";
+            std::cout << "Oracle is dead :(\n";
             return;
         }
 
-        if (!client.incoming().empty())
+        if (!client_ptr->incoming().empty())
         {
-            auto msg = client.incoming().pop_front().msg;
+            auto msg = client_ptr->incoming().pop_front().msg;
 
             switch (msg.header.id)
             {
             case custom_msg_types::server_message:
                 {
-                    cout << "the oracle says...\n\n_______________________\n" << msg.body.data() <<
-                        "\n_______________________\n\n";
-                    
-                    player_model player{};
+                    model::player_model player{};
                     msg >> player;
-                    input_enabled = true;
                     break;
                 }
             case custom_msg_types::validate_name:
                 {
                     simple_answer_model answer;
                     msg >> answer;
-                    client.validate_name_callback(answer);
+                    client_ptr->validate_name_callback(answer);
                     break;
                 }
             case custom_msg_types::create_player:
                 {
-                    player_model player_model;
+                    model::player_model player_model;
                     msg >> player_model;
-
-                    player player(player_model.id_, player_model.name_, player_model.health_);
-                    client.set_player(player);
+                    client_ptr->create_player_callback(player_model);
                     break;
                 }
             default:
@@ -60,69 +49,15 @@ void handle_messages(client& client)
     }
 }
 
-
-void confirm_character_creation(client& client, const string& player_name)
-{
-    cout << "Confirm character creation? (Y/N)" << endl;
-    string answer;
-    cin >> answer;
-
-    if (answer == "yes")
-    {
-        client.create_player(player_name.c_str());
-    }
-    else if (answer == "no")
-        create_character(client);
-    else
-    {
-        cout << "Invalid answer";
-        confirm_character_creation(client, player_name);
-    }
-}
-
-void create_character(client& client)
-{
-    cout << "Adventurer, what's your name?" << endl;
-
-    string name;
-    do
-    {
-        getline(cin, name);
-    }
-    while (name.empty());
-
-    client.validate_name(name.c_str(),
-             [name, &client](const simple_answer_model response)
-             {
-                 if (!response.ok)
-                 {
-                     switch (response.error_code)
-                     {
-                     case unknown:
-                         throw exception("Invalid message type");
-                     case(error_code_type::name_already_taken):
-                         {
-                             cout << "Sorry adventurer, the name is already taken" << endl;
-                             create_character(client);
-                             return;
-                         }
-                     default:
-                         return;
-                     }
-                 }
-                 cout << "Hello, " << name << endl;
-                 confirm_character_creation(client, name);
-             });
-}
-
 int main()
 {
-    client client;
-    client.connect("192.168.18.30", 60000);
-    thread messages_thread(handle_messages, ref(client));
+    auto client_ptr = make_shared<client>();
+    client_ptr->connect("192.168.18.30", 60000);
+    thread messages_thread(handle_messages, ref(client_ptr));
 
     cout << "<-~- . - ~-> DUNGEON CRAWLER <-~- . - ~->" << endl;
-    create_character(client);
+    scene::character_creation_scene character_creation_scene(client_ptr);
+    character_creation_scene.init();
 
     while (true)
     {

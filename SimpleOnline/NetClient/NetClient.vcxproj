@@ -211,8 +211,10 @@
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Scenes\CharacterCreationScene.cpp" />
     <ClInclude Include="client.h" />
     <ClInclude Include="Domain\Player.h" />
+    <ClInclude Include="Scenes\CharacterCreationScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetCommon\NetCommon.vcxproj">

@@ -1,6 +1,7 @@
 ﻿#include "client.h"
 #include "Models/simple_answer_model.h"
 using namespace dungeon_common;
+using namespace dungeon_client;
 
 void client::consult_spell(const char* spell)
 {
@@ -28,7 +29,7 @@ void client::validate_name(const char* name, function<void(simple_answer_model)>
     send(msg);
 }
 
-void client::create_player(const char* name)
+void client::create_player(const char* name, function<void(dungeon_common::model::player_model)> callback)
 {
     message<custom_msg_types> msg(custom_msg_types::create_player);
 
@@ -36,11 +37,12 @@ void client::create_player(const char* name)
     char player_name[40] = "";
     strcpy_s(player_name, name);
     msg << player_name;
-    
+
+    create_player_callback = callback;
     send(msg);
 }
 
-void client::set_player(player& player)
+void client::set_player(domain::player& player)
 {
      player_ = move(player);
 }

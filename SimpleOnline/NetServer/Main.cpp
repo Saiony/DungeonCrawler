@@ -1,17 +1,20 @@
-﻿#include "net_message.h"
-#include "Models/player_model.h"
+﻿#include "Models/player_model.h"
 #include "server.h"
+#include "Domain/Encounter.h"
+#include "Domain/Enemies/Wolf.h"
 
 using namespace dungeon_server;
-using namespace dungeon_common::model;
+using namespace model;
+using namespace dungeon_server::domain;
 
 int main()
 {
     server server(60000);
     server.start();
 
-    //Debug Player Model
-    const player_model player(10000, "name", 27);
+    enemy::wolf wolf("Wolf", 10, 15);
+    const vector<enemy::base_enemy> enemies = { wolf };
+    encounter::encounter encounter(enemies);
     
     while (true)
     {

@@ -19,12 +19,6 @@ namespace dungeon_common
         unique_ptr<connection<T>> con_;
 
     public:
-        base_client() = default;
-
-        virtual ~base_client()
-        {
-            disconnect();
-        }
 
         bool connect(const string& host, const uint16_t port)
         {
