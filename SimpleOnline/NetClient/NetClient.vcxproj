@@ -108,10 +108,11 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,6 +138,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="client.cpp" />
+    <ClCompile Include="Domain\lobby_domain.cpp" />
     <ClCompile Include="Domain\Player.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -211,10 +213,15 @@
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Scenes\BaseScene.cpp" />
     <ClCompile Include="Scenes\CharacterCreationScene.cpp" />
+    <ClCompile Include="Scenes\LobbyScene.cpp" />
     <ClInclude Include="client.h" />
+    <ClInclude Include="Domain\lobby_domain.h" />
     <ClInclude Include="Domain\Player.h" />
+    <ClInclude Include="Scenes\BaseScene.h" />
     <ClInclude Include="Scenes\CharacterCreationScene.h" />
+    <ClInclude Include="Scenes\LobbyScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetCommon\NetCommon.vcxproj">

@@ -1,6 +1,8 @@
 #pragma once
 #include<dungeon_network.h>
 #include "Domain/Player.h"
+#include "Domain/Lobby/player_lobby_domain.h"
+#include "Models/lobby_model.h"
 
 using namespace dungeon_common;
 
@@ -12,9 +14,10 @@ namespace dungeon_server
     private:
         string spells_[5] = {"BurningHands", "CharmPerson", "CureWounds", "MageArmor", "Thunderwave"};
         vector<domain::player> players_;
+        vector<domain::lobby::player_lobby_domain> players_ready_;
 
     public:
-        server(const uint16_t n_port);
+        explicit server(const uint16_t n_port);
 
 
     protected:

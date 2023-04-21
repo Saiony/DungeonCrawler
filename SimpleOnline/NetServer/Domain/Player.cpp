@@ -1,10 +1,10 @@
 ﻿#include "Player.h"
-
 #include <iostream>
-using namespace dungeon_common::domain;
-using namespace std;
 
-void player::do_something()
+using namespace std;
+using namespace dungeon_server::domain;
+
+void player::do_something() const
 {
     cout << "My id is " << private_id << endl;
 }

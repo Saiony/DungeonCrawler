@@ -12,7 +12,7 @@ int main()
     server server(60000);
     server.start();
 
-    enemy::wolf wolf("Wolf", 10, 15);
+    const enemy::wolf wolf("Wolf", 10, 15);
     const vector<enemy::base_enemy> enemies = { wolf };
     encounter::encounter encounter(enemies);
     

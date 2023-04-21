@@ -96,6 +96,7 @@
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
     <ClCompile Include="Domain\Enemies\Wolf.cpp" />
+    <ClCompile Include="Domain\Lobby\player_lobby_domain.cpp" />
     <ClCompile Include="Domain\Player.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -175,6 +176,7 @@
     <ClInclude Include="Domain\Encounter.h" />
     <ClInclude Include="Domain\Enemies\BaseEnemy.h" />
     <ClInclude Include="Domain\Enemies\Wolf.h" />
+    <ClInclude Include="Domain\Lobby\player_lobby_domain.h" />
     <ClInclude Include="Domain\Player.h" />
     <ClInclude Include="server.h">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>

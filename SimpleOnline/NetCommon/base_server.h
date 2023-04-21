@@ -132,7 +132,7 @@ namespace dungeon_common
             {
                 if (any_of(begin(client_ids), end(client_ids), [con](uint32_t client_id)
                 {
-                    return con->id_ == client_id;
+                    return con->private_id_ == client_id;
                 }))
                     con->send(msg);
             });
@@ -140,7 +140,7 @@ namespace dungeon_common
 
         void broadcast_message(const message<T>& msg)
         {
-            for_each(begin(connections_), end(connections_), [msg](shared_ptr<connection<T>> con)
+            for_each(begin(connections_), end(connections_), [=](shared_ptr<connection<T>> con)
             {
                 con->send(msg);
             });

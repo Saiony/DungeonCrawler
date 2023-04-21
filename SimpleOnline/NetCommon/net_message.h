@@ -14,6 +14,8 @@ namespace dungeon_common
         spell_consult,
         validate_name,
         create_player,
+        player_ready,
+        player_ready_response,
     };
     
     template <typename T>
@@ -72,7 +74,7 @@ namespace dungeon_common
         template <typename DataType>
         friend message<T>& operator >>(message<T>& msg, DataType& data)
         {
-            static_assert(is_standard_layout_v<DataType>, "Data is too complex to be pushed into vector");
+            static_assert(std::is_trivially_copyable_v<DataType>, "Data is too complex to be pushed into vector");
 
             //Get the end of the message
             //If we would read the message from the beginning, everytime you read something, you need to erase it and cause a huge unnecessary reallocation

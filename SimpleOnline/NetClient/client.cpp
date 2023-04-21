@@ -3,20 +3,7 @@
 using namespace dungeon_common;
 using namespace dungeon_client;
 
-void client::consult_spell(const char* spell)
-{
-    cout << "\nRetrieving knowledge from the Arcane realm for [" << spell << "] spell...\n";
-    message<custom_msg_types> msg(custom_msg_types::spell_consult);
-
-    //Copying to an array because we can't simply copy char* data
-    char spell_array[40];
-    strcpy_s(spell_array, spell);
-    msg << spell_array;
-
-    send(msg);
-}
-
-void client::validate_name(const char* name, function<void(simple_answer_model)> callback)
+void client::validate_name(const char* name, const function<void(simple_answer_model)>& callback)
 {
     message<custom_msg_types> msg(custom_msg_types::validate_name);
 
@@ -29,7 +16,7 @@ void client::validate_name(const char* name, function<void(simple_answer_model)>
     send(msg);
 }
 
-void client::create_player(const char* name, function<void(dungeon_common::model::player_model)> callback)
+void client::create_player(const char* name, const function<void(model::player_model)>& callback)
 {
     message<custom_msg_types> msg(custom_msg_types::create_player);
 
@@ -45,4 +32,13 @@ void client::create_player(const char* name, function<void(dungeon_common::model
 void client::set_player(domain::player& player)
 {
      player_ = move(player);
+}
+
+void client::set_player_ready(const bool ready, const function<void(domain::lobby_domain)>& callback)
+{
+    message<custom_msg_types> msg(custom_msg_types::player_ready);
+    msg << ready;
+
+    set_player_ready_callback = callback;
+    send(msg);
 }

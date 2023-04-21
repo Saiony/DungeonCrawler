@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="error_code_type.h" />
+    <ClInclude Include="Models\lobby_model.h" />
     <ClInclude Include="Models\player_model.h" />
     <ClInclude Include="base_client.h" />
     <ClInclude Include="Models\simple_answer_model.h" />
@@ -31,6 +32,7 @@
     <ClInclude Include="dungeon_network.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Models\lobby_model.cpp" />
     <ClCompile Include="Models\player_model.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>

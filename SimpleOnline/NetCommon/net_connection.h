@@ -25,7 +25,7 @@ namespace dungeon_common
         message<T> temporary_message_in_;
         owner owner_type_ = owner::server;
     public:
-        uint32_t id_ = 0;
+        uint16_t id_ = 0;
 
         connection(owner parent, asio::io_context& asio_context, tcp::socket socket, tsqueue<owned_message<T>>& q_in)
             : socket_(move(socket)), asio_context_(asio_context), messages_in_(q_in)
@@ -37,7 +37,7 @@ namespace dungeon_common
 
         // This ID is used system wide - its how clients will understand other clients
         // exist across the whole system.
-        uint32_t get_id() const
+        uint16_t get_id() const
         {
             return id_;
         }
