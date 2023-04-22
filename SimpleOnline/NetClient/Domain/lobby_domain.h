@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "../../NetServer/Domain/Lobby/player_lobby_domain.h"
 #include "Models/lobby_model.h"
 
 namespace dungeon_client::domain
@@ -23,5 +24,6 @@ namespace dungeon_client::domain
     public:
         std::vector<player_lobby_domain> players_ready_;    
         explicit lobby_domain(dungeon_common::model::lobby_model& model);
+        lobby_domain();
     };
 }

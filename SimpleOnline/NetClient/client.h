@@ -13,13 +13,21 @@ namespace dungeon_client
     private:
         domain::player player_ = {};
     public:
-        void validate_name(const char* name, const function<void(simple_answer_model)>& callback);
-        void create_player(const char* name, const function<void(dungeon_common::model::player_model)>& callback);
+        std::condition_variable message_cv;
+        std::condition_variable condition_var;        
+        std::mutex mutex;
+        
+        void validate_name(const char* name);
+        void create_player(const char* name);
         void set_player(domain::player& player);
-        void set_player_ready(bool ready, const function<void(domain::lobby_domain)>& callback);
-    
-        function<void(simple_answer_model)> validate_name_callback;
-        function<void(dungeon_common::model::player_model)> create_player_callback;
+        void set_player_ready(const bool ready, const function<void(domain::lobby_domain)>& callback);
+
+        // function<void(simple_answer_model)> validate_name_callback;
+        // function<void(dungeon_common::model::player_model)> create_player_callback;
         function<void(domain::lobby_domain)> set_player_ready_callback;
+
+        simple_answer_model validate_name_response;
+        dungeon_common::model::player_model create_player_response;
+        domain::lobby_domain set_player_ready_response;
     };
 }

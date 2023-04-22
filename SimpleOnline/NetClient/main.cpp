@@ -1,7 +1,6 @@
 ﻿#include "client.h"
 #include <thread>
 
-#include "../NetServer/Domain/Lobby/player_lobby_domain.h"
 #include "Domain/lobby_domain.h"
 #include "Models/lobby_model.h"
 #include "Scenes/CharacterCreationScene.h"
@@ -22,7 +21,6 @@ void handle_messages(const shared_ptr<client>& client_ptr)
         if (!client_ptr->incoming().empty())
         {
             auto msg = client_ptr->incoming().pop_front().msg;
-            std::cout << "Msg Received: " << endl;
 
             switch (msg.header.id)
             {
@@ -34,27 +32,40 @@ void handle_messages(const shared_ptr<client>& client_ptr)
                 }
             case custom_msg_types::validate_name:
                 {
-                    simple_answer_model answer_dick;
-                    msg >> answer_dick;
-                    client_ptr->validate_name_callback(answer_dick);
+                    simple_answer_model response;
+                    msg >> response;
+                    
+                    std::lock_guard<std::mutex> l{client_ptr->mutex};
+                    client_ptr->validate_name_response = response;
+                    client_ptr->condition_var.notify_one();
+                    
                     break;
                 }
             case custom_msg_types::create_player:
                 {
-                    model::player_model player_model;
-                    msg >> player_model;
-                    client_ptr->create_player_callback(player_model);
+                    model::player_model response;
+                    msg >> response;
+
+                    std::lock_guard<std::mutex> l{client_ptr->mutex};
+                    client_ptr->create_player_response = response;
+                    client_ptr->condition_var.notify_one();
+                    
                     break;
                 }
             case custom_msg_types::player_ready_response:
                 {
-                    model::lobby_model lobby_model;
-                    msg >> lobby_model;
-
-                    const domain::lobby_domain lobby(lobby_model);
+                    model::lobby_model response;
+                    msg >> response;
+                    const domain::lobby_domain lobby(response);
+                    
+                    std::lock_guard<std::mutex> l{client_ptr->mutex};
 
                     if(client_ptr->set_player_ready_callback != nullptr)
                         client_ptr->set_player_ready_callback(lobby);
+                    
+                    client_ptr->set_player_ready_response = lobby;
+                    client_ptr->condition_var.notify_one();
+                    
                     break;
                 }
             default:
@@ -73,6 +84,8 @@ int main()
     cout << "<-~- . - ~-> DUNGEON CRAWLER <-~- . - ~->" << endl;
     scene::character_creation_scene character_creation_scene(client_ptr);
     thread game_thread(&scene::character_creation_scene::show, &character_creation_scene);
+
+    messages_thread.join();
 
     while (true)
     {

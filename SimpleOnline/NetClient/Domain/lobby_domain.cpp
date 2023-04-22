@@ -25,3 +25,5 @@ lobby_domain::lobby_domain(dungeon_common::model::lobby_model& model)
         players_ready_.push_back(player_lobby_domain);
     });
 }
+
+lobby_domain::lobby_domain() = default;

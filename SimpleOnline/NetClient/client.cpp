@@ -3,7 +3,7 @@
 using namespace dungeon_common;
 using namespace dungeon_client;
 
-void client::validate_name(const char* name, const function<void(simple_answer_model)>& callback)
+void client::validate_name(const char* name)
 {
     message<custom_msg_types> msg(custom_msg_types::validate_name);
 
@@ -11,12 +11,11 @@ void client::validate_name(const char* name, const function<void(simple_answer_m
     char player_name[40] = "";
     strcpy_s(player_name, name);
     msg << player_name;
-
-    validate_name_callback = callback;
+    
     send(msg);
 }
 
-void client::create_player(const char* name, const function<void(model::player_model)>& callback)
+void client::create_player(const char* name)
 {
     message<custom_msg_types> msg(custom_msg_types::create_player);
 
@@ -25,7 +24,6 @@ void client::create_player(const char* name, const function<void(model::player_m
     strcpy_s(player_name, name);
     msg << player_name;
 
-    create_player_callback = callback;
     send(msg);
 }
 

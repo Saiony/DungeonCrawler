@@ -22,55 +22,56 @@ void character_creation_scene::create_character()
     cout << "Adventurer, what's your name?" << endl;
 
     string name;
-    do
-    {
-        getline(cin, name);
-    }
-    while (name.empty());
+    getline(cin, name);
 
-    client_ptr_->validate_name(name.c_str(),
-                               [name, this](const simple_answer_model response)
-                               {
-                                   if (!response.ok)
-                                   {
-                                       switch (response.error_code)
-                                       {
-                                       case unknown:
-                                           throw exception("Invalid message type");
-                                       case(error_code_type::name_already_taken):
-                                           {
-                                               cout << "Sorry adventurer, the name is already taken" << endl;
-                                               create_character();
-                                               return;
-                                           }
-                                       default:
-                                           return;
-                                       }
-                                   }
-                                   cout << "Hello, " << name << endl;
-                                   confirm_character_creation(name);
-                               });
+    client_ptr_->validate_name(name.c_str());
+
+    //locks thread and waits for condition var
+    std::unique_lock<std::mutex> lock{client_ptr_->mutex};
+    client_ptr_->condition_var.wait(lock);    
+    const auto response = client_ptr_->validate_name_response;
+    lock.unlock();
+    
+    if (!response.ok)
+    {
+        switch (response.error_code)
+        {
+        case unknown:
+            throw exception("Invalid message type");
+        case(error_code_type::name_already_taken):
+            {
+                cout << "Sorry adventurer, the name is already taken" << endl;
+                create_character();
+                return;
+            }
+        default:
+            return;
+        }
+    }
+    cout << endl << name << " is a beautiful name" << endl;
+    confirm_character_creation(name);
 }
 
 void character_creation_scene::confirm_character_creation(const string& player_name)
 {
     cout << "Confirm character creation? (yes/no)" << endl;
     string answer;
-    do
-    {
-        getline(cin, answer);
-    }
-    while (answer.empty());
+    getline(cin, answer);
 
     if (answer == "yes")
     {
-        client_ptr_->create_player(player_name.c_str(), [this](model::player_model player_model)
-        {
-            domain::player player(player_model.id_, player_model.name_, player_model.health_);
-            client_ptr_->set_player(player);
-            cout << "Character created successfully";
-            on_character_created();
-        });      
+        client_ptr_->create_player(player_name.c_str());
+
+        //locks thread and waits for condition var
+        std::unique_lock<std::mutex> lock{client_ptr_->mutex};
+        client_ptr_->condition_var.wait(lock);        
+        const auto response = client_ptr_->create_player_response;
+        lock.unlock();
+
+        domain::player player(response.id_, response.name_, response.health_);
+        client_ptr_->set_player(player);
+        cout << endl << "Character created successfully";
+        on_character_created();
     }
     else if (answer == "no")
         create_character();
