@@ -9,7 +9,8 @@ lobby_scene::lobby_scene(const shared_ptr<client>& client_ptr)
 }
 
 void lobby_scene::show()
-{
+{    
+    system("CLS");
     auto client_ptr = client_ptr_;
     auto ready = ready_;
     
@@ -24,7 +25,6 @@ void lobby_scene::show()
     const auto response = client_ptr_->set_player_ready_response;
     lock.unlock();
     
-    //print_lobby(response);
     wait_player_ready(client_ptr, ready);
 }
 
@@ -50,8 +50,9 @@ void lobby_scene::wait_player_ready(const shared_ptr<client>& client_ptr, bool r
 }
 
 void lobby_scene::print_lobby(domain::lobby_domain lobby) const
-{
-    cout << endl << endl <<"Waiting for other players..." << endl;
+{    
+    system("CLS");
+    cout << "Waiting for other players..." << endl;
     cout << "-----------------------------------------" << endl;
     for (auto& player_lobby : lobby.players_ready_)
     {

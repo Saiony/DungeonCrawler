@@ -12,7 +12,7 @@ namespace dungeon_server
     class server final : public base_server<custom_msg_types>
     {
     private:
-        const uint8_t max_players_ = 1;
+        const uint8_t max_players_ = 3;
         string spells_[5] = {"BurningHands", "CharmPerson", "CureWounds", "MageArmor", "Thunderwave"};
         vector<domain::player> players_;
         vector<domain::lobby::player_lobby_domain> players_ready_;

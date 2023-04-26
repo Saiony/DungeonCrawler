@@ -65,8 +65,8 @@ void handle_messages(const shared_ptr<client>& client_ptr)
 
                     std::lock_guard l{client_ptr->mutex};
 
-                    if (client_ptr->set_player_ready_callback != nullptr)
-                        client_ptr->set_player_ready_callback(lobby);
+                     if (client_ptr->set_player_ready_callback != nullptr)
+                         client_ptr->set_player_ready_callback(lobby);
 
                     client_ptr->set_player_ready_response = lobby;
                     client_ptr->condition_var.notify_one();
@@ -82,6 +82,7 @@ void handle_messages(const shared_ptr<client>& client_ptr)
 
 int main()
 {
+    cout << "<-~- . - ~-> DUNGEON CRAWLER <-~- . - ~->" << endl << endl;
     auto client_ptr = make_shared<client>();
     thread messages_thread(handle_messages, ref(client_ptr));
     client_ptr->connect("192.168.18.30", 60000);
@@ -97,23 +98,22 @@ int main()
         switch (server_connection_response.error_code)
         {
         case server_full:
-                cout << "Server full, please wait for someone to disconnect";
-                break;
+            cout << "Server full, please wait for someone to disconnect";
+            break;
         default:
-                cout << "Couldn't connect to server. Unknown error";
-                break;
+            cout << "Couldn't connect to server. Unknown error";
+            break;
         }
-
-        messages_thread.join();
-        return 0;
+    }
+    else
+    {
+        scene::character_creation_scene character_creation_scene(client_ptr);
+        thread game_thread(&scene::character_creation_scene::show, &character_creation_scene);
+        game_thread.join();
     }
 
-    cout << "<-~- . - ~-> DUNGEON CRAWLER <-~- . - ~->" << endl;
-    scene::character_creation_scene character_creation_scene(client_ptr);
-    thread game_thread(&scene::character_creation_scene::show, &character_creation_scene);
 
     messages_thread.join();
-
     while (true)
     {
     }

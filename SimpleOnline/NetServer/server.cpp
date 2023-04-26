@@ -70,7 +70,6 @@ void server::on_message(const shared_ptr<connection<custom_msg_types>> client, m
     case custom_msg_types::validate_name:
         {
             const auto player_name = msg.read_body().substr(0, msg.read_body().find('\0', 0));
-            cout << "Validating name from player: " << player_name << endl;
 
             error_code_type error_code = {};
             const auto valid = ranges::none_of(players_, [player_name](const domain::player& player)
@@ -91,15 +90,13 @@ void server::on_message(const shared_ptr<connection<custom_msg_types>> client, m
         {
             bool ready;
             msg >> ready;
-            cout << "Player [" << client->get_id() << "] is ready: " << ready;
 
             //update lobby domain
-            const auto player_lobby_status = ranges::find_if(players_ready_,
-                                                             [client](
-                                                             const domain::lobby::player_lobby_domain& player_ready)
-                                                             {
-                                                                 return player_ready.get_id() == client->get_id();
-                                                             });
+            const auto player_lobby_status = ranges::find_if(players_ready_,[client](
+                 const domain::lobby::player_lobby_domain& player_ready)
+                 {
+                     return player_ready.get_id() == client->get_id();
+                 });
             player_lobby_status->set_ready(ready);
 
             //answer
