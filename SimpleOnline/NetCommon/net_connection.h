@@ -112,7 +112,7 @@ namespace dungeon_common
                                  }
                                  else
                                  {
-                                     cout << "\n[" << id_ << "] Read Header Fail.\n";
+                                     cout << "\n[" << id_ << "] Connection Lost\n";
                                      socket_.close();
                                  }
                              });

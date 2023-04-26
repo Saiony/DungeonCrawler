@@ -7,8 +7,7 @@ namespace dungeon_common
     enum class custom_msg_types : uint32_t
     {
         unknown,
-        server_accept,
-        server_deny,
+        server_connection_response,
         message_all,
         server_message,
         spell_consult,

@@ -2,5 +2,6 @@
 {
     unknown = 0,
     none = 1,
-    name_already_taken = 2,
+    server_full = 2,
+    name_already_taken = 3,
 };

@@ -19,7 +19,7 @@ namespace dungeon_common
         tcp::acceptor asio_acceptor_;
         uint32_t id_counter_ = 10000;
 
-        virtual void on_client_connect(shared_ptr<connection<T>>)
+        virtual void on_client_connect(const shared_ptr<connection<custom_msg_types>>&)
         {
         }
 
@@ -31,7 +31,7 @@ namespace dungeon_common
         {
         }
 
-        virtual bool can_client_connect(shared_ptr<connection<T>>)
+        virtual bool can_client_connect(const shared_ptr<connection<custom_msg_types>>&)
         {
             return false;
         }
@@ -86,20 +86,11 @@ namespace dungeon_common
                 else
                 {
                     cout << "[SERVER] New Connection: " << socket.remote_endpoint() << endl;
-                    shared_ptr<connection<T>> new_con = make_shared<connection<T>>(
-                        owner::server, asio_context_, move(socket), messages_in_);
+                    shared_ptr<connection<T>> new_con = make_shared<connection<T>>(owner::server, asio_context_, move(socket), messages_in_);
 
-                    if (can_client_connect(new_con))
-                    {
-                        new_con->connect_to_client(id_counter_++);
-                        on_client_connect(new_con);
-                        connections_.push_back(move(new_con));
-                        cout << "[" << connections_.back()->get_id() << "] Connection Approved\n";
-                    }
-                    else
-                    {
-                        cout << "[-----] Connection Denied\n";
-                    }
+                    new_con->connect_to_client(id_counter_++);
+                    on_client_connect(new_con);
+                    connections_.push_back(move(new_con));
                 }
 
                 wait_for_client_connection();
