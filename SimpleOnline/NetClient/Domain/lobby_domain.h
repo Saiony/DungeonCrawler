@@ -13,17 +13,23 @@ namespace dungeon_client::domain
     private:
         std::string name_{};
         bool ready_{};
-    public:
+        bool start_match_;
+
+    public:        
         explicit player_lobby_domain(dungeon_common::model::player_lobby_model model);
         std::string get_name();
-        std::string get_ready() const;
+        std::string get_ready_text() const;
+        bool get_ready();
+        bool get_start_match();
     };
 
     class lobby_domain
     {
     public:
-        std::vector<player_lobby_domain> players_ready_;    
+        bool start_match;
+        
         explicit lobby_domain(dungeon_common::model::lobby_model& model);
         lobby_domain();
+        std::vector<player_lobby_domain> players_ready;
     };
 }

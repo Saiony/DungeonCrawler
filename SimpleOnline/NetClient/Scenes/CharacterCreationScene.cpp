@@ -14,72 +14,66 @@ character_creation_scene::character_creation_scene(const shared_ptr<client>& cli
 
 void character_creation_scene::show()
 {
-    create_character();    
+    create_character();
 }
 
 void character_creation_scene::create_character()
 {
     cout << "Adventurer, what's your name?" << endl;
 
-    string name;
-    getline(cin, name);
-
-    client_ptr_->validate_name(name.c_str());
-
-    //locks thread and waits for condition var
-    std::unique_lock<std::mutex> lock{client_ptr_->mutex};
-    client_ptr_->condition_var.wait(lock);    
-    const auto response = client_ptr_->validate_name_response;
-    lock.unlock();
-    
-    if (!response.ok)
+    client_ptr_->read_input([this](string input)
     {
-        switch (response.error_code)
+        cout << "Name: " << input << endl;
+
+        client_ptr_->validate_name(input.c_str(), [this, &input](model::simple_answer_model response)
         {
-        case unknown:
-            throw exception("Invalid message type");
-        case(error_code_type::name_already_taken):
+            if (!response.ok)
             {
-                cout << "Sorry adventurer, the name is already taken" << endl;
-                create_character();
-                return;
+                switch (response.error_code)
+                {
+                case unknown:
+                    throw exception("Invalid message type");
+                case(error_code_type::name_already_taken):
+                    {
+                        cout << "Sorry adventurer, the name is already taken" << endl;
+                        create_character();
+                        return;
+                    }
+                default:
+                    return;
+                }
             }
-        default:
-            return;
-        }
-    }
-    cout << endl << name << " is a beautiful name" << endl;
-    confirm_character_creation(name);
+            cout << endl << input << " is a beautiful name" << endl;
+            confirm_character_creation(input);
+        });
+        client_ptr_->wait_message();
+    });
 }
 
 void character_creation_scene::confirm_character_creation(const string& player_name)
 {
     cout << "Confirm character creation? (yes/no)" << endl;
-    string answer;
-    getline(cin, answer);
-
-    if (answer == "yes")
+    client_ptr_->read_input([&](string answer)
     {
-        client_ptr_->create_player(player_name.c_str());
-
-        //locks thread and waits for condition var
-        std::unique_lock<std::mutex> lock{client_ptr_->mutex};
-        client_ptr_->condition_var.wait(lock);        
-        const auto response = client_ptr_->create_player_response;
-        lock.unlock();
-
-        domain::player player(response.id_, response.name_, response.health_);
-        client_ptr_->set_player(player);
-        cout << endl << "Character created successfully";
-        on_character_created();
-    }
-    else if (answer == "no")
-        create_character();
-    else
-    {
-        cout << "Please type only yes or no";
-        confirm_character_creation(player_name);
-    }
+        if (answer == "yes")
+        {
+            client_ptr_->create_player(player_name.c_str(), [&](dungeon_common::model::player_model response)
+            {
+                domain::player player(response.id_, response.name_, response.health_);
+                client_ptr_->set_player(player);
+                cout << endl << "Character created successfully";
+                on_character_created();
+            });
+            client_ptr_->wait_message();
+        }
+        else if (answer == "no")
+            create_character();
+        else
+        {
+            cout << "Please type only yes or no";
+            confirm_character_creation(player_name);
+        }
+    });
 }
 
 void character_creation_scene::on_character_created() const

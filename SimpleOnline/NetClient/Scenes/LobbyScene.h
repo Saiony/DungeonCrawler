@@ -13,6 +13,7 @@ namespace dungeon_client::scene
         std::shared_ptr<client> client_ptr_ = nullptr;
         
         void wait_player_ready(const shared_ptr<client>& client_ptr, bool ready);
+        void start_match() const;
         void print_lobby(domain::lobby_domain lobby) const;
     public:        
         explicit lobby_scene(const shared_ptr<client>& client_ptr);

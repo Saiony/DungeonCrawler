@@ -62,9 +62,8 @@ void server::on_message(const shared_ptr<connection<custom_msg_types>> client, m
             const domain::player player_domain(player_model.id_, player_name, player_model.health_);
             players_.push_back(player_domain);
 
-            const auto player_lobby = domain::lobby::player_lobby_domain(
-                player_domain.private_id, player_domain.name, false);
-            players_ready_.push_back(player_lobby);
+            auto player_lobby = domain::lobby::player_lobby_domain(player_domain.private_id, player_domain.name, false);
+            lobby_.players_ready.push_back(player_lobby);
             break;
         }
     case custom_msg_types::validate_name:
@@ -92,24 +91,24 @@ void server::on_message(const shared_ptr<connection<custom_msg_types>> client, m
             msg >> ready;
 
             //update lobby domain
-            const auto player_lobby_status = ranges::find_if(players_ready_,[client](
-                 const domain::lobby::player_lobby_domain& player_ready)
+            const auto player_lobby = find_if(begin(lobby_.players_ready), end(lobby_.players_ready),
+                [client](const domain::lobby::player_lobby_domain& player_ready)
                  {
                      return player_ready.get_id() == client->get_id();
                  });
-            player_lobby_status->set_ready(ready);
+            player_lobby->set_ready(ready);
 
             //answer
-            model::lobby_model player_lobby;
-            for (size_t i = 0; i < players_ready_.size(); i++)
+            model::lobby_model lobby_model;
+            for (size_t i = 0; i < lobby_.players_ready.size(); i++)
             {
-                strcpy_s(player_lobby.players_lobby_status[i].name_, players_ready_[i].get_name());
-                player_lobby.players_lobby_status[i].ready_ = players_ready_[i].get_ready();
+                strcpy_s(lobby_model.players_lobby_status[i].name, lobby_.players_ready[i].get_name());
+                lobby_model.players_lobby_status[i].ready = lobby_.players_ready[i].get_ready();
             }
+            lobby_model.start_match = lobby_.start_match();
 
             message<custom_msg_types> answer(custom_msg_types::player_ready_response);
-            answer << player_lobby;
-
+            answer << lobby_model;
             broadcast_message(answer);
 
             break;

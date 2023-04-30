@@ -215,12 +215,14 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scenes\BaseScene.cpp" />
     <ClCompile Include="Scenes\CharacterCreationScene.cpp" />
+    <ClCompile Include="Scenes\LevelScene.cpp" />
     <ClCompile Include="Scenes\LobbyScene.cpp" />
     <ClInclude Include="client.h" />
     <ClInclude Include="Domain\lobby_domain.h" />
     <ClInclude Include="Domain\Player.h" />
     <ClInclude Include="Scenes\BaseScene.h" />
     <ClInclude Include="Scenes\CharacterCreationScene.h" />
+    <ClInclude Include="Scenes\LevelScene.h" />
     <ClInclude Include="Scenes\LobbyScene.h" />
   </ItemGroup>
   <ItemGroup>
