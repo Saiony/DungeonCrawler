@@ -19,12 +19,12 @@ void read_input_thread(string& input)
     }
 }
 
-void client::init()
+client::client()
 {
     input_thread = thread(read_input_thread, ref(player_input));
 }
 
-void client::end()
+void client::end() const
 {
     input_thread.join();
 }

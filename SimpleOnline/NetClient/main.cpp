@@ -26,7 +26,6 @@ int main()
 {
     cout << "<-~- . - ~-> DUNGEON CRAWLER <-~- . - ~->" << endl << endl;
     auto client_ptr = make_shared<client>();
-    client_ptr->init();
     client_ptr->connect("192.168.18.30", 60000, [&client_ptr](const model::simple_answer_model response)
     {
         if (!response.ok)

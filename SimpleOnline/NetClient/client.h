@@ -18,8 +18,9 @@ namespace dungeon_client
         std::condition_variable condition_var;        
         std::mutex mutex;
 
+        client();
         void init();
-        void end();
+        void end() const;
         void connect(const string& host, const uint16_t port, const function<void(dungeon_common::model::simple_answer_model)>& callback);
         void validate_name(const char* name, const function<void(dungeon_common::model::simple_answer_model)>& callback);
         void create_player(const char* name, const function<void(dungeon_common::model::player_model)>& callback);
