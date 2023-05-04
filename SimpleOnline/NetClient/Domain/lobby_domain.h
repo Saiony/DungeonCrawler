@@ -1,9 +1,7 @@
 ﻿#pragma once
-#include <cstdint>
+
 #include <string>
 #include <vector>
-
-#include "../../NetServer/Domain/Lobby/player_lobby_domain.h"
 #include "Models/lobby_model.h"
 
 namespace dungeon_client::domain

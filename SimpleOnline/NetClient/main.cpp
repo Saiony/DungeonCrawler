@@ -1,8 +1,5 @@
 ﻿#include "client.h"
 #include <thread>
-
-#include "Domain/lobby_domain.h"
-#include "Models/lobby_model.h"
 #include "Scenes/CharacterCreationScene.h"
 
 using namespace dungeon_common;

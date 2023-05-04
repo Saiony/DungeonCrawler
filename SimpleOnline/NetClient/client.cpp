@@ -1,7 +1,5 @@
 ﻿#include "client.h"
 
-#include <conio.h>
-
 #include "Models/simple_answer_model.h"
 using namespace dungeon_common;
 using namespace dungeon_client;
