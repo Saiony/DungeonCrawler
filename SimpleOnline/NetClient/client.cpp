@@ -29,6 +29,13 @@ void client::end()
     input_thread.join();
 }
 
+void client::connect(const string& host, const uint16_t port, const function<void(dungeon_common::model::simple_answer_model)>& callback)
+{
+    base_client::connect(host, port);
+    connection_callback = callback;
+    wait_message();
+}
+
 void client::validate_name(const char* name, const function<void(model::simple_answer_model)>& callback)
 {
     message<custom_msg_types> msg(custom_msg_types::validate_name);
@@ -40,6 +47,7 @@ void client::validate_name(const char* name, const function<void(model::simple_a
 
     validate_name_callback = callback;
     send(msg);
+    wait_message();
 }
 
 void client::create_player(const char* name, const function<void(dungeon_common::model::player_model)>& callback)
@@ -53,6 +61,7 @@ void client::create_player(const char* name, const function<void(dungeon_common:
 
     create_player_callback = callback;
     send(msg);
+    wait_message();
 }
 
 void client::set_player(domain::player& player)
@@ -67,6 +76,7 @@ void client::set_player_ready(const bool ready, const function<void(domain::lobb
 
     set_player_ready_callback = callback;
     send(msg);
+    wait_message();
 }
 
 void client::read_input(const function<void(string input)>& callback)

@@ -13,28 +13,24 @@ namespace dungeon_client
     private:
         domain::player player_ = {};
         bool handle_messages();
+        void wait_message();
     public:
         std::condition_variable condition_var;        
         std::mutex mutex;
 
         void init();
         void end();
+        void connect(const string& host, const uint16_t port, const function<void(dungeon_common::model::simple_answer_model)>& callback);
         void validate_name(const char* name, const function<void(dungeon_common::model::simple_answer_model)>& callback);
         void create_player(const char* name, const function<void(dungeon_common::model::player_model)>& callback);
         void set_player(domain::player& player);
         void set_player_ready(const bool ready, const function<void(domain::lobby_domain)>& callback);
         void read_input(const function<void(string input)>& callback);
-        void wait_message();
 
         function<void(string input)> player_input_callback;
         function<void(dungeon_common::model::simple_answer_model)> validate_name_callback;
         function<void(dungeon_common::model::player_model)> create_player_callback;
         function<void(domain::lobby_domain)> set_player_ready_callback;
-        function<void( dungeon_common::model::simple_answer_model)> connection_callback;
-        //
-        // dungeon_common::model::simple_answer_model server_connection_response;
-        // dungeon_common::model::simple_answer_model validate_name_response;
-        // dungeon_common::model::player_model create_player_response;
-        // domain::lobby_domain set_player_ready_response;
+        function<void(dungeon_common::model::simple_answer_model)> connection_callback;
     };
 }

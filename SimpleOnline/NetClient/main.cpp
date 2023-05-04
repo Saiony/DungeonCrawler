@@ -26,10 +26,8 @@ int main()
 {
     cout << "<-~- . - ~-> DUNGEON CRAWLER <-~- . - ~->" << endl << endl;
     auto client_ptr = make_shared<client>();
-    client_ptr->connect("192.168.18.30", 60000);
     client_ptr->init();
-
-    client_ptr->connection_callback = [&client_ptr](model::simple_answer_model response)
+    client_ptr->connect("192.168.18.30", 60000, [&client_ptr](const model::simple_answer_model response)
     {
         if (!response.ok)
         {
@@ -38,9 +36,8 @@ int main()
         }
         scene::character_creation_scene character_creation_scene(client_ptr);
         character_creation_scene.show();
-    };
+    });
     
-    client_ptr->wait_message();    
     client_ptr->end();
     while (true)
     {

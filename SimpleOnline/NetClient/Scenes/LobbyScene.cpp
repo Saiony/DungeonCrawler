@@ -22,7 +22,6 @@ void lobby_scene::show()
         print_lobby(lobby);
         wait_player_ready(client_ptr, ready);
     });
-    client_ptr->wait_message();
 }
 
 void lobby_scene::wait_player_ready(const shared_ptr<client>& client_ptr, bool ready)
@@ -49,7 +48,6 @@ void lobby_scene::wait_player_ready(const shared_ptr<client>& client_ptr, bool r
 
             wait_player_ready(client_ptr, ready);
         });
-        client_ptr->wait_message();
     });
 }
 

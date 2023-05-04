@@ -46,7 +46,6 @@ void character_creation_scene::create_character()
             cout << endl << input << " is a beautiful name" << endl;
             confirm_character_creation(input);
         });
-        client_ptr_->wait_message();
     });
 }
 
@@ -64,7 +63,6 @@ void character_creation_scene::confirm_character_creation(const string& player_n
                 cout << endl << "Character created successfully";
                 on_character_created();
             });
-            client_ptr_->wait_message();
         }
         else if (answer == "no")
             create_character();
