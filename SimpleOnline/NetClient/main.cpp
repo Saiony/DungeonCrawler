@@ -38,7 +38,4 @@ int main()
     });
     
     client_ptr->end();
-    while (true)
-    {
-    }
 }
