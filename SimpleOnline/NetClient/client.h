@@ -3,6 +3,7 @@
 
 #include "Domain/lobby_domain.h"
 #include "Domain/Player.h"
+#include "Models/action_model.h"
 #include "Models/player_model.h"
 #include "Models/simple_answer_model.h"
 
@@ -26,6 +27,8 @@ namespace dungeon_client
         void create_player(const char* name, const function<void(dungeon_common::model::player_model)>& callback);
         void set_player(domain::player& player);
         void set_player_ready(const bool ready, const function<void(domain::lobby_domain)>& callback);
+        void send_action(action_types action_id, int target_id);
+        void send_action(action_types action_id, int target_id) const;
         void read_input(const function<void(string input)>& callback);
 
         function<void(string input)> player_input_callback;

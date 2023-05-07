@@ -1,4 +1,6 @@
-﻿enum error_code_type
+﻿#pragma once
+
+enum class error_code_type
 {
     unknown = 0,
     none = 1,

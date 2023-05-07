@@ -1,6 +1,7 @@
 ﻿#include "server.h"
 #include<string>
 
+#include "Models/action_model.h"
 #include "Models/lobby_model.h"
 #include "Models/player_model.h"
 #include "Models/simple_answer_model.h"
@@ -32,7 +33,7 @@ void server::on_client_connect(const shared_ptr<connection<custom_msg_types>>& c
     {
         cout << "[" << client->get_id() << "] Connection Approved\n";
         answer.ok = true;
-        answer.error_code = none;
+        answer.error_code = error_code_type::none;
     }
     
     msg << answer;
@@ -62,7 +63,7 @@ void server::on_message(const shared_ptr<connection<custom_msg_types>> client, m
             const domain::player player_domain(player_model.id_, player_name, player_model.health_);
             players_.push_back(player_domain);
 
-            auto player_lobby = domain::lobby::player_lobby_domain(player_domain.private_id, player_domain.name, false);
+            const auto player_lobby = domain::lobby::player_lobby_domain(player_domain.private_id, player_domain.name, false);
             lobby_.players_ready.push_back(player_lobby);
             break;
         }
@@ -111,6 +112,12 @@ void server::on_message(const shared_ptr<connection<custom_msg_types>> client, m
             answer << lobby_model;
             broadcast_message(answer);
 
+            break;
+        }
+    case custom_msg_types::player_action:
+        {
+            action_model action_model;
+            msg >> action_model;
             break;
         }
     default:

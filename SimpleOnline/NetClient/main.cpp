@@ -10,7 +10,7 @@ void handle_connection_error(error_code_type error_code)
 {
     switch (error_code)
     {
-    case server_full:
+    case error_code_type::server_full:
         cout << "Server full, please wait for someone to disconnect";
         break;
     default:

@@ -1,5 +1,6 @@
 ﻿#include "client.h"
 
+#include "Models/action_model.h"
 #include "Models/simple_answer_model.h"
 using namespace dungeon_common;
 using namespace dungeon_client;
@@ -73,6 +74,16 @@ void client::set_player_ready(const bool ready, const function<void(domain::lobb
     msg << ready;
 
     set_player_ready_callback = callback;
+    send(msg);
+    wait_message();
+}
+
+void client::send_action(action_types action_id, int target_id)
+{
+    const action_model action(action_types::fireball, 1);
+    message<custom_msg_types> msg(custom_msg_types::player_action);
+
+    msg << action;
     send(msg);
     wait_message();
 }

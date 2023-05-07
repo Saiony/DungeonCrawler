@@ -16,6 +16,7 @@ namespace dungeon_common
         player_ready,
         player_ready_response,
         match_start,
+        player_action,
     };
     
     template <typename T>

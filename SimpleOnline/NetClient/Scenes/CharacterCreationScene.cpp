@@ -31,7 +31,7 @@ void character_creation_scene::create_character()
             {
                 switch (response.error_code)
                 {
-                case unknown:
+                case error_code_type::unknown:
                     throw exception("Invalid message type");
                 case(error_code_type::name_already_taken):
                     {
