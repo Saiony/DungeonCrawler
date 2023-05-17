@@ -78,14 +78,13 @@ void client::set_player_ready(const bool ready, const function<void(domain::lobb
     wait_message();
 }
 
-void client::send_action(action_types action_id, int target_id)
+void client::send_action(const action_types action_id, int target_id)
 {
-    const action_model action(action_types::fireball, 1);
+    const action_model action(action_id, 1);
     message<custom_msg_types> msg(custom_msg_types::player_action);
 
     msg << action;
     send(msg);
-    wait_message();
 }
 
 void client::read_input(const function<void(string input)>& callback)

@@ -6,7 +6,7 @@ namespace dungeon_server::domain::enemy
     class base_enemy
     {
     protected:
-        int id_;
+        std::string id_;
         const char* name_;
         uint16_t health_;
         uint16_t damage_;

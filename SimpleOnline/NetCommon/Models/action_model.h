@@ -4,8 +4,9 @@
 enum class action_types
 {
     unknown = 0,
-    fireball = 1,
-    bite = 2,
+    sword_slash,
+    heal,
+    bite,
 };
 
 struct action_model

@@ -1,6 +1,7 @@
 ﻿#include "server.h"
 #include<string>
 
+#include "Domain/Factory/action_factory.h"
 #include "Models/action_model.h"
 #include "Models/lobby_model.h"
 #include "Models/player_model.h"
@@ -92,11 +93,11 @@ void server::on_message(const shared_ptr<connection<custom_msg_types>> client, m
             msg >> ready;
 
             //update lobby domain
-            const auto player_lobby = find_if(begin(lobby_.players_ready), end(lobby_.players_ready),
-                [client](const domain::lobby::player_lobby_domain& player_ready)
-                 {
-                     return player_ready.get_id() == client->get_id();
-                 });
+            const auto player_lobby = ranges::find_if(lobby_.players_ready,
+                                                                      [client](const domain::lobby::player_lobby_domain& player_ready)
+                                                                      {
+                                                                          return player_ready.get_id() == client->get_id();
+                                                                      });
             player_lobby->set_ready(ready);
 
             //answer
@@ -118,10 +119,13 @@ void server::on_message(const shared_ptr<connection<custom_msg_types>> client, m
         {
             action_model action_model;
             msg >> action_model;
+
+            auto action = ::domain::action::action_factory::create_action(action_model);
+            action->use();
             break;
         }
     default:
-        cout << "Invalid MsgType";
+        cout << "Invalid MsgType"; 
         break;
     }
 }

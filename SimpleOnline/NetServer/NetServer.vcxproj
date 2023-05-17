@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Domain\Actions\base_action.cpp" />
+    <ClCompile Include="Domain\Actions\heal_action.cpp" />
+    <ClCompile Include="Domain\Actions\sword_slash_action.cpp" />
     <ClCompile Include="Domain\Encounter.cpp" />
     <ClCompile Include="Domain\Enemies\BaseEnemy.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -96,6 +99,7 @@
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
     <ClCompile Include="Domain\Enemies\Wolf.cpp" />
+    <ClCompile Include="Domain\Factory\action_factory.cpp" />
     <ClCompile Include="Domain\Lobby\lobby_domain.cpp" />
     <ClCompile Include="Domain\Lobby\player_lobby_domain.cpp" />
     <ClCompile Include="Domain\Player.cpp">
@@ -174,9 +178,13 @@
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
     <ClCompile Include="Main.cpp" />
+    <ClInclude Include="Domain\Actions\base_action.h" />
+    <ClInclude Include="Domain\Actions\heal_action.h" />
+    <ClInclude Include="Domain\Actions\sword_slash_action.h" />
     <ClInclude Include="Domain\Encounter.h" />
     <ClInclude Include="Domain\Enemies\BaseEnemy.h" />
     <ClInclude Include="Domain\Enemies\Wolf.h" />
+    <ClInclude Include="Domain\Factory\action_factory.h" />
     <ClInclude Include="Domain\Lobby\lobby_domain.h" />
     <ClInclude Include="Domain\Lobby\player_lobby_domain.h" />
     <ClInclude Include="Domain\Player.h" />
