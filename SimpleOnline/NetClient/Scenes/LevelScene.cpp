@@ -14,20 +14,26 @@ void dungeon_client::scene::level_scene::show()
 
     client_ptr_->get_encounter([](auto encounter)
     {
-        cout << "hello";
+        for (auto& enemy : encounter.enemies)
+        {
+            cout << enemy.get_name() << " - " << enemy.get_health() << "hp" << endl << endl;
+        }
+        cout << "-----------------------------------------" << endl << endl;
+        for (auto& player : encounter.players)
+        {
+            cout << player.name << " - " << player.health << "hp" << endl;
+        }
     });
 
     string input;
-    while(true)
+    while (true)
     {
         client_ptr_->read_input([this](string input)
         {
-            if(input == "heal")
+            if (input == "heal")
                 client_ptr_->send_action(action_types::heal, 1);
-            else if(input == "sword slash")
+            else if (input == "sword slash")
                 client_ptr_->send_action(action_types::sword_slash, 1);
         });
-            
     }
-
 }

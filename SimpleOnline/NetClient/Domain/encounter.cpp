@@ -4,7 +4,17 @@ dungeon_client::domain::enemy::enemy(const char* name, const uint16_t health): n
 {
 }
 
+std::string dungeon_client::domain::enemy::get_name()
+{
+    return name_;
+}
+
+uint16_t dungeon_client::domain::enemy::get_health()
+{
+    return health_;
+}
+
 dungeon_client::domain::encounter::encounter(std::vector<enemy> enemies, std::vector<player> players) :
-                                             enemies_(std::move(enemies)), players_(std::move(players))
+                                             enemies(std::move(enemies)), players(std::move(players))
 {
 }

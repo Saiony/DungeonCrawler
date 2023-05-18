@@ -11,14 +11,16 @@ namespace dungeon_client::domain
         uint16_t health_;
     public:
         enemy(const char* name, uint16_t health);
+        std::string get_name();
+        uint16_t get_health();
     };
     
     class encounter
     {
-    private:
-        std::vector<enemy> enemies_;
-        std::vector<player> players_;
     public:
+        std::vector<enemy> enemies;
+        std::vector<player> players;
+        
         encounter(std::vector<enemy> enemies, std::vector<player> players);
     };
 }
