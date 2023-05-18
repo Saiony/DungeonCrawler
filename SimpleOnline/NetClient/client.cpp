@@ -1,6 +1,7 @@
 ﻿#include "client.h"
 
 #include "Models/action_model.h"
+#include "Models/encounter_model.h"
 #include "Models/simple_answer_model.h"
 using namespace dungeon_common;
 using namespace dungeon_client;
@@ -84,6 +85,13 @@ void client::send_action(const action_types action_id, int target_id)
     message<custom_msg_types> msg(custom_msg_types::player_action);
 
     msg << action;
+    send(msg);
+}
+
+void client::get_encounter(const function<void(domain::encounter)>& callback)
+{
+    get_encounter_callback = callback;
+    const message<custom_msg_types> msg(custom_msg_types::match_start_request);
     send(msg);
 }
 
@@ -181,6 +189,33 @@ bool client::handle_messages()
                 set_player_ready_callback(lobby);
                 return true;
             }
+            return false;
+        }
+    case custom_msg_types::match_start_response:
+        {
+            model::encounter_model encounter_model;
+            msg >> encounter_model;
+
+            std::vector<domain::enemy> enemies;
+            std::vector<domain::player> players;
+
+            for (auto& enemy_model : encounter_model.enemies)
+            {
+                enemies.emplace_back(enemy_model.name, enemy_model.health);
+            }
+
+            for(auto& player_model : encounter_model.players)
+            {
+                players.emplace_back(player_model.id_, player_model.name_, player_model.health_);
+            }
+
+            const domain::encounter encounter(enemies, players);               
+            if(get_encounter_callback != nullptr)
+            {
+                get_encounter_callback(encounter);
+                return true;
+            }
+
             return false;
         }
     default:

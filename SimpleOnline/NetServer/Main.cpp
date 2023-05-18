@@ -2,6 +2,7 @@
 #include "server.h"
 #include "Domain/Encounter.h"
 #include "Domain/Enemies/Wolf.h"
+#include "Models/encounter_model.h"
 
 using namespace dungeon_server;
 using namespace model;
@@ -11,10 +12,6 @@ int main()
 {
     server server(60000);
     server.start();
-
-    const enemy::wolf wolf("wolf", 10, 15);
-    const vector<enemy::base_enemy> enemies = { static_cast<enemy::base_enemy>(wolf) };
-    encounter::encounter encounter(enemies);
     
     while (true)
         server.update(150, false);

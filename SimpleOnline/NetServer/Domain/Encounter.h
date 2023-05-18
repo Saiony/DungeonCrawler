@@ -10,6 +10,6 @@ namespace dungeon_server::domain::encounter
     private:
         std::vector<enemy::base_enemy> enemies_;
     public:
-        encounter(std::vector<enemy::base_enemy> enemies);
+        explicit encounter(std::vector<enemy::base_enemy> enemies);
     };
 }

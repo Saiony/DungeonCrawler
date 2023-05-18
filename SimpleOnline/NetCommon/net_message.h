@@ -15,7 +15,8 @@ namespace dungeon_common
         create_player,
         player_ready,
         player_ready_response,
-        match_start,
+        match_start_request,
+        match_start_response,
         player_action,
     };
     

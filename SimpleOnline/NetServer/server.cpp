@@ -1,8 +1,11 @@
 ﻿#include "server.h"
 #include<string>
 
+#include "Domain/Encounter.h"
+#include "Domain/Enemies/Wolf.h"
 #include "Domain/Factory/action_factory.h"
 #include "Models/action_model.h"
+#include "Models/encounter_model.h"
 #include "Models/lobby_model.h"
 #include "Models/player_model.h"
 #include "Models/simple_answer_model.h"
@@ -10,8 +13,6 @@ using namespace dungeon_server;
 
 server::server(const uint16_t n_port) : base_server<custom_msg_types>(n_port)
 {
-    const domain::player debug_player(5, "saiony", 50);
-    players_.push_back(debug_player);
 }
 
 bool server::can_client_connect(const shared_ptr<connection<custom_msg_types>>& connection)
@@ -113,6 +114,29 @@ void server::on_message(const shared_ptr<connection<custom_msg_types>> client, m
             answer << lobby_model;
             broadcast_message(answer);
 
+            break;
+        }
+    case custom_msg_types::match_start_request:
+        {         
+            const domain::enemy::wolf wolf("wolf", 10, 15);
+            vector<domain::enemy::base_enemy> enemies = { static_cast<domain::enemy::base_enemy>(wolf) };
+            domain::encounter::encounter encounter(enemies);
+
+            model::encounter_model encounter_model;
+            for(size_t i = 0; i < enemies.size(); i++)
+            {
+                encounter_model.enemies[i] = model::enemy_model(enemies[i].get_name(), enemies[i].get_health());
+            }
+
+            for(size_t i = 0; i < players_.size(); i++)
+            {
+                encounter_model.players[i] = model::player_model(players_[i].private_id, players_[i].name, players_[i].health);    
+            }
+
+            message<custom_msg_types> answer(custom_msg_types::match_start_response);
+            answer << encounter_model;
+            broadcast_message(answer);
+            
             break;
         }
     case custom_msg_types::player_action:

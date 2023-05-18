@@ -138,6 +138,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="client.cpp" />
+    <ClCompile Include="Domain\encounter.cpp" />
     <ClCompile Include="Domain\lobby_domain.cpp" />
     <ClCompile Include="Domain\Player.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -218,6 +219,7 @@
     <ClCompile Include="Scenes\LevelScene.cpp" />
     <ClCompile Include="Scenes\LobbyScene.cpp" />
     <ClInclude Include="client.h" />
+    <ClInclude Include="Domain\encounter.h" />
     <ClInclude Include="Domain\lobby_domain.h" />
     <ClInclude Include="Domain\Player.h" />
     <ClInclude Include="Scenes\BaseScene.h" />

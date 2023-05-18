@@ -12,6 +12,11 @@ void dungeon_client::scene::level_scene::show()
     system("CLS");
     cout << "--- GAME SCENE ---" << endl << endl;
 
+    client_ptr_->get_encounter([](auto encounter)
+    {
+        cout << "hello";
+    });
+
     string input;
     while(true)
     {
