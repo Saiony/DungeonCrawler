@@ -135,7 +135,7 @@ void server::on_message(const shared_ptr<connection<custom_msg_types>> client, m
 
             message<custom_msg_types> answer(custom_msg_types::match_start_response);
             answer << encounter_model;
-            broadcast_message(answer);
+            message_client(client->get_id(), answer);
             
             break;
         }

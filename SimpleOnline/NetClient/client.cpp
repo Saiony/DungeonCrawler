@@ -150,6 +150,7 @@ bool client::handle_messages()
             if (connection_callback != nullptr)
             {
                 connection_callback(response);
+                connection_callback = nullptr;
                 return true;
             }
             return false;
@@ -162,6 +163,7 @@ bool client::handle_messages()
             if (validate_name_callback != nullptr)
             {
                 validate_name_callback(response);
+                validate_name_callback = nullptr;
                 return true;
             }
             return false;
@@ -174,6 +176,7 @@ bool client::handle_messages()
             if (create_player_callback != nullptr)
             {
                 create_player_callback(response);
+                create_player_callback = nullptr;
                 return true;
             }
             return false;
@@ -187,6 +190,7 @@ bool client::handle_messages()
             if (set_player_ready_callback != nullptr)
             {
                 set_player_ready_callback(lobby);
+                set_player_ready_callback = nullptr;
                 return true;
             }
             return false;
@@ -201,18 +205,21 @@ bool client::handle_messages()
 
             for (auto& enemy_model : encounter_model.enemies)
             {
-                enemies.emplace_back(enemy_model.name, enemy_model.health);
+                if(std::strlen(enemy_model.name) > 0)
+                    enemies.emplace_back(enemy_model.name, enemy_model.health);
             }
 
             for(auto& player_model : encounter_model.players)
             {
-                players.emplace_back(player_model.id_, player_model.name_, player_model.health_);
+                if(std::strlen(player_model.name_) > 0)
+                    players.emplace_back(player_model.id_, player_model.name_, player_model.health_);
             }
 
             const domain::encounter encounter(enemies, players);               
             if(get_encounter_callback != nullptr)
             {
                 get_encounter_callback(encounter);
+                get_encounter_callback = nullptr;
                 return true;
             }
 
