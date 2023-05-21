@@ -8,11 +8,11 @@ namespace dungeon_client::domain
     class player
     {
     public:
-        uint32_t id;
-        std::string name;
-        uint32_t health;
+        std::string id{};
+        std::string name{};
+        uint32_t health{};
 
         player();
-        player(uint32_t id, std::string name, uint32_t health);
+        player(std::string id, std::string name, uint32_t health);
     };
 }

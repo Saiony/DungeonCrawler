@@ -7,11 +7,11 @@ namespace dungeon_common::model
     class player_model
     {
     public:
-        uint32_t id_{};
-        char name_[40]{};
-        uint32_t health_{};
+        char id[40]{};
+        char name[40]{};
+        uint32_t health{};
         
         player_model();
-        player_model(uint32_t id, std::string name, uint32_t health);
+        player_model(std::string new_id, std::string new_name, uint32_t health);
     };
 }

@@ -55,18 +55,20 @@ void server::on_message(const shared_ptr<connection<custom_msg_types>> client, m
         {
             const auto player_name = msg.read_body().substr(0, msg.read_body().find('\0', 0));
 
+            //create player domain and add to the list
+            const domain::player player_domain(client->get_id(), player_name, 37);
+            players_.push_back(player_domain);
+
+            //add player to lobby
+            const auto player_lobby = domain::lobby::player_lobby_domain(player_domain.private_id, player_domain.name, false);
+            lobby_.players_ready.push_back(player_lobby);
+            
             //create player model and send to client
-            const model::player_model player_model(client->get_id(), player_name, 37);
+            const model::player_model player_model(player_domain.public_id, player_name, 37);
             message<custom_msg_types> answer(custom_msg_types::create_player);
             answer << player_model;
             message_client(client->get_id(), answer);
 
-            //create player domain and add to the list
-            const domain::player player_domain(player_model.id_, player_name, player_model.health_);
-            players_.push_back(player_domain);
-
-            const auto player_lobby = domain::lobby::player_lobby_domain(player_domain.private_id, player_domain.name, false);
-            lobby_.players_ready.push_back(player_lobby);
             break;
         }
     case custom_msg_types::validate_name:
@@ -125,12 +127,12 @@ void server::on_message(const shared_ptr<connection<custom_msg_types>> client, m
             model::encounter_model encounter_model;
             for(size_t i = 0; i < enemies.size(); i++)
             {
-                encounter_model.enemies[i] = model::enemy_model(enemies[i].get_name(), enemies[i].get_health());
+                encounter_model.enemies[i] = model::enemy_model(enemies[i].get_id(), enemies[i].get_name(), enemies[i].get_health());
             }
 
             for(size_t i = 0; i < players_.size(); i++)
             {
-                encounter_model.players[i] = model::player_model(players_[i].private_id, players_[i].name, players_[i].health);    
+                encounter_model.players[i] = model::player_model(players_[i].public_id, players_[i].name, players_[i].health);    
             }
 
             message<custom_msg_types> answer(custom_msg_types::match_start_response);

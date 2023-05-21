@@ -206,13 +206,13 @@ bool client::handle_messages()
             for (auto& enemy_model : encounter_model.enemies)
             {
                 if(std::strlen(enemy_model.name) > 0)
-                    enemies.emplace_back(enemy_model.name, enemy_model.health);
+                    enemies.emplace_back(enemy_model.id, enemy_model.name, enemy_model.health);
             }
 
             for(auto& player_model : encounter_model.players)
             {
-                if(std::strlen(player_model.name_) > 0)
-                    players.emplace_back(player_model.id_, player_model.name_, player_model.health_);
+                if(std::strlen(player_model.name) > 0)
+                    players.emplace_back(player_model.id, player_model.name, player_model.health);
             }
 
             const domain::encounter encounter(enemies, players);               

@@ -7,12 +7,13 @@ namespace dungeon_client::domain
     class enemy
     {
     private:
+        std::string id_;
         std::string name_;
         uint16_t health_;
     public:
-        enemy(const char* name, uint16_t health);
+        enemy(const char* id, const char* name, uint16_t health);
         std::string get_name();
-        uint16_t get_health();
+        uint16_t get_health() const;
     };
     
     class encounter

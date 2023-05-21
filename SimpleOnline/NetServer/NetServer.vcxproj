@@ -265,6 +265,7 @@
       </AdditionalUsingDirectories>
       <AdditionalIncludeDirectories>C:\Users\cauec\source\repos\SimpleOnline\;</AdditionalIncludeDirectories>
     </ClInclude>
+    <ClInclude Include="Utility\guid_generator.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetClient\NetClient.vcxproj">

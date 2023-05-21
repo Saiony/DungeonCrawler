@@ -16,5 +16,6 @@ namespace dungeon_server::domain::enemy
         virtual void execute_turn();
         std::string get_name() const;
         uint16_t get_health() const;
+        std::string get_id() const;
     };
 }

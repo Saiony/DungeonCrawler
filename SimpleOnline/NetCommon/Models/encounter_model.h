@@ -1,16 +1,16 @@
 ﻿#pragma once
 #include "player_model.h"
 #include "../base_client.h"
-#include "../../NetServer/Domain/Encounter.h"
 
 namespace dungeon_common::model
 {
     struct enemy_model
     {
+        char id[40]{};
         char name[40]{};
         uint16_t health;
 
-        enemy_model(std::string name_string, uint16_t health);
+        enemy_model(std::string new_id, std::string name_string, uint16_t health);
         enemy_model();
     };
     

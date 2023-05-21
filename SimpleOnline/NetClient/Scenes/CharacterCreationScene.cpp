@@ -58,7 +58,7 @@ void character_creation_scene::confirm_character_creation(const string& player_n
         {
             client_ptr_->create_player(player_name.c_str(), [&](dungeon_common::model::player_model response)
             {
-                domain::player player(response.id_, response.name_, response.health_);
+                domain::player player(response.id, response.name, response.health);
                 client_ptr_->set_player(player);
                 cout << endl << "Character created successfully";
                 on_character_created();

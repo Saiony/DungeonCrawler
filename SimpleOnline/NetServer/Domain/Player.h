@@ -1,8 +1,5 @@
 ﻿#pragma once
-#include <cstdint>
 #include <string>
-
-using namespace std;
 
 namespace dungeon_server::domain
 {
@@ -10,10 +7,11 @@ namespace dungeon_server::domain
     {
     public:
         uint16_t private_id;
+        std::string public_id;
         uint16_t health;
         std::string name;
         
         void do_something() const;
-        player(uint16_t id, std::string name, uint16_t health);
+        player(uint16_t client_id, std::string name, uint16_t health);
     };
 }
