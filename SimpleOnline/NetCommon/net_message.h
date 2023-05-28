@@ -1,6 +1,5 @@
 #pragma once
 #include "net_common.h"
-using namespace std;
 
 namespace dungeon_common
 {
@@ -36,7 +35,7 @@ namespace dungeon_common
     {
     public:
         message_header<T> header{};
-        vector<uint8_t> body;
+        std::vector<uint8_t> body;
 
         message() : header(custom_msg_types::unknown)
         {
@@ -52,7 +51,7 @@ namespace dungeon_common
         }
 
         //std::cout override
-        friend ostream& operator <<(ostream& os, const message<T>& msg)
+        friend std::ostream& operator <<(std::ostream& os, const message<T>& msg)
         {
             os << "ID:" << int(msg.header.id) << " Size:" << msg.header.body_size;
             return os;
@@ -62,7 +61,7 @@ namespace dungeon_common
         template <typename DataType>
         friend message<T>& operator <<(message<T>& msg, const DataType& data)
         {
-            static_assert(is_standard_layout_v<DataType>, "Data is too complex to be pushed into vector");
+            static_assert(std::is_standard_layout_v<DataType>, "Data is too complex to be pushed into vector");
 
             size_t messageSize = msg.body.size();
             msg.body.resize(messageSize + sizeof(DataType));
@@ -88,9 +87,9 @@ namespace dungeon_common
             return msg;
         }
 
-        string read_body()
+        std::string read_body()
         {
-            string s(begin(body), end(body));
+            std::string s(begin(body), end(body));
             return s;
         }
     };
@@ -101,11 +100,11 @@ namespace dungeon_common
     template <typename T>
     struct owned_message
     {
-        shared_ptr<connection<T>> remote = nullptr;
+        std::shared_ptr<connection<T>> remote = nullptr;
         message<T> msg;
 
         //friendly string maker
-        friend ostream& operator<<(ostream& os, const owned_message<T>& msg)
+        friend std::ostream& operator<<(std::ostream& os, const owned_message<T>& msg)
         {
             os << msg.msg;
             return os;

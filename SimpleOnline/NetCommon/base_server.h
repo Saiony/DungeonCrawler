@@ -4,7 +4,7 @@
 #include "net_tsqueue.h"
 #include "net_message.h"
 #include "net_connection.h"
-#include <algorithm>
+#include "Utility/guid_generator.h"
 
 namespace dungeon_common
 {
@@ -13,25 +13,25 @@ namespace dungeon_common
     {
     protected:
         tsqueue<owned_message<T>> messages_in_;
-        deque<shared_ptr<connection<T>>> connections_;
+        std::deque<std::shared_ptr<connection<T>>> connections_;
         asio::io_context asio_context_;
-        thread thread_context_;
+        std::thread thread_context_;
         tcp::acceptor asio_acceptor_;
         uint32_t id_counter_ = 10000;
 
-        virtual void on_client_connect(const shared_ptr<connection<custom_msg_types>>&)
+        virtual void on_client_connect(const std::shared_ptr<connection<custom_msg_types>>&)
         {
         }
 
-        virtual void on_client_disconnect(shared_ptr<connection<T>>)
+        virtual void on_client_disconnect(std::shared_ptr<connection<T>>)
         {
         }
 
-        virtual void on_message(shared_ptr<connection<T>> client, message<T>&)
+        virtual void on_message(std::shared_ptr<connection<T>> client, message<T>&)
         {
         }
 
-        virtual bool can_client_connect(const shared_ptr<connection<custom_msg_types>>&)
+        virtual bool can_client_connect(const std::shared_ptr<connection<custom_msg_types>>&)
         {
             return false;
         }
@@ -51,18 +51,18 @@ namespace dungeon_common
             try
             {
                 wait_for_client_connection();
-                thread_context_ = thread([this]()
+                thread_context_ = std::thread([this]()
                 {
                     asio_context_.run();
                 });
             }
-            catch (exception& e)
+            catch (std::exception& e)
             {
-                cerr << "[SERVER] Exception: " << e.what() << "\n";
+                std::cerr << "[SERVER] Exception: " << e.what() << "\n";
                 return false;
             }
 
-            cout << "[SERVER] Started!\n";
+            std::cout << "[SERVER] Started!\n";
             return true;
         }
 
@@ -74,21 +74,22 @@ namespace dungeon_common
             if (thread_context_.joinable())
                 thread_context_.join();
 
-            cout << "[SERVER] Stopped!\n";
+            std::cout << "[SERVER] Stopped!\n";
         }
 
         void wait_for_client_connection()
         {
-            asio_acceptor_.async_accept([this](const error_code error_code, tcp::socket socket)
+            asio_acceptor_.async_accept([this](const std::error_code error_code, tcp::socket socket)
             {
                 if (error_code)
-                    cout << "[SERVER] New Connection Error: " << error_code.message() << endl;
+                    std::cout << "[SERVER] New Connection Error: " << error_code.message() << std::endl;
                 else
                 {
-                    cout << "[SERVER] New Connection: " << socket.remote_endpoint() << endl;
-                    shared_ptr<connection<T>> new_con = make_shared<connection<T>>(owner::server, asio_context_, move(socket), messages_in_);
+                    std::cout << "[SERVER] New Connection: " << socket.remote_endpoint() << std::endl;
+                    std::shared_ptr<connection<T>> new_con = make_shared<connection<T>>(owner::server, asio_context_, std::move(socket), messages_in_);
 
-                    new_con->connect_to_client(id_counter_++);
+                    auto con_id = utility::guid_generator::create_guid();
+                    new_con->connect_to_client(con_id);
                     on_client_connect(new_con);
                     connections_.push_back(move(new_con));
                 }
@@ -97,10 +98,10 @@ namespace dungeon_common
             });
         }
 
-        void message_client(uint32_t client_id, const message<T>& msg)
+        void message_client(std::string client_id, const message<T>& msg)
         {
             auto client_it = find_if(begin(connections_), end(connections_),
-                                     [client_id](shared_ptr<connection<T>> con)
+                                     [client_id](std::shared_ptr<connection<T>> con)
                                      {
                                          return con->get_id() == client_id;
                                      });
@@ -117,11 +118,11 @@ namespace dungeon_common
             connections_.erase(remove(connections_.begin(), connections_.end(), client), connections_.end());
         }
 
-        void multicast_message(const message<T>& msg, vector<uint32_t> client_ids)
+        void multicast_message(const message<T>& msg, std::vector<uint32_t> client_ids)
         {
-            for_each(begin(connections_), end(connections_), [client_ids, msg](shared_ptr<connection<T>> con)
+            for_each(begin(connections_), end(connections_), [client_ids, msg](std::shared_ptr<connection<T>> con)
             {
-                if (any_of(begin(client_ids), end(client_ids), [con](uint32_t client_id)
+                if (any_of(std::begin(client_ids), std::end(client_ids), [con](uint32_t client_id)
                 {
                     return con->private_id_ == client_id;
                 }))
@@ -131,7 +132,7 @@ namespace dungeon_common
 
         void broadcast_message(const message<T>& msg)
         {
-            for_each(begin(connections_), end(connections_), [=](shared_ptr<connection<T>> con)
+            for_each(begin(connections_), end(connections_), [=](std::shared_ptr<connection<T>> con)
             {
                 con->send(msg);
             });

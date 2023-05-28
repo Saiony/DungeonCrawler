@@ -15,7 +15,7 @@ namespace dungeon_common
     };
 
     template <typename T>
-    class connection : public enable_shared_from_this<connection<T>>
+    class connection : public std::enable_shared_from_this<connection<T>>
     {
     protected:
         tcp::socket socket_;
@@ -24,11 +24,11 @@ namespace dungeon_common
         tsqueue<owned_message<T>>& messages_in_;
         message<T> temporary_message_in_;
         owner owner_type_ = owner::server;
+        char id_[39]{};
     public:
-        uint16_t id_ = 0;
 
         connection(owner parent, asio::io_context& asio_context, tcp::socket socket, tsqueue<owned_message<T>>& q_in)
-            : socket_(move(socket)), asio_context_(asio_context), messages_in_(q_in)
+            : socket_(std::move(socket)), asio_context_(asio_context), messages_in_(q_in)
         {
             owner_type_ = parent;
         }
@@ -37,18 +37,18 @@ namespace dungeon_common
 
         // This ID is used system wide - its how clients will understand other clients
         // exist across the whole system.
-        uint16_t get_id() const
+        std::string get_id() const
         {
             return id_;
         }
 
-        void connect_to_client(const uint32_t uid = 0)
+        void connect_to_client(std::string uid)
         {
             if (owner_type_ == owner::server)
             {
                 if (socket_.is_open())
                 {
-                    id_ = uid;
+                    strcpy_s(id_, uid.c_str());
                     read_header();
                 }
             }
@@ -60,7 +60,7 @@ namespace dungeon_common
                 return;
 
             asio::async_connect(socket_, endpoints,
-                                [this](error_code error_code, tcp::endpoint const& endpoint)
+                                [this](std::error_code error_code, tcp::endpoint const& endpoint)
                                 {
                                     if (!error_code)
                                     {
@@ -98,7 +98,7 @@ namespace dungeon_common
         void read_header()
         {
             asio::async_read(socket_, asio::buffer(&temporary_message_in_.header, sizeof(message_header<T>)),
-                             [this](const error_code error_code, size_t length)
+                             [this](const std::error_code error_code, size_t length)
                              {
                                  if (!error_code)
                                  {
@@ -112,7 +112,7 @@ namespace dungeon_common
                                  }
                                  else
                                  {
-                                     cout << "\n[" << id_ << "] Connection Lost\n";
+                                     std::cout << "\n[" << id_ << "] Connection Lost\n";
                                      socket_.close();
                                  }
                              });
@@ -122,7 +122,7 @@ namespace dungeon_common
         void write_header()
         {
             asio::async_write(socket_, asio::buffer(&messages_out_.front().header, sizeof(message_header<T>)),
-                              [this](const error_code error_code, size_t length)
+                              [this](const std::error_code error_code, size_t length)
                               {
                                   if (!error_code)
                                   {
@@ -140,7 +140,7 @@ namespace dungeon_common
                                   }
                                   else
                                   {
-                                      cout << "[" << id_ << "] Write Header Fail.\n";
+                                      std::cout << "[" << id_ << "] Write Header Fail.\n";
                                       socket_.close();
                                   }
                               });
@@ -150,7 +150,7 @@ namespace dungeon_common
         {
             asio::async_write(
                 socket_, asio::buffer(messages_out_.front().body.data(), messages_out_.front().header.body_size),
-                [this](const error_code error_code, size_t length)
+                [this](const std::error_code error_code, size_t length)
                 {
                     if (!error_code)
                     {
@@ -163,7 +163,7 @@ namespace dungeon_common
                     }
                     else
                     {
-                        cout << "[" << id_ << "] Write Body Fail.\n";
+                        std::cout << "[" << id_ << "] Write Body Fail.\n";
                         socket_.close();
                     }
                 });
@@ -173,13 +173,13 @@ namespace dungeon_common
         {
             asio::async_read(
                 socket_, asio::buffer(temporary_message_in_.body.data(), temporary_message_in_.body.size()),
-                [this](const error_code error_code, size_t length)
+                [this](const std::error_code error_code, size_t length)
                 {
                     if (!error_code)
                         add_to_incoming_message_queue();
                     else
                     {
-                        cout << "[" << id_ << "] Read Body Fail.\n";
+                        std::cout << "[" << id_ << "] Read Body Fail.\n";
                         socket_.close();
                     }
                 });

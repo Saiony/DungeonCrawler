@@ -1,5 +1,4 @@
 ﻿#include "player_model.h"
-#include <cstring>
 #include <string>
 
 using namespace dungeon_common::model;

@@ -7,7 +7,7 @@ namespace dungeon_common::model
     class player_model
     {
     public:
-        char id[40]{};
+        char id[38]{};
         char name[40]{};
         uint32_t health{};
         

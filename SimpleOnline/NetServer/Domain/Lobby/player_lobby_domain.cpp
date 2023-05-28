@@ -1,12 +1,12 @@
 ﻿#include "player_lobby_domain.h"
 using namespace  dungeon_server::domain::lobby;
 
-player_lobby_domain::player_lobby_domain(const uint16_t private_id, const std::string& name, const bool ready) : ready_(ready), private_id_(private_id)
+player_lobby_domain::player_lobby_domain(const std::string& private_id, const std::string& name, const bool ready) : private_id_(private_id), ready_(ready)
 {
     strcpy_s(name_, name.c_str());
 }
 
-uint16_t player_lobby_domain::get_id() const
+std::string player_lobby_domain::get_private_id() const
 {
     return private_id_;
 }

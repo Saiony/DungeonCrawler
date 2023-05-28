@@ -15,25 +15,25 @@ server::server(const uint16_t n_port) : base_server<custom_msg_types>(n_port)
 {
 }
 
-bool server::can_client_connect(const shared_ptr<connection<custom_msg_types>>& connection)
+bool server::can_client_connect(const std::shared_ptr<connection<custom_msg_types>>& connection)
 {
     return connections_.size() < max_players_;
 }
 
-void server::on_client_connect(const shared_ptr<connection<custom_msg_types>>& client)
+void server::on_client_connect(const std::shared_ptr<connection<custom_msg_types>>& client)
 {
     message<custom_msg_types> msg(custom_msg_types::server_connection_response);
     model::simple_answer_model answer;
     
     if (!can_client_connect(client))
     {
-        cout << "[-----] Server is full, connection denied" << endl;
+        std::cout << "[-----] Server is full, connection denied" << std::endl;
         answer.ok = false;
         answer.error_code = error_code_type::server_full;
     }
     else
     {
-        cout << "[" << client->get_id() << "] Connection Approved\n";
+        std::cout << "[" << client->get_id() << "] Connection Approved\n";
         answer.ok = true;
         answer.error_code = error_code_type::none;
     }
@@ -42,12 +42,12 @@ void server::on_client_connect(const shared_ptr<connection<custom_msg_types>>& c
     client->send(msg);
 }
 
-void server::on_client_disconnect(const shared_ptr<connection<custom_msg_types>> client)
+void server::on_client_disconnect(const std::shared_ptr<connection<custom_msg_types>> client)
 {
-    cout << "Removing client [" << client->get_id() << "]\n";
+    std::cout << "Removing client [" << client->get_id() << "]\n";
 }
 
-void server::on_message(const shared_ptr<connection<custom_msg_types>> client, message<custom_msg_types>& msg)
+void server::on_message(const std::shared_ptr<connection<custom_msg_types>> client, message<custom_msg_types>& msg)
 {
     switch (msg.header.id)
     {
@@ -59,7 +59,7 @@ void server::on_message(const shared_ptr<connection<custom_msg_types>> client, m
             const domain::player player_domain(client->get_id(), player_name, 37);
             players_.push_back(player_domain);
 
-            //add player to lobby
+            //add player to lobby domain
             const auto player_lobby = domain::lobby::player_lobby_domain(player_domain.private_id, player_domain.name, false);
             lobby_.players_ready.push_back(player_lobby);
             
@@ -76,7 +76,7 @@ void server::on_message(const shared_ptr<connection<custom_msg_types>> client, m
             const auto player_name = msg.read_body().substr(0, msg.read_body().find('\0', 0));
 
             error_code_type error_code = {};
-            const auto valid = ranges::none_of(players_, [player_name](const domain::player& player)
+            const auto valid = std::ranges::none_of(players_, [player_name](const domain::player& player)
             {
                 return player.name == player_name;
             });
@@ -96,10 +96,10 @@ void server::on_message(const shared_ptr<connection<custom_msg_types>> client, m
             msg >> ready;
 
             //update lobby domain
-            const auto player_lobby = ranges::find_if(lobby_.players_ready,
+            const auto player_lobby = std::ranges::find_if(lobby_.players_ready,
                                                                       [client](const domain::lobby::player_lobby_domain& player_ready)
                                                                       {
-                                                                          return player_ready.get_id() == client->get_id();
+                                                                          return player_ready.get_private_id() == client->get_id();
                                                                       });
             player_lobby->set_ready(ready);
 
@@ -121,7 +121,7 @@ void server::on_message(const shared_ptr<connection<custom_msg_types>> client, m
     case custom_msg_types::match_start_request:
         {         
             const domain::enemy::wolf wolf("wolf", 10, 15);
-            vector<domain::enemy::base_enemy> enemies = { static_cast<domain::enemy::base_enemy>(wolf) };
+            std::vector<domain::enemy::base_enemy> enemies = { static_cast<domain::enemy::base_enemy>(wolf) };
             domain::encounter::encounter encounter(enemies);
 
             model::encounter_model encounter_model;
@@ -151,7 +151,7 @@ void server::on_message(const shared_ptr<connection<custom_msg_types>> client, m
             break;
         }
     default:
-        cout << "Invalid MsgType"; 
+        std::cout << "Invalid MsgType"; 
         break;
     }
 }

@@ -15,29 +15,29 @@ namespace dungeon_common
         tsqueue<owned_message<T>> messages_in_;
     protected:
         asio::io_context io_context_; //handles data transfer
-        thread thread_context_; //...but it needs a thread of its own to execute its work commands
-        unique_ptr<connection<T>> con_;
+        std::thread thread_context_; //...but it needs a thread of its own to execute its work commands
+        std::unique_ptr<connection<T>> con_;
 
     public:
 
-        bool connect(const string& host, const uint16_t port)
+        bool connect(const std::string& host, const uint16_t port)
         {
             try
             {
                 //Resolve hostname/ip-address into tangible physical address
                 tcp::resolver resolver(io_context_);
-                tcp::resolver::results_type endpoints = resolver.resolve(host, to_string(port));
+                tcp::resolver::results_type endpoints = resolver.resolve(host, std::to_string(port));
 
-                con_ = make_unique<connection<T>>(owner::client, io_context_, tcp::socket(io_context_), messages_in_);
+                con_ = std::make_unique<connection<T>>(owner::client, io_context_, tcp::socket(io_context_), messages_in_);
                 con_->connect_to_server(endpoints);
-                thread_context_ = thread([this]()
+                thread_context_ = std::thread([this]()
                 {
                     io_context_.run();
                 });
             }
-            catch (exception& e)
+            catch (std::exception& e)
             {
-                cerr << "Client Exception: " << e.what() << "\n";
+                std::cerr << "Client Exception: " << e.what() << "\n";
                 return false;
             }
 

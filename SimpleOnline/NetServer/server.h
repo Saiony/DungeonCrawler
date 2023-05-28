@@ -11,17 +11,17 @@ namespace dungeon_server
     {
     private:
         const uint8_t max_players_ = 3;
-        string spells_[5] = {"BurningHands", "CharmPerson", "CureWounds", "MageArmor", "Thunderwave"};
-        vector<domain::player> players_;
+        std::string spells_[5] = {"BurningHands", "CharmPerson", "CureWounds", "MageArmor", "Thunderwave"};
+        std::vector<domain::player> players_;
         domain::lobby::lobby_domain lobby_;
 
             
         
     protected:
-        bool can_client_connect(const shared_ptr<connection<custom_msg_types>>& connection) override;
-        void on_client_connect(const shared_ptr<connection<custom_msg_types>>& client) override;              
-        void on_client_disconnect(shared_ptr<connection<custom_msg_types>> client) override;
-        void on_message(const shared_ptr<connection<custom_msg_types>> client, message<custom_msg_types>& msg) override;
+        bool can_client_connect(const std::shared_ptr<connection<custom_msg_types>>& connection) override;
+        void on_client_connect(const std::shared_ptr<connection<custom_msg_types>>& client) override;              
+        void on_client_disconnect(std::shared_ptr<connection<custom_msg_types>> client) override;
+        void on_message(const std::shared_ptr<connection<custom_msg_types>> client, message<custom_msg_types>& msg) override;
 
     public:
         explicit server(const uint16_t n_port);

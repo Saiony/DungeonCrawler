@@ -7,10 +7,10 @@ namespace dungeon_common
     class tsqueue
     {
     protected:
-        mutex mux_queue_;
-        deque<T> deq_queue_;
-        condition_variable cv_blocking_;
-        mutex mux_blocking_;
+        std::mutex mux_queue_;
+        std::deque<T> deq_queue_;
+        std::condition_variable cv_blocking_;
+        std::mutex mux_blocking_;
 
     public:
         tsqueue() = default;
@@ -23,54 +23,54 @@ namespace dungeon_common
 
         const T& front()
         {
-            lock_guard<mutex> lock(mux_queue_); //locks code while returning
+            std::lock_guard<std::mutex> lock(mux_queue_); //locks code while returning
 
             return deq_queue_.front();
         }
 
         const T& back()
         {
-            lock_guard<mutex> lock(mux_queue_); //locks code while returning
+            std::lock_guard<std::mutex> lock(mux_queue_); //locks code while returning
 
             return deq_queue_.back();
         }
 
         void push_back(const T& item)
         {
-            lock_guard<mutex> lock(mux_queue_); //locks code while returning
-            deq_queue_.emplace_back(move(item));
+            std::lock_guard<std::mutex> lock(mux_queue_); //locks code while returning
+            deq_queue_.emplace_back(std::move(item));
         }
 
         void push_front(const T& item)
         {
-            lock_guard<mutex> lock(mux_queue_); //locks code while returning
+            std::lock_guard<std::mutex> lock(mux_queue_); //locks code while returning
             deq_queue_.emplace_front(move(item));
         }
 
         bool empty()
         {
-            lock_guard<mutex> lock(mux_queue_); //locks code while returning
+            std::lock_guard<std::mutex> lock(mux_queue_); //locks code while returning
 
             return deq_queue_.empty();
         }
 
         size_t count()
         {
-            lock_guard<mutex> lock(mux_queue_); //locks code while returning
+            std::lock_guard<std::mutex> lock(mux_queue_); //locks code while returning
 
             return deq_queue_.size();
         }
 
         void clear()
         {
-            lock_guard<mutex> lock(mux_queue_); //locks code while returning
+            std::lock_guard<std::mutex> lock(mux_queue_); //locks code while returning
             deq_queue_.clear();
         }
 
         T pop_front()
         {
-            lock_guard<mutex> lock(mux_queue_); //locks code while returning
-            auto t = move(deq_queue_.front());
+            std::lock_guard<std::mutex> lock(mux_queue_); //locks code while returning
+            auto t = std::move(deq_queue_.front());
             deq_queue_.pop_front();
 
             return t;
@@ -78,8 +78,8 @@ namespace dungeon_common
 
         T pop_back()
         {
-            lock_guard<mutex> lock(mux_queue_); //locks code while returning
-            auto t = move(deq_queue_.back());
+            std::lock_guard<std::mutex> lock(mux_queue_); //locks code while returning
+            auto t = std::move(deq_queue_.back());
             deq_queue_.pop_back();
 
             return t;
@@ -89,7 +89,7 @@ namespace dungeon_common
         {
             while (empty())
             {
-                unique_lock<mutex> ul(mux_blocking_);
+                std::unique_lock<std::mutex> ul(mux_blocking_);
                 cv_blocking_.wait(ul);
             }
         }

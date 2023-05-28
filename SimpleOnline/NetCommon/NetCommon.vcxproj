@@ -32,6 +32,7 @@
     <ClInclude Include="base_server.h" />
     <ClInclude Include="net_tsqueue.h" />
     <ClInclude Include="dungeon_network.h" />
+    <ClInclude Include="Utility\guid_generator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Models\action_model.cpp" />

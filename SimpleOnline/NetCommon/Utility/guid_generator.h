@@ -3,7 +3,7 @@
 #include "combaseapi.h"
 #include "objbase.h"
 
-namespace dungeon_server::utility
+namespace dungeon_common::utility
 {
     class guid_generator
     {

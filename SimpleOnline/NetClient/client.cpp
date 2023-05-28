@@ -6,22 +6,22 @@
 using namespace dungeon_common;
 using namespace dungeon_client;
 
-string player_input;
-thread input_thread;
+std::string player_input;
+std::thread input_thread;
 
-void read_input_thread(string& input)
+void read_input_thread(std::string& input)
 {
     while (true)
     {
-        string x;
-        getline(cin, x);
+        std::string x;
+        std::getline(std::cin, x);
         input = x;
     }
 }
 
 client::client()
 {
-    input_thread = thread(read_input_thread, ref(player_input));
+    input_thread = std::thread(read_input_thread, std::ref(player_input));
 }
 
 void client::end() const
@@ -29,14 +29,14 @@ void client::end() const
     input_thread.join();
 }
 
-void client::connect(const string& host, const uint16_t port, const function<void(dungeon_common::model::simple_answer_model)>& callback)
+void client::connect(const std::string& host, const uint16_t port, const std::function<void(dungeon_common::model::simple_answer_model)>& callback)
 {
     base_client::connect(host, port);
     connection_callback = callback;
     wait_message();
 }
 
-void client::validate_name(const char* name, const function<void(model::simple_answer_model)>& callback)
+void client::validate_name(const char* name, const std::function<void(model::simple_answer_model)>& callback)
 {
     message<custom_msg_types> msg(custom_msg_types::validate_name);
 
@@ -50,7 +50,7 @@ void client::validate_name(const char* name, const function<void(model::simple_a
     wait_message();
 }
 
-void client::create_player(const char* name, const function<void(dungeon_common::model::player_model)>& callback)
+void client::create_player(const char* name, const std::function<void(dungeon_common::model::player_model)>& callback)
 {
     message<custom_msg_types> msg(custom_msg_types::create_player);
 
@@ -66,10 +66,10 @@ void client::create_player(const char* name, const function<void(dungeon_common:
 
 void client::set_player(domain::player& player)
 {
-    player_ = move(player);
+    player_ = std::move(player);
 }
 
-void client::set_player_ready(const bool ready, const function<void(domain::lobby_domain)>& callback)
+void client::set_player_ready(const bool ready, const std::function<void(domain::lobby_domain)>& callback)
 {
     message<custom_msg_types> msg(custom_msg_types::player_ready);
     msg << ready;
@@ -88,14 +88,14 @@ void client::send_action(const action_types action_id, int target_id)
     send(msg);
 }
 
-void client::get_encounter(const function<void(domain::encounter)>& callback)
+void client::get_encounter(const std::function<void(domain::encounter)>& callback)
 {
     get_encounter_callback = callback;
     const message<custom_msg_types> msg(custom_msg_types::match_start_request);
     send(msg);
 }
 
-void client::read_input(const function<void(string input)>& callback)
+void client::read_input(const std::function<void(std::string input)>& callback)
 {
     player_input.clear();
     player_input_callback = callback;
@@ -205,7 +205,7 @@ bool client::handle_messages()
 
             for (auto& enemy_model : encounter_model.enemies)
             {
-                if(std::strlen(enemy_model.name) > 0)
+                if(std::strlen(enemy_model.id) > 0)
                     enemies.emplace_back(enemy_model.id, enemy_model.name, enemy_model.health);
             }
 
