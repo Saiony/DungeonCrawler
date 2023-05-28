@@ -136,7 +136,7 @@ void server::on_message(const std::shared_ptr<connection<custom_msg_types>> clie
                 encounter_model.players[i] = model::player_model(players_[i].public_id, players_[i].name, players_[i].health);    
             }
 
-            message<custom_msg_types> answer(custom_msg_types::match_start_response);
+            message<custom_msg_types> answer(custom_msg_types::encounter_update);
             answer << encounter_model;
             message_client(client->get_id(), answer);
             
@@ -149,6 +149,25 @@ void server::on_message(const std::shared_ptr<connection<custom_msg_types>> clie
 
             auto action = ::domain::action::action_factory::create_action(action_model, current_encounter_);
             action->use();
+
+            //sends back the encounter
+            model::encounter_model encounter_model;
+            for(size_t i = 0; i < current_encounter_->enemies.size(); i++)
+            {
+                encounter_model.enemies[i] = model::enemy_model(current_encounter_->enemies[i].get_id(),
+                                                                current_encounter_->enemies[i].get_name(),
+                                                                current_encounter_->enemies[i].get_health());
+            }
+
+            for(size_t i = 0; i < players_.size(); i++)
+            {
+                encounter_model.players[i] = model::player_model(players_[i].public_id, players_[i].name, players_[i].health);    
+            }
+
+            message<custom_msg_types> answer(custom_msg_types::encounter_update);
+            answer << encounter_model;
+            broadcast_message(answer);
+            
             break;
         }
     default:

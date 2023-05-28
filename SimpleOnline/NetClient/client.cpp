@@ -79,7 +79,7 @@ void client::set_player_ready(const bool ready, const std::function<void(domain:
     wait_message();
 }
 
-void client::send_action(const model::action_types action_id, std::string target_id)
+void client::send_action(const model::action_types action_id, const std::string& target_id)
 {
     const model::action_model action(action_id, target_id);
     message<custom_msg_types> msg(custom_msg_types::player_action);
@@ -197,7 +197,7 @@ bool client::handle_messages()
             }
             return false;
         }
-    case custom_msg_types::match_start_response:
+    case custom_msg_types::encounter_update:
         {
             model::encounter_model encounter_model;
             msg >> encounter_model;
