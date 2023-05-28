@@ -101,6 +101,7 @@ void client::read_input(const std::function<void(std::string input)>& callback)
 {
     player_input.clear();
     player_input_callback = callback;
+    std::cout << "> ";
 
     while (true)
     {
