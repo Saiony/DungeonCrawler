@@ -6,7 +6,7 @@ namespace dungeon_common::model
 {
     struct enemy_model
     {
-        char id[40]{};
+        char id[38]{};
         char name[40]{};
         uint16_t health;
 

@@ -7,9 +7,8 @@ namespace dungeon_server::domain::encounter
 {
     class encounter
     {
-    private:
-        std::vector<enemy::base_enemy> enemies_;
     public:
+        std::vector<enemy::base_enemy> enemies;
         explicit encounter(std::vector<enemy::base_enemy> enemies);
     };
 }

@@ -23,6 +23,10 @@ uint16_t base_enemy::get_health() const
 
 std::string base_enemy::get_id() const
 {
-    std::string id_copy(id_);
-    return id_copy;
+    return id_;
+}
+
+void base_enemy::take_damage(const int damage)
+{
+    health_ -= damage;
 }

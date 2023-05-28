@@ -17,5 +17,6 @@ namespace dungeon_server::domain::enemy
         std::string get_name() const;
         uint16_t get_health() const;
         std::string get_id() const;
+        void take_damage(int damage);
     };
 }
