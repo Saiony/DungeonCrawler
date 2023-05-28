@@ -9,6 +9,11 @@ std::string dungeon_client::domain::enemy::get_name()
     return name_;
 }
 
+std::string dungeon_client::domain::enemy::get_id()
+{
+    return id_;
+}
+
 uint16_t dungeon_client::domain::enemy::get_health() const
 {
     return health_;

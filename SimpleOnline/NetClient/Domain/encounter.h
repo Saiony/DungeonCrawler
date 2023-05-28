@@ -13,6 +13,7 @@ namespace dungeon_client::domain
     public:
         enemy(const char* id, const char* name, uint16_t health);
         std::string get_name();
+        std::string get_id();
         uint16_t get_health() const;
     };
     

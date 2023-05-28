@@ -1,5 +1,7 @@
 #pragma once
 #include<dungeon_network.h>
+
+#include "Domain/Encounter.h"
 #include "Domain/Player.h"
 #include "Domain/Lobby/lobby_domain.h"
 using namespace dungeon_common;
@@ -14,8 +16,7 @@ namespace dungeon_server
         std::string spells_[5] = {"BurningHands", "CharmPerson", "CureWounds", "MageArmor", "Thunderwave"};
         std::vector<domain::player> players_;
         domain::lobby::lobby_domain lobby_;
-
-            
+        std::shared_ptr<domain::encounter::encounter> current_encounter_;            
         
     protected:
         bool can_client_connect(const std::shared_ptr<connection<custom_msg_types>>& connection) override;

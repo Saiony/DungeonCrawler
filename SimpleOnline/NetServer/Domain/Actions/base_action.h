@@ -2,6 +2,8 @@
 #include <iostream>
 
 #include "Models/action_model.h"
+#include "NetClient/Domain/encounter.h"
+#include "NetServer/Domain/Encounter.h"
 
 namespace domain::action
 {
@@ -9,10 +11,11 @@ namespace domain::action
     {
     public:
         virtual ~base_action() = default;
-        action_types id;
-        int target_id{};
+        dungeon_common::model::action_types id;
+        std::string target_id;
+        std::shared_ptr<dungeon_server::domain::encounter::encounter> encounter;
 
-        explicit base_action(action_model model);
+        explicit base_action(dungeon_common::model::action_model model, std::shared_ptr<dungeon_server::domain::encounter::encounter>& encounter);
         virtual void use()
         {
             std::cout << "base use " << std::endl;

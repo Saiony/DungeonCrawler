@@ -12,11 +12,11 @@ namespace dungeon_client::scene
         bool ready_ = false;
         std::shared_ptr<client> client_ptr_ = nullptr;
         
-        void wait_player_ready(const shared_ptr<client>& client_ptr, bool ready);
+        void wait_player_ready(const std::shared_ptr<client>& client_ptr, bool ready);
         void start_match(const domain::lobby_domain& lobby) const;
         void print_lobby(domain::lobby_domain lobby) const;
     public:        
-        explicit lobby_scene(const shared_ptr<client>& client_ptr);
+        explicit lobby_scene(const std::shared_ptr<client>& client_ptr);
         void show() override;
     };
 }

@@ -79,13 +79,14 @@ void client::set_player_ready(const bool ready, const std::function<void(domain:
     wait_message();
 }
 
-void client::send_action(const action_types action_id, int target_id)
+void client::send_action(const model::action_types action_id, std::string target_id)
 {
-    const action_model action(action_id, 1);
+    const model::action_model action(action_id, target_id);
     message<custom_msg_types> msg(custom_msg_types::player_action);
 
     msg << action;
     send(msg);
+    wait_message();
 }
 
 void client::get_encounter(const std::function<void(domain::encounter)>& callback)
@@ -93,6 +94,7 @@ void client::get_encounter(const std::function<void(domain::encounter)>& callbac
     get_encounter_callback = callback;
     const message<custom_msg_types> msg(custom_msg_types::match_start_request);
     send(msg);
+    wait_message();
 }
 
 void client::read_input(const std::function<void(std::string input)>& callback)

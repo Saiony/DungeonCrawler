@@ -121,8 +121,9 @@ void server::on_message(const std::shared_ptr<connection<custom_msg_types>> clie
     case custom_msg_types::match_start_request:
         {         
             const domain::enemy::wolf wolf("wolf", 10, 15);
-            std::vector<domain::enemy::base_enemy> enemies = { static_cast<domain::enemy::base_enemy>(wolf) };
-            domain::encounter::encounter encounter(enemies);
+            std::vector enemies = { static_cast<domain::enemy::base_enemy>(wolf) };
+
+            current_encounter_ = std::make_shared<domain::encounter::encounter>(enemies);
 
             model::encounter_model encounter_model;
             for(size_t i = 0; i < enemies.size(); i++)
@@ -143,10 +144,10 @@ void server::on_message(const std::shared_ptr<connection<custom_msg_types>> clie
         }
     case custom_msg_types::player_action:
         {
-            action_model action_model;
+            model::action_model action_model;
             msg >> action_model;
 
-            auto action = ::domain::action::action_factory::create_action(action_model);
+            auto action = ::domain::action::action_factory::create_action(action_model, current_encounter_);
             action->use();
             break;
         }

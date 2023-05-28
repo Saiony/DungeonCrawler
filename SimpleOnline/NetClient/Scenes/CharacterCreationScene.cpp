@@ -7,7 +7,7 @@ using namespace dungeon_client::scene;
 using namespace dungeon_common;
 
 
-character_creation_scene::character_creation_scene(const shared_ptr<client>& client_ptr)
+character_creation_scene::character_creation_scene(const std::shared_ptr<client>& client_ptr)
 {
     client_ptr_ = client_ptr;
 }
@@ -19,11 +19,11 @@ void character_creation_scene::show()
 
 void character_creation_scene::create_character()
 {
-    cout << "Adventurer, what's your name?" << endl;
+    std::cout << "Adventurer, what's your name?" << std::endl;
 
-    client_ptr_->read_input([this](string input)
+    client_ptr_->read_input([this](std::string input)
     {
-        cout << "Name: " << input << endl;
+        std::cout << "Name: " << input << std::endl;
 
         client_ptr_->validate_name(input.c_str(), [this, &input](model::simple_answer_model response)
         {
@@ -32,10 +32,10 @@ void character_creation_scene::create_character()
                 switch (response.error_code)
                 {
                 case error_code_type::unknown:
-                    throw exception("Invalid message type");
+                    throw std::exception("Invalid message type");
                 case(error_code_type::name_already_taken):
                     {
-                        cout << "Sorry adventurer, the name is already taken" << endl;
+                        std::cout << "Sorry adventurer, the name is already taken" << std::endl;
                         create_character();
                         return;
                     }
@@ -43,16 +43,16 @@ void character_creation_scene::create_character()
                     return;
                 }
             }
-            cout << endl << input << " is a beautiful name" << endl;
+            std::cout << std::endl << input << " is a beautiful name" << std::endl;
             confirm_character_creation(input);
         });
     });
 }
 
-void character_creation_scene::confirm_character_creation(const string& player_name)
+void character_creation_scene::confirm_character_creation(const std::string& player_name)
 {
-    cout << "Confirm character creation? (yes/no)" << endl;
-    client_ptr_->read_input([&](string answer)
+    std::cout << "Confirm character creation? (yes/no)" << std::endl;
+    client_ptr_->read_input([&](std::string answer)
     {
         if (answer == "yes")
         {
@@ -60,7 +60,7 @@ void character_creation_scene::confirm_character_creation(const string& player_n
             {
                 domain::player player(response.id, response.name, response.health);
                 client_ptr_->set_player(player);
-                cout << endl << "Character created successfully";
+                std::cout << std::endl << "Character created successfully";
                 on_character_created();
             });
         }
@@ -68,7 +68,7 @@ void character_creation_scene::confirm_character_creation(const string& player_n
             create_character();
         else
         {
-            cout << "Please type only yes or no";
+            std::cout << "Please type only yes or no";
             confirm_character_creation(player_name);
         }
     });

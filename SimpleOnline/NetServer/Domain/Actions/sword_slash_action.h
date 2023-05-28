@@ -6,7 +6,8 @@ namespace domain::action
     class sword_slash_action final : public base_action
     {
     public:
-        explicit sword_slash_action(const action_model& model) : base_action(model)
+        explicit sword_slash_action(const dungeon_common::model::action_model& model, std::shared_ptr<dungeon_server::domain::encounter::encounter>& encounter_ptr)
+                             : base_action(model, encounter_ptr)
         {
         }
 

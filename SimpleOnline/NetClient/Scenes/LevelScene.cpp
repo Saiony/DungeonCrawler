@@ -11,7 +11,7 @@ void dungeon_client::scene::level_scene::show()
     system("CLS");
     std::cout << "--- GAME SCENE ---" << std::endl << std::endl;
 
-    client_ptr_->get_encounter([](auto encounter)
+    client_ptr_->get_encounter([this](auto encounter)
     {
         for (auto& enemy : encounter.enemies)
         {
@@ -22,17 +22,14 @@ void dungeon_client::scene::level_scene::show()
         {
             std::cout << player.name << " - " << player.health << "hp" << std::endl;
         }
-    });
 
-    std::string input;
-    while (true)
-    {
-        client_ptr_->read_input([this](std::string input)
+        std::string input;
+        client_ptr_->read_input([this, &encounter](std::string input)
         {
             if (input == "heal")
-                client_ptr_->send_action(action_types::heal, 1);
+                client_ptr_->send_action(dungeon_common::model::action_types::heal, encounter.enemies[0].get_id());
             else if (input == "sword slash")
-                client_ptr_->send_action(action_types::sword_slash, 1);
+                client_ptr_->send_action(dungeon_common::model::action_types::sword_slash, encounter.enemies[0].get_id());
         });
-    }
+    });
 }
