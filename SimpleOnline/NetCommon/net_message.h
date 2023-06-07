@@ -17,6 +17,8 @@ namespace dungeon_common
         match_start_request,
         encounter_update,
         player_action,
+        game_room_broadcast,
+        match_start_response,
     };
     
     template <typename T>

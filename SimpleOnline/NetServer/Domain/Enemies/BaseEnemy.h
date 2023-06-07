@@ -1,9 +1,10 @@
 ﻿#pragma once
 #include <string>
+#include "NetServer/Domain/base_creature.h"
 
 namespace dungeon_server::domain::enemy
 {
-    class base_enemy
+    class base_enemy : public base_creature
     {
     protected:
         std::string id_;

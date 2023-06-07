@@ -1,9 +1,10 @@
 ﻿#pragma once
 #include <string>
+#include "base_creature.h"
 
 namespace dungeon_server::domain
 {
-    class player
+    class player : public base_creature
     {
     public:
         std::string private_id;

@@ -2,9 +2,9 @@
 
 #include <iostream>
 
-domain::action::sword_slash_action::~sword_slash_action() = default;
+dungeon_server::domain::action::sword_slash_action::~sword_slash_action() = default;
 
-void domain::action::sword_slash_action::use()
+void dungeon_server::domain::action::sword_slash_action::use()
 {
     const auto target = std::ranges::find_if(encounter->enemies, [this](auto& enemy)
     {

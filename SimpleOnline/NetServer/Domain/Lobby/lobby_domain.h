@@ -10,6 +10,6 @@ namespace dungeon_server::domain::lobby
     public:
         std::vector<player_lobby_domain> players_ready;
         
-        bool start_match();
+        bool can_start_match();
     };
 }

@@ -198,6 +198,12 @@ bool client::handle_messages()
             }
             return false;
         }
+    case custom_msg_types::match_start_response:
+        {
+            model::simple_answer_model response;
+            msg >> response;
+            return false;
+        }
     case custom_msg_types::encounter_update:
         {
             model::encounter_model encounter_model;

@@ -138,7 +138,7 @@ namespace dungeon_common
             });
         }
 
-        void update(const size_t max_messages = -1, const bool wait = false)
+        virtual void update(const size_t max_messages = -1, const bool wait = false)
         {
             if (wait)
                 messages_in_.wait();
