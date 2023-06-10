@@ -13,7 +13,7 @@ namespace dungeon_server::game_room
         base_state<T> state_;
 
     public:
-        explicit game_room_combat_state(const domain::encounter::encounter& encounter): active_player_(encounter.players[0])
+        explicit game_room_combat_state(const domain::encounter& encounter): active_player_(encounter.players[0])
         {
         }
 

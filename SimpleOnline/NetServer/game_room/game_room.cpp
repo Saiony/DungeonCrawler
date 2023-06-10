@@ -6,11 +6,13 @@
 #include "states/game_room_combat_state.h"
 
 dungeon_server::game_room::game_room::game_room(std::vector<domain::player> players,
-                            const std::function<void(std::shared_ptr<emitter_message>)>& send_message_function)
-                            : players_(std::move(players)), encounter_(get_encounter())
+            const std::function<void(std::shared_ptr<domain::message::emitter_message>)>& send_message_function)
+        :
+            state_ptr_(std::make_unique<game_room_combat_state<game_room>>(encounter_)),
+            players_(std::move(players)),
+            encounter_(get_encounter())
 {
-    state_ptr_ = std::make_unique<game_room_combat_state<game_room>>(encounter_);
-    send_message_ = send_message_function;
+    send_inner_message_ = send_message_function;
     
     //historia -> combate
 
@@ -29,19 +31,20 @@ dungeon_server::game_room::game_room::game_room(std::vector<domain::player> play
     //FIM DO LOOP
 }
 
-dungeon_server::domain::encounter::encounter dungeon_server::game_room::game_room::get_encounter() const
+dungeon_server::domain::encounter dungeon_server::game_room::game_room::get_encounter() const
 {
     const domain::enemy::wolf wolf("wolf", 10, 15);
     const std::vector enemies = { static_cast<domain::enemy::base_enemy>(wolf) };    
-    domain::encounter::encounter encounter(enemies, players_);
+    domain::encounter encounter(enemies, players_);
     
     return encounter;
 }
 
 void dungeon_server::game_room::game_room::player_match_start_request(const domain::player& player) const
 {
-    const auto x = std::make_shared<match_start_response>(player);
-    send_message_(x);
+    auto encounter = get_encounter();
+    const auto x = std::make_shared<domain::message::match_start_response>(player, encounter);
+    send_inner_message_(x);
 }
 
 void dungeon_server::game_room::game_room::set_state(const base_state<game_room>& state)

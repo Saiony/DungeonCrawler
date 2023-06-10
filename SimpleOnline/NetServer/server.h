@@ -15,7 +15,7 @@ namespace dungeon_server
         std::string spells_[5] = {"BurningHands", "CharmPerson", "CureWounds", "MageArmor", "Thunderwave"};
         std::vector<domain::player> players_;
         domain::lobby::lobby_domain lobby_;
-        std::shared_ptr<domain::encounter::encounter> current_encounter_;
+        std::shared_ptr<domain::encounter> current_encounter_;
         std::unique_ptr<game_room::game_room> game_room_ptr_;
         
     protected:
@@ -26,7 +26,7 @@ namespace dungeon_server
 
     public:
         void update(const size_t max_messages = -1, const bool wait = false) override;//TODO: isso vira protected
-        void on_game_room_message(const std::shared_ptr<emitter_message>& emitter_msg);
+        void on_game_room_message(const std::shared_ptr<domain::message::emitter_message>& emitter_msg);
         explicit server(const uint16_t n_port);
     };
 }

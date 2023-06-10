@@ -89,7 +89,7 @@ void client::send_action(const model::action_types action_id, const std::string&
     wait_message();
 }
 
-void client::get_encounter(const std::function<void(domain::encounter)>& callback)
+void client::request_match_start(const std::function<void(domain::encounter)>& callback)
 {
     get_encounter_callback = callback;
     const message<custom_msg_types> msg(custom_msg_types::match_start_request);

@@ -12,6 +12,6 @@ namespace dungeon_common::model
         uint32_t health{};
         
         player_model();
-        player_model(std::string new_id, std::string new_name, uint32_t health);
+        player_model(const std::string& new_id, const std::string& new_name, uint32_t health);
     };
 }

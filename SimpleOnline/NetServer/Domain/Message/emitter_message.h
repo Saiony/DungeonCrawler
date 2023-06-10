@@ -1,11 +1,14 @@
 ﻿#pragma once
 #include "net_message.h"
 
-class emitter_message
+namespace dungeon_server::domain::message
 {
-public:
-    virtual dungeon_common::custom_msg_types get_id()
+    class emitter_message
     {
-        return dungeon_common::custom_msg_types::unknown;
-    }
-};
+    public:
+        virtual dungeon_common::custom_msg_types get_id()
+        {
+            return dungeon_common::custom_msg_types::unknown;
+        }
+    };
+}

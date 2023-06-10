@@ -8,7 +8,7 @@ dungeon_client::scene::level_scene::level_scene(const std::shared_ptr<client>& c
 
 void dungeon_client::scene::level_scene::show()
 {
-    client_ptr_->get_encounter([this](auto encounter)
+    client_ptr_->request_match_start([this](auto encounter)
     {
         system("CLS");
         std::cout << "--- GAME SCENE ---" << std::endl << std::endl;

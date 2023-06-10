@@ -57,21 +57,30 @@ void server::update(const size_t max_messages, const bool wait)
         game_room_ptr_->update();
 }
 
-void server::on_game_room_message(const std::shared_ptr<emitter_message>& emitter_msg)
+void server::on_game_room_message(const std::shared_ptr<domain::message::emitter_message>& emitter_msg)
 {
     switch (emitter_msg->get_id())
     {
     case dungeon_common::custom_msg_types::match_start_response:
         {
-            std::cout << "cheguei aqui POUHA";
-            const auto match_start_msg_ptr = std::dynamic_pointer_cast<match_start_response>(emitter_msg);
+            const auto match_start_msg_ptr = std::dynamic_pointer_cast<domain::message::match_start_response>(emitter_msg);
+            const auto encounter = match_start_msg_ptr->encounter;
+            dungeon_common::model::encounter_model encounter_model;
             
-            //answer msg
-            dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::match_start_response);
-            const dungeon_common::model::simple_answer_model model(true, error_code_type::none);
-            answer << model;
-            
-            message_client(match_start_msg_ptr->player.private_id, answer);            
+            for(size_t i = 0; i < encounter.enemies.size(); i++)
+            {
+                encounter_model.enemies[i] = dungeon_common::model::enemy_model(encounter.enemies[i].get_id(), encounter.enemies[i].get_name(),
+                                                                                encounter.enemies[i].get_health());
+            }
+            for(size_t i = 0; i < encounter.players.size(); i++)
+            {
+                encounter_model.players[i] = dungeon_common::model::player_model(encounter.players[i].public_id, encounter.players[i].name,
+                                                                                   encounter.players[i].health);    
+            }
+
+            dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::encounter_update);
+            answer << encounter_model;
+            message_client(match_start_msg_ptr->player.private_id, answer);       
             break;
         }
     default: ;
@@ -152,34 +161,14 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
                 return;
 
             game_room_ptr_ = std::make_unique<game_room::game_room>(players_,
-            [this](std::shared_ptr<emitter_message> emitter_msg)
+            [this](std::shared_ptr<domain::message::emitter_message> emitter_msg)
             {
                 on_game_room_message(emitter_msg);
             });
             break;
         }
     case dungeon_common::custom_msg_types::match_start_request:
-        {         
-            // const domain::enemy::wolf wolf("wolf", 10, 15);
-            // std::vector enemies = { static_cast<domain::enemy::base_enemy>(wolf) };
-            //
-            // current_encounter_ = std::make_shared<domain::encounter::encounter>(enemies);
-            //
-            // model::encounter_model encounter_model;
-            // for(size_t i = 0; i < enemies.size(); i++)
-            // {
-            //     encounter_model.enemies[i] = model::enemy_model(enemies[i].get_id(), enemies[i].get_name(), enemies[i].get_health());
-            // }
-            //
-            // for(size_t i = 0; i < players_.size(); i++)
-            // {
-            //     encounter_model.players[i] = model::player_model(players_[i].public_id, players_[i].name, players_[i].health);    
-            // }
-            //
-            // message<custom_msg_types> answer(custom_msg_types::encounter_update);
-            // answer << encounter_model;
-            // message_client(client->get_id(), answer);
-
+        {     
             auto player = *std::ranges::find_if(players_, [&client](auto p)
             {
                 return p.private_id == client->get_id();
