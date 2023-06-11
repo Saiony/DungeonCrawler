@@ -204,7 +204,7 @@ bool client::handle_messages()
             msg >> response;
             return false;
         }
-    case custom_msg_types::encounter_update:
+    case custom_msg_types::encounter_update_response:
         {
             model::encounter_model encounter_model;
             msg >> encounter_model;

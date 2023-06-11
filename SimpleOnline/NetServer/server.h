@@ -12,10 +12,8 @@ namespace dungeon_server
     {
     private:
         const uint8_t max_players_ = 3;
-        std::string spells_[5] = {"BurningHands", "CharmPerson", "CureWounds", "MageArmor", "Thunderwave"};
         std::vector<domain::player> players_;
         domain::lobby::lobby_domain lobby_;
-        std::shared_ptr<domain::encounter> current_encounter_;
         std::unique_ptr<game_room::game_room> game_room_ptr_;
         
     protected:

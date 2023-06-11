@@ -11,10 +11,10 @@ namespace dungeon_server::domain::action
         virtual ~base_action();
         dungeon_common::model::action_types id;
         std::string target_id;
-        std::shared_ptr<encounter> encounter;
 
-        explicit base_action(dungeon_common::model::action_model model, const std::shared_ptr<domain::encounter>& encounter);
-        virtual void use()
+        explicit base_action(dungeon_common::model::action_model model);
+        
+        virtual void use(const std::shared_ptr<encounter>& encounter_ptr)
         {
             std::cout << "base use " << std::endl;
         }

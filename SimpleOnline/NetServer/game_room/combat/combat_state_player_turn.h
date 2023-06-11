@@ -1,27 +1,26 @@
 ﻿#pragma once
+#include "base_combat_state.h"
 #include "NetServer/Domain/Player.h"
 #include "NetServer/Domain/Actions/base_action.h"
-#include "NetServer/game_room/states/base_state.h"
-#include "NetServer/game_room/states/game_room_combat_state.h"
 
 namespace dungeon_server::game_room::combat
 {
-    template<typename T>
-    class combat_state_player_turn final : public base_state<T>
+    class combat_state_player_turn final : public base_combat_state
     {    
     private:
         domain::player active_player_;
 
     public:
-        explicit combat_state_player_turn(domain::player player): active_player_(player)
+        explicit combat_state_player_turn(const domain::player& active_player): active_player_(active_player)
         {
         }
 
-        void update()
+        void handle_player_action(const domain::player& player, const domain::action::base_action& action) override
         {
+            
         }
 
-        void handle_player_action(domain::player player, domain::action::base_action action)
+        void update() override
         {
         }
     };

@@ -1,17 +1,16 @@
 ﻿#pragma once
 #include "emitter_message.h"
-#include "Models/encounter_model.h"
 #include "NetServer/Domain/Player.h"
 
 namespace dungeon_server::domain::message
 {
-    class match_start_response : public emitter_message
+    class match_start_response final : public emitter_message
     {
     public:
         player player;
-        encounter encounter;
+        std::shared_ptr<encounter> encounter;
         
-        explicit match_start_response(domain::player player, domain::encounter encounter) : player(std::move(player)), encounter(std::move(encounter))
+        explicit match_start_response(domain::player player, std::shared_ptr<domain::encounter> encounter) : player(std::move(player)), encounter(std::move(encounter))
         {
         }
     

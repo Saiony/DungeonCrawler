@@ -29,4 +29,6 @@ void dungeon_client::scene::level_scene::show()
                 client_ptr_->send_action(dungeon_common::model::action_types::sword_slash, encounter.enemies[0].get_id());
         });
     });
+
+    while(true){}
 }

@@ -5,6 +5,7 @@
 #include "Domain/Enemies/Wolf.h"
 #include "Domain/Factory/action_factory.h"
 #include "Domain/Message/emitter_message.h"
+#include "Domain/Message/encounter_update_response.h"
 #include "Domain/Message/match_start_response.h"
 #include "Models/action_model.h"
 #include "Models/encounter_model.h"
@@ -67,20 +68,48 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
             const auto encounter = match_start_msg_ptr->encounter;
             dungeon_common::model::encounter_model encounter_model;
             
-            for(size_t i = 0; i < encounter.enemies.size(); i++)
+            for(size_t i = 0; i < encounter->enemies.size(); i++)
             {
-                encounter_model.enemies[i] = dungeon_common::model::enemy_model(encounter.enemies[i].get_id(), encounter.enemies[i].get_name(),
-                                                                                encounter.enemies[i].get_health());
+                encounter_model.enemies[i] = dungeon_common::model::enemy_model(encounter->enemies[i].get_id(),
+                                                                                encounter->enemies[i].get_name(),
+                                                                                encounter->enemies[i].get_health());
             }
-            for(size_t i = 0; i < encounter.players.size(); i++)
+            for(size_t i = 0; i < encounter->players.size(); i++)
             {
-                encounter_model.players[i] = dungeon_common::model::player_model(encounter.players[i].public_id, encounter.players[i].name,
-                                                                                   encounter.players[i].health);    
+                encounter_model.players[i] = dungeon_common::model::player_model(encounter->players[i].public_id,
+                                                                                encounter->players[i].name,
+                                                                                encounter->players[i].health);    
             }
 
-            dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::encounter_update);
+            dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::encounter_update_response);
             answer << encounter_model;
             message_client(match_start_msg_ptr->player.private_id, answer);       
+            break;
+        }
+    case dungeon_common::custom_msg_types::encounter_update_response:
+        {
+            const auto encounter_update = std::dynamic_pointer_cast<domain::message::encounter_update_response>(emitter_msg);
+            const auto encounter = encounter_update->encounter_ptr;
+            
+            //sends back the encounter
+            dungeon_common::model::encounter_model encounter_model;
+            for(size_t i = 0; i < encounter->enemies.size(); i++)
+            {
+                encounter_model.enemies[i] = dungeon_common::model::enemy_model(encounter->enemies[i].get_id(),
+                                                                                encounter->enemies[i].get_name(),
+                                                                                encounter->enemies[i].get_health());
+            }
+
+            for(size_t i = 0; i < encounter->players.size(); i++)
+            {
+                encounter_model.players[i] = dungeon_common::model::player_model(encounter->players[i].public_id,
+                                                                                 encounter->players[i].name,
+                                                                                 encounter->players[i].health);    
+            }
+
+            dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::encounter_update_response);
+            answer << encounter_model;
+            broadcast_message(answer);
             break;
         }
     default: ;
@@ -181,30 +210,9 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
         {
             dungeon_common::model::action_model action_model;
             msg >> action_model;
-
-            auto action = ::domain::action::action_factory::create_action(action_model, current_encounter_);
-            action->use();
-
-            //sends back the encounter
-            dungeon_common::model::encounter_model encounter_model;
-            for(size_t i = 0; i < current_encounter_->enemies.size(); i++)
-            {
-                encounter_model.enemies[i] = dungeon_common::model::enemy_model(current_encounter_->enemies[i].get_id(),
-                                                                current_encounter_->enemies[i].get_name(),
-                                                                current_encounter_->enemies[i].get_health());
-            }
-
-            for(size_t i = 0; i < players_.size(); i++)
-            {
-                encounter_model.players[i] = dungeon_common::model::player_model(players_[i].public_id, players_[i].name, players_[i].health);    
-            }
-
-            dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::encounter_update);
-            answer << encounter_model;
-            broadcast_message(answer); //nao vamos mais broadcastear a msg, apenas mandar pra listar de msgs, o switch/case vai fazer o broadcast
+            auto action = ::domain::action::action_factory::create_action(action_model);
+            game_room_ptr_->handle_player_input(action);
             
-
-            //isso aqui na verdade chama game_room.receive_action() passando tudo pra dentro
             break;
         }
     default:

@@ -15,7 +15,7 @@ namespace dungeon_common
         player_ready,
         player_ready_response,
         match_start_request,
-        encounter_update,
+        encounter_update_response,
         player_action,
         game_room_broadcast,
         match_start_response,
