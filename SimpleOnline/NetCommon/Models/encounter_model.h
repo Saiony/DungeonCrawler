@@ -6,7 +6,7 @@ namespace dungeon_common::model
 {
     struct enemy_model
     {
-        char id[38]{};
+        char id[39]{};
         char name[40]{};
         uint16_t health;
 
@@ -18,6 +18,7 @@ namespace dungeon_common::model
     {
         std::array<enemy_model, 3> enemies{};
         std::array<player_model, 3> players{};
+        char active_creature_id[40]{};
 
         encounter_model() = default;
     };

@@ -34,7 +34,7 @@ std::shared_ptr<dungeon_server::domain::encounter> dungeon_server::game_room::ga
 {
     const domain::enemy::wolf wolf("wolf", 10, 15);
     const std::vector enemies = { static_cast<domain::enemy::base_enemy>(wolf) };    
-    auto encounter = std::make_shared<domain::encounter>(enemies, players_);
+    auto encounter = std::make_shared<domain::encounter>(enemies, players_, players_[0]);
     
     return encounter;
 }

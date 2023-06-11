@@ -13,7 +13,7 @@ namespace dungeon_client
     class client : public dungeon_common::base_client<dungeon_common::custom_msg_types>
     {
     private:
-        domain::player player_ = {};
+        std::unique_ptr<domain::player> player_ptr_;
         bool handle_messages();
         void wait_message();
     public:

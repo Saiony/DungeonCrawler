@@ -4,7 +4,7 @@ using namespace dungeon_server::domain::enemy;
 
 base_enemy::base_enemy(std::string name, const uint16_t health, const uint16_t damage): name_(std::move(name)), health_(health), damage_(damage)
 {
-    id_ = dungeon_common::utility::guid_generator::create_guid();
+    public_id = dungeon_common::utility::guid_generator::create_guid();
 }
 
 void base_enemy::execute_turn()
@@ -23,7 +23,7 @@ uint16_t base_enemy::get_health() const
 
 std::string base_enemy::get_id() const
 {
-    return id_;
+    return public_id;
 }
 
 void base_enemy::take_damage(const int damage)

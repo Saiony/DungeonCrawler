@@ -1,25 +1,17 @@
 ﻿#include "encounter.h"
 
-dungeon_client::domain::enemy::enemy(const char* id, const char* name, const uint16_t health): id_(id), name_(name), health_(health)
-{
-}
+#include "../Scenes/CharacterCreationScene.h"
 
-std::string dungeon_client::domain::enemy::get_name()
+dungeon_client::domain::encounter::encounter(std::vector<enemy> enemies, std::vector<player> players, std::string active_player_id)
+                                            : enemies(std::move(enemies)), players(std::move(players))
 {
-    return name_;
-}
+    const auto active_player_it = std::ranges::find_if(this->players, [&active_player_id](auto player)
+    {
+        return player.get_id() == active_player_id;
+    });
 
-std::string dungeon_client::domain::enemy::get_id()
-{
-    return id_;
-}
+    if(active_player_it == std::end(this->players))
+        throw std::logic_error("Couldn't find player id - " + active_player_id);
 
-uint16_t dungeon_client::domain::enemy::get_health() const
-{
-    return health_;
-}
-
-dungeon_client::domain::encounter::encounter(std::vector<enemy> enemies, std::vector<player> players) :
-                                             enemies(std::move(enemies)), players(std::move(players))
-{
+    active_creature_ptr = std::make_unique<base_creature>(*active_player_it);
 }

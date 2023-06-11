@@ -66,7 +66,7 @@ void client::create_player(const char* name, const std::function<void(dungeon_co
 
 void client::set_player(domain::player& player)
 {
-    player_ = std::move(player);
+    player_ptr_ = std::make_unique<domain::player>(player);
 }
 
 void client::set_player_ready(const bool ready, const std::function<void(domain::lobby_domain)>& callback)
@@ -224,10 +224,11 @@ bool client::handle_messages()
                     players.emplace_back(player_model.id, player_model.name, player_model.health);
             }
 
-            const domain::encounter encounter(enemies, players);               
+            const std::string active_creature_id(encounter_model.active_creature_id);
+            domain::encounter encounter(enemies, players, active_creature_id);               
             if(get_encounter_callback != nullptr)
             {
-                get_encounter_callback(encounter);
+                get_encounter_callback(std::move(encounter));
                 get_encounter_callback = nullptr;
                 return true;
             }

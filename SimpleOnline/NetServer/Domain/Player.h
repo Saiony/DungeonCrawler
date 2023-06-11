@@ -8,7 +8,6 @@ namespace dungeon_server::domain
     {
     public:
         std::string private_id;
-        std::string public_id;
         uint16_t health;
         std::string name;
         

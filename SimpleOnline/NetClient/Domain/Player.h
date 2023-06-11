@@ -1,18 +1,14 @@
 ﻿#pragma once
 #include <cstdint>
 #include <string>
-
+#include "base_creature.h"
 
 namespace dungeon_client::domain
 {
-    class player
+    class player : public base_creature
     {
     public:
-        std::string id{};
-        std::string name{};
-        uint32_t health{};
-
         player();
-        player(std::string id, std::string name, uint32_t health);
+        player(const std::string& id, const std::string& name, uint32_t health);
     };
 }
