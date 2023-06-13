@@ -16,7 +16,7 @@ namespace dungeon_common::utility
             wchar_t guid_char[39];
             StringFromGUID2(guid, guid_char, 39);
 
-            std::wstring wstr(guid_char);
+            std::wstring wstr(std::begin(guid_char), std::end(guid_char));
             std::string guid_string(wstr.begin(), wstr.end());
 
             return guid_string;
