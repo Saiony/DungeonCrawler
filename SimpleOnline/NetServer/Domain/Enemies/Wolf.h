@@ -3,7 +3,7 @@
 
 namespace dungeon_server::domain::enemy
 {
-    class wolf : public base_enemy
+    class wolf final : public base_enemy
     {
     public:
         wolf(const std::string& name, uint16_t health, uint16_t damage);

@@ -1,10 +1,11 @@
-﻿#pragma once
+﻿    #pragma once
 
-namespace dungeon_server::domain
-{
-    class base_creature
+    namespace dungeon_server::domain
     {
-    public:
-        std::string public_id;
-    };
-}
+        class base_creature
+        {
+        public:
+            virtual ~base_creature(){}
+            std::string public_id;
+        };
+    }

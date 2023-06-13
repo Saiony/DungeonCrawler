@@ -4,7 +4,7 @@
 
 namespace dungeon_server::domain
 {
-    class player : public base_creature
+    class player final : public base_creature
     {
     public:
         std::string private_id;

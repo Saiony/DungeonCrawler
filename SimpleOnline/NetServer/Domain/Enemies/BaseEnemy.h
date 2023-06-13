@@ -1,8 +1,9 @@
 ﻿#pragma once
+#include <iostream>
 #include <string>
 #include "NetServer/Domain/base_creature.h"
 
-namespace dungeon_server::domain::enemy
+namespace dungeon_server::domain
 {
     class base_enemy : public base_creature
     {
@@ -13,10 +14,13 @@ namespace dungeon_server::domain::enemy
 
     public:
         base_enemy(std::string name, const uint16_t health, const uint16_t damage);
-        virtual void execute_turn();
         std::string get_name() const;
         uint16_t get_health() const;
         std::string get_id() const;
         void take_damage(int damage);
+        virtual void execute_turn()
+        {
+            std::cout << "base execute turn" << std::endl;
+        }
     };
 }

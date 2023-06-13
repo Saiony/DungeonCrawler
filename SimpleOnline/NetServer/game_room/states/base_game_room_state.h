@@ -12,7 +12,7 @@ namespace dungeon_server::game_room
         {            
         }
 
-        virtual void update()
+        virtual void update(const std::function<void(std::shared_ptr<domain::message::emitter_message>)>& send_message_function)
         {            
         }
 

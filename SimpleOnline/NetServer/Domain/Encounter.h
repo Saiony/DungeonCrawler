@@ -9,11 +9,12 @@ namespace dungeon_server::domain
     class encounter
     {
     public:
-        std::vector<enemy::base_enemy> enemies;
-        std::vector<player> players;
+        std::vector<std::shared_ptr<base_enemy>> enemies;
+        std::vector<std::shared_ptr<player>> players;
         std::vector<std::shared_ptr<base_creature>> creatures;
-        base_creature active_creature;
+        std::shared_ptr<base_creature> active_creature;
         
-        encounter(std::vector<enemy::base_enemy> enemies, std::vector<player> players, base_creature active_creature);
+        encounter(std::vector<std::shared_ptr<base_enemy>> enemies, std::vector<std::shared_ptr<player>> players, std::shared_ptr<base_creature> active_creature);
+        void go_to_next_turn();
     };
 }

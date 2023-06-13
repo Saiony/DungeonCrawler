@@ -1,14 +1,10 @@
 ﻿#include "BaseEnemy.h"
 #include "Utility/guid_generator.h"
-using namespace dungeon_server::domain::enemy;
+using namespace dungeon_server::domain;
 
 base_enemy::base_enemy(std::string name, const uint16_t health, const uint16_t damage): name_(std::move(name)), health_(health), damage_(damage)
 {
     public_id = dungeon_common::utility::guid_generator::create_guid();
-}
-
-void base_enemy::execute_turn()
-{
 }
 
 std::string base_enemy::get_name() const

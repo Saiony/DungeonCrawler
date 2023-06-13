@@ -12,7 +12,7 @@ namespace dungeon_server
     {
     private:
         const uint8_t max_players_ = 3;
-        std::vector<domain::player> players_;
+        std::vector<std::shared_ptr<domain::player>> players_;
         domain::lobby::lobby_domain lobby_;
         std::unique_ptr<game_room::game_room> game_room_ptr_;
         

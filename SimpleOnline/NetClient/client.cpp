@@ -229,7 +229,6 @@ bool client::handle_messages()
             if(get_encounter_callback != nullptr)
             {
                 get_encounter_callback(std::move(encounter));
-                get_encounter_callback = nullptr;
                 return true;
             }
 
