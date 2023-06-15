@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include "base_game_room_state.h"
-#include "NetClient/Domain/base_creature.h"
 #include "NetServer/Domain/Encounter.h"
 #include "NetServer/Domain/Player.h"
 #include "NetServer/Domain/Message/encounter_update_response.h"
@@ -43,7 +42,7 @@ namespace dungeon_server::game_room
             
             if(const auto enemy_ptr = std::dynamic_pointer_cast<domain::base_enemy>(encounter_ptr_->active_creature))
             {
-                enemy_ptr->execute_turn();
+                enemy_ptr->execute_turn(encounter_ptr_);
                 encounter_ptr_->go_to_next_turn();
             }
             if(const auto player_ptr = std::dynamic_pointer_cast<domain::player>(encounter_ptr_->active_creature))

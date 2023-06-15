@@ -7,6 +7,6 @@ namespace dungeon_server::domain::enemy
     {
     public:
         wolf(const std::string& name, uint16_t health, uint16_t damage);
-        void execute_turn() override;
+        void execute_turn(const std::shared_ptr<encounter>& encounter_ptr) override;
     };
 }

@@ -6,6 +6,8 @@
 
 namespace dungeon_server::domain
 {
+    class base_enemy;
+    
     class encounter
     {
     public:

@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include <string>
 #include "combaseapi.h"
-#include "objbase.h"
 
 namespace dungeon_common::utility
 {

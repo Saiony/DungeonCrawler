@@ -8,10 +8,8 @@ namespace dungeon_server::domain
     {
     public:
         std::string private_id;
-        uint16_t health;
-        std::string name;
         
         void do_something() const;
-        player(const std::string& client_id, std::string name, uint16_t health);
+        player(std::string client_id, std::string new_name, uint16_t new_health);
     };
 }

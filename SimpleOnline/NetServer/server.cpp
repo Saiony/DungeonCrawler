@@ -73,9 +73,9 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
             
             for(size_t i = 0; i < encounter->enemies.size(); i++)
             {
-                encounter_model.enemies[i] = dungeon_common::model::enemy_model(encounter->enemies[i]->get_id(),
-                                                                                encounter->enemies[i]->get_name(),
-                                                                                encounter->enemies[i]->get_health());
+                encounter_model.enemies[i] = dungeon_common::model::enemy_model(encounter->enemies[i]->public_id,
+                                                                                encounter->enemies[i]->name,
+                                                                                encounter->enemies[i]->health);
             }
             for(size_t i = 0; i < encounter->players.size(); i++)
             {
@@ -99,9 +99,9 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
             dungeon_common::model::encounter_model encounter_model;
             for(size_t i = 0; i < encounter->enemies.size(); i++)
             {
-                encounter_model.enemies[i] = dungeon_common::model::enemy_model(encounter->enemies[i]->get_id(),
-                                                                                encounter->enemies[i]->get_name(),
-                                                                                encounter->enemies[i]->get_health());
+                encounter_model.enemies[i] = dungeon_common::model::enemy_model(encounter->enemies[i]->public_id,
+                                                                                encounter->enemies[i]->name,
+                                                                                encounter->enemies[i]->health);
             }
 
             for(size_t i = 0; i < encounter->players.size(); i++)
