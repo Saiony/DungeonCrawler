@@ -11,12 +11,12 @@ void dungeon_client::scene::level_scene::show()
     client_ptr_->request_match_start([this](auto encounter)
     {
         print_combat(encounter);
-
-        client_ptr_->read_input([this, &encounter](const std::string& input)
-        {
-            if (input == "sword slash")
-                client_ptr_->send_action(dungeon_common::model::action_types::sword_slash, encounter.enemies[0].id);
-        });
+        handle_player_input(encounter);
+        
+        // if(!encounter.check_active_player(client_ptr_->get_player()))
+        //     handle_wrong_turn_input(encounter);
+        //
+        // handle_player_input(encounter);
     });
 
     while(true){}
@@ -45,4 +45,34 @@ void dungeon_client::scene::level_scene::print_combat(const domain::encounter& e
         std::cout << encounter.active_creature_ptr->name << "'s turn...";
 
     std::cout << std::endl << std::endl;
+}
+
+void dungeon_client::scene::level_scene::handle_wrong_turn_input(const domain::encounter& encounter) const
+{
+    client_ptr_->read_input([&encounter, this](const std::string& input)
+    {
+        print_combat(encounter);
+        handle_wrong_turn_input(encounter);
+    });
+}
+
+void dungeon_client::scene::level_scene::handle_player_input(const domain::encounter& encounter) const
+{
+    client_ptr_->read_input([this, &encounter](const std::string& input)
+    {
+        if(!encounter.check_active_player(client_ptr_->get_player()))
+        {
+            print_combat(encounter);
+            std::cout << "Please wait your turn" << std::endl;
+            handle_player_input(encounter);
+        }
+        else if (input == "sword slash")
+            client_ptr_->send_action(dungeon_common::model::action_types::sword_slash, encounter.enemies[0].id);
+        else
+        {
+            print_combat(encounter);
+            std::cout << "[" << input << "] is not on your action list" << std::endl;
+            handle_player_input(encounter);
+        }
+    });
 }

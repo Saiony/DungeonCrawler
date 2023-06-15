@@ -15,7 +15,6 @@ namespace dungeon_client
     private:
         std::unique_ptr<domain::player> player_ptr_;
         bool handle_messages();
-        void wait_message();
     public:
         std::condition_variable condition_var;        
         std::mutex mutex;
@@ -30,6 +29,7 @@ namespace dungeon_client
         void set_player_ready(const bool ready, const std::function<void(domain::lobby_domain)>& callback);
         void send_action(const dungeon_common::model::action_types action_id, const std::string& target_id);
         void request_match_start(const std::function<void(domain::encounter)>& callback);
+        void wait_message();
         domain::player get_player() const;
 
         std::function<void(std::string input)> player_input_callback;
