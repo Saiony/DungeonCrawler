@@ -97,6 +97,11 @@ void client::request_match_start(const std::function<void(domain::encounter)>& c
     wait_message();
 }
 
+domain::player client::get_player() const
+{
+    return *player_ptr_;
+}
+
 void client::read_input(const std::function<void(std::string input)>& callback)
 {
     player_input.clear();

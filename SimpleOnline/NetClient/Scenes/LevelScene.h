@@ -13,5 +13,6 @@ namespace dungeon_client::scene
     public:        
         explicit level_scene(const std::shared_ptr<client>& client_ptr);
         void show() override;
+        void print_combat(const dungeon_client::domain::encounter& encounter) const;
     };
 }

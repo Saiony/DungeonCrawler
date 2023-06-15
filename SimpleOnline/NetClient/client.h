@@ -30,6 +30,7 @@ namespace dungeon_client
         void set_player_ready(const bool ready, const std::function<void(domain::lobby_domain)>& callback);
         void send_action(const dungeon_common::model::action_types action_id, const std::string& target_id);
         void request_match_start(const std::function<void(domain::encounter)>& callback);
+        domain::player get_player() const;
 
         std::function<void(std::string input)> player_input_callback;
         std::function<void(dungeon_common::model::simple_answer_model)> connection_callback;
