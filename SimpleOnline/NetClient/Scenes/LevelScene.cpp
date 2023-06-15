@@ -12,11 +12,6 @@ void dungeon_client::scene::level_scene::show()
     {
         print_combat(encounter);
         handle_player_input(encounter);
-        
-        // if(!encounter.check_active_player(client_ptr_->get_player()))
-        //     handle_wrong_turn_input(encounter);
-        //
-        // handle_player_input(encounter);
     });
 
     while(true){}

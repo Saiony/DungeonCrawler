@@ -26,6 +26,7 @@ namespace dungeon_server::game_room
                           const std::shared_ptr<domain::action::base_action>& action) override
         {
             action->use(encounter_ptr_);
+            encounter_ptr_->go_to_next_turn();
             const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_ptr_);
             send_message_function(msg);
         }

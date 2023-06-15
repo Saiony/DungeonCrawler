@@ -194,7 +194,7 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
             if(!lobby_model.start_match)
                 return;
 
-            game_room_ptr_ = std::make_unique<game_room::game_room>(players_, [this](std::shared_ptr<domain::message::emitter_message> emitter_msg)
+            game_room_ptr_ = std::make_unique<game_room::game_room>(players_, [this](const std::shared_ptr<domain::message::emitter_message> emitter_msg)
             {
                 on_game_room_message(emitter_msg);
             });

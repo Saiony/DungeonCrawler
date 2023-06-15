@@ -14,7 +14,7 @@ void read_input_thread(std::string& input)
     while (true)
     {
         std::string x;
-        std::getline(std::cin, x);
+        std::getline(std::cin, input);
         input = x;
     }
 }
