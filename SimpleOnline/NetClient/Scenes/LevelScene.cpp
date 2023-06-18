@@ -1,5 +1,7 @@
 ﻿#include "LevelScene.h"
 #include "Models/action_model.h"
+#include <iostream>
+#include <chrono>
 
 dungeon_client::scene::level_scene::level_scene(const std::shared_ptr<client>& client_ptr)
 {
@@ -14,14 +16,16 @@ void dungeon_client::scene::level_scene::show()
         handle_player_input(encounter);
     });
 
-    while(true){}
+    while (true)
+    {
+    }
 }
 
 void dungeon_client::scene::level_scene::print_combat(const domain::encounter& encounter) const
 {
     system("CLS");
     std::cout << "--- GAME SCENE ---" << std::endl << std::endl;
-    
+
     std::cout << "-----------------------------------------" << std::endl;
     for (auto& enemy : encounter.enemies)
     {
@@ -34,7 +38,12 @@ void dungeon_client::scene::level_scene::print_combat(const domain::encounter& e
     }
     std::cout << "-----------------------------------------" << std::endl;
 
-    if(encounter.check_active_player(client_ptr_->get_player()))
+    if (!encounter.log.empty())
+    {
+        std::cout << encounter.log << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+    }
+    if (encounter.check_active_player(client_ptr_->get_player()))
         std::cout << "Your turn...";
     else
         std::cout << encounter.active_creature_ptr->name << "'s turn...";
@@ -55,14 +64,14 @@ void dungeon_client::scene::level_scene::handle_player_input(const domain::encou
 {
     client_ptr_->read_input([this, &encounter](const std::string& input)
     {
-        if(!encounter.check_active_player(client_ptr_->get_player()))
+        if (!encounter.check_active_player(client_ptr_->get_player()))
         {
             print_combat(encounter);
             std::cout << "Please wait your turn" << std::endl;
             handle_player_input(encounter);
         }
         else if (input == "sword slash")
-            client_ptr_->send_action(dungeon_common::model::action_types::sword_slash, encounter.enemies[0].id);
+            client_ptr_->send_action(dungeon_common::model::action_types::sword_slash, encounter.enemies[0].public_id);
         else
         {
             print_combat(encounter);

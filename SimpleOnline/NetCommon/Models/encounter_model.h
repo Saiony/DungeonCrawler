@@ -18,7 +18,8 @@ namespace dungeon_common::model
     {
         std::array<enemy_model, 3> enemies{};
         std::array<player_model, 3> players{};
-        char active_creature_id[40]{};
+        char active_creature_id[39]{};
+        char log[120]{};
 
         encounter_model() = default;
     };

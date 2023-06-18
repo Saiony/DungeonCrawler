@@ -8,8 +8,10 @@ namespace dungeon_server::domain::message
     {
     public:
         std::shared_ptr<domain::encounter> encounter_ptr;
+        std::string log;
         
-        explicit encounter_update_response(const std::shared_ptr<domain::encounter>& encounter_ptr) : encounter_ptr(encounter_ptr)
+        explicit encounter_update_response(std::shared_ptr<domain::encounter> encounter_ptr, std::string action_log)
+                                           : encounter_ptr(std::move(encounter_ptr)), log(std::move(action_log))
         {
         }
 

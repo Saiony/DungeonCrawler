@@ -14,7 +14,6 @@
 #include "Models/lobby_model.h"
 #include "Models/player_model.h"
 #include "Models/simple_answer_model.h"
-#include "NetClient/Domain/Player.h"
 using namespace dungeon_server;
 
 server::server(const uint16_t n_port) : base_server<dungeon_common::custom_msg_types>(n_port)
@@ -80,11 +79,11 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
             for(size_t i = 0; i < encounter->players.size(); i++)
             {
                 encounter_model.players[i] = dungeon_common::model::player_model(encounter->players[i]->public_id,
-                                                                                encounter->players[i]->name,
-                                                                                encounter->players[i]->health);    
+                                                                                 encounter->players[i]->name,
+                                                                                 encounter->players[i]->health);    
             }
+            
             std::ranges::copy(encounter->active_creature->public_id, encounter_model.active_creature_id);
-
             dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::encounter_update_response);
             answer << encounter_model;
             message_client(match_start_msg_ptr->player->private_id, answer);       
@@ -94,30 +93,29 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
         {
             const auto encounter_update = std::dynamic_pointer_cast<domain::message::encounter_update_response>(emitter_msg);
             const auto encounter = encounter_update->encounter_ptr;
-            
-            //sends back the encounter
             dungeon_common::model::encounter_model encounter_model;
+            
             for(size_t i = 0; i < encounter->enemies.size(); i++)
             {
                 encounter_model.enemies[i] = dungeon_common::model::enemy_model(encounter->enemies[i]->public_id,
                                                                                 encounter->enemies[i]->name,
-                                                                                encounter->enemies[i]->health);
+                                                                                  encounter->enemies[i]->health);
             }
-
             for(size_t i = 0; i < encounter->players.size(); i++)
             {
                 encounter_model.players[i] = dungeon_common::model::player_model(encounter->players[i]->public_id,
                                                                                  encounter->players[i]->name,
                                                                                  encounter->players[i]->health);    
             }
+            
             std::ranges::copy(encounter->active_creature->public_id, encounter_model.active_creature_id);
-
+            std::ranges::copy(encounter_update->log, encounter_model.log);
             dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::encounter_update_response);
             answer << encounter_model;
             broadcast_message(answer);
             break;
         }
-    default: ;
+    default: break;
     }
 }
 

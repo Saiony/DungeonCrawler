@@ -7,13 +7,15 @@ dungeon_server::domain::enemy::wolf::wolf(const std::string& name, const uint16_
 {
 }
 
-void dungeon_server::domain::enemy::wolf::execute_turn(const std::shared_ptr<encounter>& encounter_ptr)
+std::string dungeon_server::domain::enemy::wolf::execute_turn(const std::shared_ptr<encounter>& encounter_ptr)
 {
     auto it = encounter_ptr->players.cbegin();
     const int random = rand() % encounter_ptr->players.size();
     std::advance(it, random);
 
     const auto target_id = (*it)->public_id;
-    action::bite_action action(dungeon_common::model::action_types::bite, target_id);
-    action.use(encounter_ptr);
+    action::bite_action action(dungeon_common::model::action_types::bite, public_id, target_id);
+    auto action_log = action.use(encounter_ptr);
+
+    return action_log;
 }

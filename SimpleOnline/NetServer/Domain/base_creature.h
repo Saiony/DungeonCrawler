@@ -18,12 +18,14 @@ namespace dungeon_server::domain
             {
             }
             
-            void take_damage(const int dmg)
+            int take_damage(const int dmg)
             {
                 if(health - dmg < 0)
                     health = 0;
                 else
                     health -= dmg;
+
+                return dmg;
             }
         };
     }

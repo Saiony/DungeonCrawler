@@ -14,7 +14,7 @@ void read_input_thread(std::string& input)
     while (true)
     {
         std::string x;
-        std::getline(std::cin, input);
+        std::getline(std::cin, x);
         input = x;
     }
 }
@@ -81,7 +81,7 @@ void client::set_player_ready(const bool ready, const std::function<void(domain:
 
 void client::send_action(const model::action_types action_id, const std::string& target_id)
 {
-    const model::action_model action(action_id, target_id);
+    const model::action_model action(action_id, player_ptr_->public_id,target_id);
     message<custom_msg_types> msg(custom_msg_types::player_action);
 
     msg << action;
@@ -229,8 +229,7 @@ bool client::handle_messages()
                     players.emplace_back(player_model.id, player_model.name, player_model.health);
             }
 
-            const std::string active_creature_id(encounter_model.active_creature_id);
-            domain::encounter encounter(enemies, players, active_creature_id);               
+            domain::encounter encounter(enemies, players, encounter_model.active_creature_id, encounter_model.log);               
             if(get_encounter_callback != nullptr)
             {
                 get_encounter_callback(std::move(encounter));

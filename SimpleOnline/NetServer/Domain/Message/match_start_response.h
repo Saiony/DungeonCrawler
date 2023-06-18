@@ -10,7 +10,8 @@ namespace dungeon_server::domain::message
         std::shared_ptr<player> player;
         std::shared_ptr<encounter> encounter;
         
-        explicit match_start_response(std::shared_ptr<domain::player> player, std::shared_ptr<domain::encounter> encounter) : player(std::move(player)), encounter(std::move(encounter))
+        explicit match_start_response(std::shared_ptr<domain::player> player, std::shared_ptr<domain::encounter> encounter)
+                                      : player(std::move(player)), encounter(std::move(encounter))
         {
         }
     

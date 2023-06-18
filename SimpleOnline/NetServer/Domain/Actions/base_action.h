@@ -10,12 +10,18 @@ namespace dungeon_server::domain::action
     public:
         virtual ~base_action();
         dungeon_common::model::action_types id;
+        std::string action_owner_id{};
 
-        explicit base_action(const dungeon_common::model::action_types& action_type);
-        
-        virtual void use(const std::shared_ptr<encounter>& encounter_ptr)
+        explicit base_action(const dungeon_common::model::action_types& action_type, std::string new_action_owner_id);
+
+        virtual std::string get_name()
         {
-            std::cout << "base use " << std::endl;
+            return "unknown";
+        }
+
+        virtual std::string use(const std::shared_ptr<encounter>& encounter_ptr)
+        {
+            return "default log";
         }
     };
 }

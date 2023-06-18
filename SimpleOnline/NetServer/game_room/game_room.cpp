@@ -11,22 +11,6 @@ dungeon_server::game_room::game_room::game_room(std::vector<std::shared_ptr<doma
                                                 state_ptr_(std::make_unique<game_room_combat_state>(encounter_))
 {
     send_inner_message = send_message_function;
-    
-    //historia -> combate
-
-    //LOOP
-    //player 0 habilitado para jogar
-    //player 0 escolhe uma habilidade da lista de habilidades
-    //passa a vez
-
-    //player 1 habilitado para jogar
-    //player 1 escolhe uma habilidade da lista de habilidades
-    //passa a vez
-
-    //inimigo 1 habilitado para jogar
-    //inimigo 1 escolhe uma habilidade da lista de habilidades
-    //passa a vez
-    //FIM DO LOOP
 }
 
 std::shared_ptr<dungeon_server::domain::encounter> dungeon_server::game_room::game_room::generate_encounter() const

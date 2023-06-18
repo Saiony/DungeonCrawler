@@ -55,7 +55,7 @@ namespace dungeon_common
         //std::cout override
         friend std::ostream& operator <<(std::ostream& os, const message<T>& msg)
         {
-            os << "ID:" << int(msg.header.id) << " Size:" << msg.header.body_size;
+            os << "ID:" << int(msg.header.public_id) << " Size:" << msg.header.body_size;
             return os;
         }
 

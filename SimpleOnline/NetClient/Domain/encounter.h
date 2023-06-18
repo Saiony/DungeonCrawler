@@ -12,8 +12,9 @@ namespace dungeon_client::domain
         std::vector<enemy> enemies;
         std::vector<player> players;
         std::unique_ptr<base_creature> active_creature_ptr;
+        std::string log;
         
-        encounter(std::vector<enemy> enemies, std::vector<player> players, std::string active_player_id);
+        encounter(std::vector<enemy> enemies, std::vector<player> players, const std::string& active_creature_id, const std::string& log);
         bool check_active_player(const player& player) const;
     };
 }

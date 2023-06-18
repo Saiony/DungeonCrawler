@@ -1,6 +1,4 @@
-﻿
-#include "server.h"
-#include "Domain/Enemies/Wolf.h"
+﻿#include "server.h"
 
 using namespace dungeon_server;
 
