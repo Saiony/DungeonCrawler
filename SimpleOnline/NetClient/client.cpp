@@ -1,7 +1,10 @@
 ﻿#include "client.h"
 
-#include "Models/action_model.h"
+#include "Domain/action.h"
+#include "Domain/player_complete.h"
+#include "Models/action_use_model.h"
 #include "Models/encounter_model.h"
+#include "Models/player_config_model.h"
 #include "Models/simple_answer_model.h"
 using namespace dungeon_common;
 using namespace dungeon_client;
@@ -50,7 +53,7 @@ void client::validate_name(const char* name, const std::function<void(model::sim
     wait_message();
 }
 
-void client::create_player(const char* name, const std::function<void(dungeon_common::model::player_model)>& callback)
+void client::create_player(const char* name, const std::function<void(domain::player_complete)>& callback)
 {
     message<custom_msg_types> msg(custom_msg_types::create_player);
 
@@ -64,12 +67,12 @@ void client::create_player(const char* name, const std::function<void(dungeon_co
     wait_message();
 }
 
-void client::set_player(domain::player& player)
+void client::set_player(domain::player_complete& player)
 {
-    player_ptr_ = std::make_unique<domain::player>(player);
+    player_ptr_ = std::make_unique<domain::player_complete>(player);
 }
 
-void client::set_player_ready(const bool ready, const std::function<void(domain::lobby_domain)>& callback)
+void client::set_player_ready(const bool ready, const std::function<void(domain::lobby)>& callback)
 {
     message<custom_msg_types> msg(custom_msg_types::player_ready);
     msg << ready;
@@ -81,7 +84,7 @@ void client::set_player_ready(const bool ready, const std::function<void(domain:
 
 void client::send_action(const model::action_types action_id, const std::string& target_id)
 {
-    const model::action_model action(action_id, player_ptr_->public_id,target_id);
+    const model::action_use_model action(action_id, player_ptr_->public_id,target_id);
     message<custom_msg_types> msg(custom_msg_types::player_action);
 
     msg << action;
@@ -97,7 +100,7 @@ void client::request_match_start(const std::function<void(domain::encounter)>& c
     wait_message();
 }
 
-domain::player client::get_player() const
+domain::player_complete client::get_player() const
 {
     return *player_ptr_;
 }
@@ -178,12 +181,21 @@ bool client::handle_messages()
         }
     case custom_msg_types::create_player:
         {
-            model::player_model response;
+            model::player_config_model response;
             msg >> response;
+
+            std::array<domain::action, 4> actions;
+            for (size_t i = 0; i < actions.max_size(); ++i)
+            {
+                domain::action action(response.actions[i].id, response.actions[i].name);
+                actions[i] = action;
+            }
+            
+            domain::player_complete player_complete(response.id, response.name, response.max_health, actions);
 
             if (create_player_callback != nullptr)
             {
-                create_player_callback(response);
+                create_player_callback(player_complete);
                 create_player_callback = nullptr;
                 return true;
             }
@@ -193,7 +205,7 @@ bool client::handle_messages()
         {
             model::lobby_model response;
             msg >> response;
-            const domain::lobby_domain lobby(response);
+            const domain::lobby lobby(response);
 
             if (set_player_ready_callback != nullptr)
             {

@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <iostream>
-#include "Models/action_model.h"
+#include "Models/action_use_model.h"
 #include "NetServer/Domain/Encounter.h"
 
 namespace dungeon_server::domain::action

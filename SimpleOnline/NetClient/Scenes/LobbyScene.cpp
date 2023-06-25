@@ -16,7 +16,7 @@ void lobby_scene::show()
     const auto client_ptr = client_ptr_;
     const auto ready = ready_;
 
-    client_ptr_->set_player_ready(false, [&](const domain::lobby_domain& lobby)
+    client_ptr_->set_player_ready(false, [&](const domain::lobby& lobby)
     {
         print_lobby(lobby);
         wait_player_ready(client_ptr, ready);
@@ -35,7 +35,7 @@ void lobby_scene::wait_player_ready(const shared_ptr<client>& client_ptr, bool r
         }
 
         ready = !ready;
-        client_ptr->set_player_ready(ready, [&](const domain::lobby_domain& lobby)
+        client_ptr->set_player_ready(ready, [&](const domain::lobby& lobby)
         {
             print_lobby(lobby);
 
@@ -50,7 +50,7 @@ void lobby_scene::wait_player_ready(const shared_ptr<client>& client_ptr, bool r
     });
 }
 
-void lobby_scene::start_match(const domain::lobby_domain& lobby) const
+void lobby_scene::start_match(const domain::lobby& lobby) const
 {
     for (int i = 3; i > 0; i--)
     {
@@ -63,7 +63,7 @@ void lobby_scene::start_match(const domain::lobby_domain& lobby) const
     level_scene.show();
 }
 
-void lobby_scene::print_lobby(domain::lobby_domain lobby) const
+void lobby_scene::print_lobby(domain::lobby lobby) const
 {
     system("CLS");
     cout << "Waiting for other players..." << endl;

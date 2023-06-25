@@ -20,9 +20,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="error_code_type.h" />
-    <ClInclude Include="Models\action_model.h" />
+    <ClInclude Include="Models\player_action_model.h" />
+    <ClInclude Include="Models\action_use_model.h" />
     <ClInclude Include="Models\encounter_model.h" />
     <ClInclude Include="Models\lobby_model.h" />
+    <ClInclude Include="Models\player_config_model.h" />
     <ClInclude Include="Models\player_model.h" />
     <ClInclude Include="base_client.h" />
     <ClInclude Include="Models\simple_answer_model.h" />
@@ -35,9 +37,11 @@
     <ClInclude Include="Utility\guid_generator.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Models\action_model.cpp" />
+    <ClCompile Include="Models\player_action_model.cpp" />
+    <ClCompile Include="Models\action_use_model.cpp" />
     <ClCompile Include="Models\encounter_model.cpp" />
     <ClCompile Include="Models\lobby_model.cpp" />
+    <ClCompile Include="Models\player_config_model.cpp" />
     <ClCompile Include="Models\player_model.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>

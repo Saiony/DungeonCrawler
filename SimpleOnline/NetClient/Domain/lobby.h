@@ -6,7 +6,7 @@
 
 namespace dungeon_client::domain
 {
-    class player_lobby_domain
+    class player_lobby
     {
     private:
         std::string name_{};
@@ -14,20 +14,20 @@ namespace dungeon_client::domain
         bool start_match_;
 
     public:        
-        explicit player_lobby_domain(dungeon_common::model::player_lobby_model model);
+        explicit player_lobby(dungeon_common::model::player_lobby_model model);
         std::string get_name();
         std::string get_ready_text() const;
         bool get_ready();
         bool get_start_match();
     };
 
-    class lobby_domain
+    class lobby
     {
     public:
         bool start_match;
         
-        explicit lobby_domain(dungeon_common::model::lobby_model& model);
-        lobby_domain();
-        std::vector<player_lobby_domain> players_ready;
+        explicit lobby(dungeon_common::model::lobby_model& model);
+        lobby();
+        std::vector<player_lobby> players_ready;
     };
 }

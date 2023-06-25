@@ -9,9 +9,10 @@
 #include "Domain/Message/emitter_message.h"
 #include "Domain/Message/encounter_update_response.h"
 #include "Domain/Message/match_start_response.h"
-#include "Models/action_model.h"
+#include "Models/action_use_model.h"
 #include "Models/encounter_model.h"
 #include "Models/lobby_model.h"
+#include "Models/player_config_model.h"
 #include "Models/player_model.h"
 #include "Models/simple_answer_model.h"
 using namespace dungeon_server;
@@ -135,8 +136,9 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
             const auto player_lobby = domain::lobby::player_lobby_domain(player_domain.private_id, player_domain.name, false);
             lobby_.players_ready.push_back(player_lobby);
             
-            //create player model and send to client
-            const dungeon_common::model::player_model player_model(player_domain.public_id, player_name, 37);
+            //create player config model and send to client
+            std::vector<player_action_model> player_actions { player_action_model(dungeon_common::model::action_types::sword_slash, "sword slash",1) };
+            const dungeon_common::model::player_config_model player_model(player_domain.public_id, player_name, 37, player_actions);
             dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::create_player);
             answer << player_model;
             message_client(client->get_id(), answer);
@@ -210,9 +212,9 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
         }
     case dungeon_common::custom_msg_types::player_action:
         {
-            dungeon_common::model::action_model action_model;
-            msg >> action_model;
-            auto action = ::domain::action::action_factory::create_action(action_model);
+            dungeon_common::model::action_use_model action_use_model;
+            msg >> action_use_model;
+            auto action = ::domain::action::action_factory::create_action(action_use_model);
             game_room_ptr_->handle_player_input(action);
             
             break;

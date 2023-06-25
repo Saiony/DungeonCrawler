@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <cstdint>
 #include <string>
+
 #include "base_creature.h"
 
 namespace dungeon_client::domain

@@ -1,5 +1,5 @@
 ﻿#include "LevelScene.h"
-#include "Models/action_model.h"
+#include "Models/action_use_model.h"
 #include <iostream>
 #include <chrono>
 
@@ -70,13 +70,17 @@ void dungeon_client::scene::level_scene::handle_player_input(const domain::encou
             std::cout << "Please wait your turn" << std::endl;
             handle_player_input(encounter);
         }
-        else if (input == "sword slash")
-            client_ptr_->send_action(dungeon_common::model::action_types::sword_slash, encounter.enemies[0].public_id);
-        else
+
+        const auto player_action_ptr = client_ptr_->get_player().get_action(input);
+
+        if(player_action_ptr == nullptr)
         {
             print_combat(encounter);
             std::cout << "[" << input << "] is not on your action list" << std::endl;
             handle_player_input(encounter);
+            return;
         }
+
+        client_ptr_->send_action(player_action_ptr->id, encounter.enemies[0].public_id);
     });
 }

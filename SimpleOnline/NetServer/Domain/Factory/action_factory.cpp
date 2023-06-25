@@ -1,7 +1,7 @@
 ﻿#include "action_factory.h"
 #include "NetServer/Domain/Actions/sword_slash_action.h"
 
-std::shared_ptr<dungeon_server::domain::action::base_action> dungeon_server::domain::action::action_factory::create_action(dungeon_common::model::action_model action_model)
+std::shared_ptr<dungeon_server::domain::action::base_action> dungeon_server::domain::action::action_factory::create_action(dungeon_common::model::action_use_model action_model)
 {
     switch (action_model.id)
     {
