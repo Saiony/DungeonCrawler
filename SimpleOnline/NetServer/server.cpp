@@ -137,7 +137,7 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
             lobby_.players_ready.push_back(player_lobby);
             
             //create player config model and send to client
-            std::vector<player_action_model> player_actions { player_action_model(dungeon_common::model::action_types::sword_slash, "sword slash",1) };
+            std::vector player_actions { player_action_model(dungeon_common::model::action_types::sword_slash, "sword slash", 1) };
             const dungeon_common::model::player_config_model player_model(player_domain.public_id, player_name, 37, player_actions);
             dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::create_player);
             answer << player_model;

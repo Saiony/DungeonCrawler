@@ -84,7 +84,7 @@ void client::set_player_ready(const bool ready, const std::function<void(domain:
 
 void client::send_action(const model::action_types action_id, const std::string& target_id)
 {
-    const model::action_use_model action(action_id, player_ptr_->public_id,target_id);
+    const model::action_use_model action(action_id, player_ptr_->public_id, target_id);
     message<custom_msg_types> msg(custom_msg_types::player_action);
 
     msg << action;
@@ -187,7 +187,7 @@ bool client::handle_messages()
             std::array<domain::action, 4> actions;
             for (size_t i = 0; i < actions.max_size(); ++i)
             {
-                domain::action action(response.actions[i].id, response.actions[i].name);
+                domain::action action(response.actions[i].id, response.actions[i].name, response.actions[i].targets_count);
                 actions[i] = action;
             }
             

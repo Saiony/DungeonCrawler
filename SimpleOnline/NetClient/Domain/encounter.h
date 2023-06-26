@@ -11,10 +11,12 @@ namespace dungeon_client::domain
     public:
         std::vector<enemy> enemies;
         std::vector<player> players;
-        std::unique_ptr<base_creature> active_creature_ptr;
+        std::vector<std::shared_ptr<base_creature>> creatures;
+        std::shared_ptr<base_creature> active_creature_ptr;
         std::string log;
         
-        encounter(std::vector<enemy> enemies, std::vector<player> players, const std::string& active_creature_id, const std::string& log);
+        encounter(std::vector<enemy> enemies, std::vector<player> players, const std::string& active_creature_id, std::string log);
         bool check_active_player(const player& player) const;
+        std::shared_ptr<base_creature> get_creature(const std::string& creature_name);
     };
 }

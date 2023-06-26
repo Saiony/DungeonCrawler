@@ -60,7 +60,7 @@ void dungeon_client::scene::level_scene::handle_wrong_turn_input(const domain::e
     });
 }
 
-void dungeon_client::scene::level_scene::handle_player_input(const domain::encounter& encounter) const
+void dungeon_client::scene::level_scene::handle_player_input(domain::encounter& encounter) const
 {
     client_ptr_->read_input([this, &encounter](const std::string& input)
     {
@@ -81,6 +81,20 @@ void dungeon_client::scene::level_scene::handle_player_input(const domain::encou
             return;
         }
 
-        client_ptr_->send_action(player_action_ptr->id, encounter.enemies[0].public_id);
+        if(player_action_ptr->needs_target())
+        {
+            std::cout << "Type the target: " << std::endl;
+            client_ptr_->read_input([&](const std::string& target_name)
+            {
+                auto target_creature = encounter.get_creature(target_name);
+                if(target_creature == nullptr)
+                {
+                    std::cout << "CREATURE NOT FOUND" << std::endl;
+                    return;
+                }
+                
+                client_ptr_->send_action(player_action_ptr->id, target_creature->public_id);
+            });
+        }        
     });
 }

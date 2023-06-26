@@ -2,28 +2,27 @@
 
 #include "../Scenes/CharacterCreationScene.h"
 
-dungeon_client::domain::encounter::encounter(std::vector<enemy> enemies, std::vector<player> players, const std::string& active_creature_id, const std::string& log)
-    : enemies(std::move(enemies)), players(std::move(players)), log(log)
+dungeon_client::domain::encounter::encounter(std::vector<enemy> enemies, std::vector<player> players, const std::string& active_creature_id, std::string log)
+    : enemies(std::move(enemies)), players(std::move(players)), log(std::move(log))
 {
-    const auto active_player_it = std::ranges::find_if(this->players, [&active_creature_id](auto player)
+    std::ranges::for_each(this->players, [&](auto player)
     {
-        return player.public_id == active_creature_id;
+        creatures.push_back(std::make_shared<base_creature>(player)); 
     });
 
-    if (active_player_it != std::end(this->players))
+    std::ranges::for_each(this->enemies, [&](auto enemy)
     {
-        active_creature_ptr = std::make_unique<base_creature>(*active_player_it);
-        return;
-    }
-
-    const auto active_enemy_it = std::ranges::find_if(this->enemies, [&active_creature_id](auto enemy)
+        creatures.push_back(std::make_shared<base_creature>(enemy)); 
+    });
+    
+    const auto active_creature_it = std::ranges::find_if(this->creatures, [&active_creature_id](auto creature)
     {
-        return enemy.public_id == active_creature_id;
+        return creature->public_id == active_creature_id;
     });
 
-    if (active_enemy_it != std::end(this->enemies))
+    if (active_creature_it != std::end(this->creatures))
     {
-        active_creature_ptr = std::make_unique<base_creature>(*active_enemy_it);
+        active_creature_ptr =  *active_creature_it;
         return;
     }
 }
@@ -31,4 +30,14 @@ dungeon_client::domain::encounter::encounter(std::vector<enemy> enemies, std::ve
 bool dungeon_client::domain::encounter::check_active_player(const player& player) const
 {
     return player.public_id == active_creature_ptr->public_id;
+}
+
+std::shared_ptr<dungeon_client::domain::base_creature> dungeon_client::domain::encounter::get_creature(const std::string& creature_name)
+{
+    const auto creature_it = std::ranges::find_if(creatures, [&creature_name](auto creature)
+    {
+        return creature->name == creature_name;
+    });
+
+    return creature_it != std::end(creatures) ? *creature_it : nullptr;
 }

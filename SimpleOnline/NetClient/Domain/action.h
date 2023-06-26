@@ -8,8 +8,10 @@ namespace dungeon_client::domain
     public:
         dungeon_common::model::action_types id;
         std::string name{};
+        uint8_t targets_count{};
         
         action();
-        action(const dungeon_common::model::action_types id, std::string name);
+        action(const dungeon_common::model::action_types id, std::string name, const uint8_t targets_count);
+        bool needs_target() const;
     };
 }
