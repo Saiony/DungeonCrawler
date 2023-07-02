@@ -10,6 +10,6 @@ namespace dungeon_server::domain
         std::string private_id;
         
         void do_something() const;
-        player(std::string client_id, std::string new_name, uint16_t new_health);
+        player(std::string client_id, const std::string& new_name, const uint16_t new_health, const uint16_t new_damage);
     };
 }

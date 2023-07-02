@@ -23,5 +23,7 @@ namespace dungeon_server::domain::action
         {
             return "default log";
         }
+
+        std::shared_ptr<base_creature> get_creature(const std::shared_ptr<encounter>& encounter_ptr, const std::string& creature_id);
     };
 }

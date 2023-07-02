@@ -6,7 +6,7 @@ namespace dungeon_server::domain::enemy
     class wolf final : public base_enemy
     {
     public:
-        wolf(const std::string& name, uint16_t health, uint16_t damage);
+        wolf(const std::string& new_name, const uint16_t new_health, const uint16_t new_damage);
         std::string execute_turn(const std::shared_ptr<encounter>& encounter_ptr) override;
     };
 }
