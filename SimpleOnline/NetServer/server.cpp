@@ -129,7 +129,7 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
             const auto player_name = msg.read_body().substr(0, msg.read_body().find('\0', 0));
 
             //create player domain and add to the list
-            const domain::player player_domain(client->get_id(), player_name, 37, 2);
+            const domain::player player_domain(client->get_id(), player_name, 37, 2, 5);
             players_.push_back(std::make_shared<domain::player>(player_domain));
 
             //add player to lobby domain
@@ -137,7 +137,11 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
             lobby_.players_ready.push_back(player_lobby);
             
             //create player config model and send to client
-            std::vector player_actions { player_action_model(dungeon_common::model::action_types::sword_slash, "sword slash", 1) };
+            std::vector player_actions {
+                                            player_action_model(dungeon_common::model::action_types::sword_slash, "sword slash", 1),
+                                            player_action_model(dungeon_common::model::action_types::heal, "heal", 1)
+                                        };
+            
             const dungeon_common::model::player_config_model player_model(player_domain.public_id, player_name, 37, player_actions);
             dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::create_player);
             answer << player_model;

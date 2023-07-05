@@ -3,8 +3,8 @@
 
 #include "NetServer/Domain/Actions/bite_action.h"
 
-dungeon_server::domain::enemy::wolf::wolf(const std::string& new_name, const uint16_t new_health, const uint16_t new_damage)
-                                        : base_enemy(new_name, new_health, new_damage)
+dungeon_server::domain::enemy::wolf::wolf(const std::string& new_name, const uint16_t new_health, const uint16_t new_damage, const uint16_t new_ability_power)
+                                        : base_enemy(new_name, new_health, new_damage, new_ability_power)
 {
 }
 

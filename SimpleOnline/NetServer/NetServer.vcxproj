@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Domain\Actions\base_action.cpp" />
     <ClCompile Include="Domain\Actions\bite_action.cpp" />
+    <ClCompile Include="Domain\Actions\heal_action.cpp" />
     <ClCompile Include="Domain\Actions\sword_slash_action.cpp" />
     <ClCompile Include="Domain\Encounter.cpp" />
     <ClCompile Include="Domain\Enemies\BaseEnemy.cpp">
@@ -255,6 +256,7 @@
     <ClCompile Include="Main.cpp" />
     <ClInclude Include="Domain\Actions\base_action.h" />
     <ClInclude Include="Domain\Actions\bite_action.h" />
+    <ClInclude Include="Domain\Actions\heal_action.h" />
     <ClInclude Include="Domain\Actions\sword_slash_action.h" />
     <ClInclude Include="Domain\base_creature.h" />
     <ClInclude Include="Domain\Encounter.h" />

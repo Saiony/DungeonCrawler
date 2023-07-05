@@ -15,7 +15,7 @@ dungeon_server::game_room::game_room::game_room(std::vector<std::shared_ptr<doma
 
 std::shared_ptr<dungeon_server::domain::encounter> dungeon_server::game_room::game_room::generate_encounter() const
 {
-    const domain::enemy::wolf wolf("wolf", 10, 5);
+    const domain::enemy::wolf wolf("wolf", 10, 5, 1);
     std::vector<std::shared_ptr<domain::base_enemy>> enemies;
     enemies.push_back(std::make_shared<domain::enemy::wolf>(wolf));
     auto encounter = std::make_shared<domain::encounter>(enemies, players_, players_[0]);

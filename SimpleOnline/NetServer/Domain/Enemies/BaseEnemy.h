@@ -11,7 +11,7 @@ namespace dungeon_server::domain
     class base_enemy : public base_creature
     {
     public:
-        base_enemy(const std::string& name, const uint16_t health, const uint16_t damage);
+        base_enemy(const std::string& name, const uint16_t health, const uint16_t attack_damage, const uint16_t ability_power);
         
         virtual std::string execute_turn(const std::shared_ptr<encounter>& encounter_ptr)
         {
