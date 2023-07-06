@@ -26,6 +26,8 @@ namespace dungeon_server::game_room
                           const std::shared_ptr<domain::action::base_action>& action) override
         {
             std::string action_log = action->use(encounter_ptr_);
+            remove_dead_creatures();
+            std::cout << action_log << "\n-\n"; 
             encounter_ptr_->go_to_next_turn();
             
             const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_ptr_, action_log);
@@ -45,6 +47,7 @@ namespace dungeon_server::game_room
                 while(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()) < enemy_action_time){}
                 
                 auto action_log = enemy_ptr->execute_turn(encounter_ptr_);
+                remove_dead_creatures();
                 encounter_ptr_->go_to_next_turn();
                 
                 const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_ptr_, action_log);
@@ -81,6 +84,24 @@ namespace dungeon_server::game_room
         {
             next_turn_time_ = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
             next_turn_time_ += turn_duration_;
+        }
+
+        void remove_dead_creatures() const
+        {
+            std::erase_if(encounter_ptr_->creatures, [](auto creature)
+            {
+                return creature->alive == false;
+            });
+
+            std::erase_if(encounter_ptr_->players, [](auto player)
+            {
+                return player->alive == false;
+            });
+            
+            std::erase_if(encounter_ptr_->enemies, [](auto enemy)
+            {
+                return enemy->alive == false;
+            });
         }
     };
 }

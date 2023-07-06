@@ -20,8 +20,6 @@ std::string dungeon_server::domain::action::heal_action::use(const std::shared_p
     const auto target = get_creature(encounter_ptr, target_id);
     const auto hp_healed = target->heal(action_owner->ability_power);
 
-    //log
     std::string log = action_owner->name + " used " + get_name() +" on " +target->name +"\n" +target->name + " healed " +std::to_string(hp_healed) +" hp";
-    std::cout << "[HEAL] on " << target->name << std::endl;
     return log;
 }
