@@ -129,7 +129,7 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
             const auto player_name = msg.read_body().substr(0, msg.read_body().find('\0', 0));
 
             //create player domain and add to the list
-            const domain::player player_domain(client->get_id(), player_name, 37, 50, 5);
+            const domain::player player_domain(client->get_id(), player_name, 37, 5, 5);
             players_.push_back(std::make_shared<domain::player>(player_domain));
 
             //add player to lobby domain

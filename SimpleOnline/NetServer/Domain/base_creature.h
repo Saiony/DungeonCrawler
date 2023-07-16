@@ -26,7 +26,7 @@ namespace dungeon_server::domain
             {
                 std::string additional_log;
                 
-                if(health - dmg < 0)
+                if(health - dmg <= 0)
                 {
                     health = 0;
                     alive = false;
