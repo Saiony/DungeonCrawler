@@ -241,7 +241,8 @@ bool client::handle_messages()
                     players.emplace_back(player_model.id, player_model.name, player_model.health);
             }
 
-            domain::encounter encounter(enemies, players, encounter_model.active_creature_id, encounter_model.log);               
+            domain::encounter encounter(enemies, players, encounter_model.active_creature_id, encounter_model.log,
+                                          encounter_model.game_over, encounter_model.players_won);               
             if(get_encounter_callback != nullptr)
             {
                 get_encounter_callback(std::move(encounter));

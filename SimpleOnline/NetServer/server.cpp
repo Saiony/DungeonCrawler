@@ -85,6 +85,8 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
             }
             
             std::ranges::copy(encounter->active_creature->public_id, encounter_model.active_creature_id);
+            encounter_model.game_over = false;
+            encounter_model.players_won = false;
             dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::encounter_update_response);
             answer << encounter_model;
             message_client(match_start_msg_ptr->player->private_id, answer);       
@@ -111,9 +113,17 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
             
             std::ranges::copy(encounter->active_creature->public_id, encounter_model.active_creature_id);
             std::ranges::copy(encounter_update->log, encounter_model.log);
+            
+            encounter_model.game_over = encounter->game_over;
+            encounter_model.players_won = encounter->players_won;
+            
             dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::encounter_update_response);
             answer << encounter_model;
             broadcast_message(answer);
+
+            if(encounter->game_over)
+                running = false;
+            
             break;
         }
     default: break;

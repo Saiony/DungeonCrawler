@@ -20,6 +20,8 @@ namespace dungeon_common::model
         std::array<player_model, 3> players{};
         char active_creature_id[39]{};
         char log[120]{};
+        bool game_over;
+        bool players_won;
 
         encounter_model() = default;
     };

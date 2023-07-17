@@ -1,7 +1,10 @@
 ﻿#include "LevelScene.h"
-#include "Models/action_use_model.h"
 #include <iostream>
 #include <chrono>
+
+#include "game_over_loss_scene.h"
+#include "game_over_win_scene.h"
+
 
 dungeon_client::scene::level_scene::level_scene(const std::shared_ptr<client>& client_ptr)
 {
@@ -12,7 +15,7 @@ void dungeon_client::scene::level_scene::show()
 {
     client_ptr_->request_match_start([this](auto encounter)
     {
-        print_combat(encounter);
+        print_combat(encounter);        
         handle_player_input(encounter);
     });
 
@@ -42,7 +45,15 @@ void dungeon_client::scene::level_scene::print_combat(const domain::encounter& e
     {
         std::cout << encounter.log << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds(2));
+    }    
+
+    if(encounter.game_over)
+    {
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+        on_game_over(encounter.players_won);
+        return; 
     }
+    
     if (encounter.check_active_player(client_ptr_->get_player()))
         std::cout << "Your turn...";
     else
@@ -97,4 +108,19 @@ void dungeon_client::scene::level_scene::handle_player_input(domain::encounter& 
             });
         }        
     });
+}
+
+
+void dungeon_client::scene::level_scene::on_game_over(const bool players_won) const
+{
+    if(players_won)
+    {
+        game_over_win_scene win_scene;
+        win_scene.show();
+    }
+    else
+    {
+        game_over_loss_scene loss_scene;
+        loss_scene.show();
+    }
 }

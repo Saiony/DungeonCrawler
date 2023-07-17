@@ -13,7 +13,7 @@ std::shared_ptr<dungeon_server::domain::encounter> dungeon_server::domain::encou
     {
     case 1:
         {
-            const enemy::wolf wolf("wolf", 10, 5, 1);
+            const enemy::wolf wolf("wolf", 10, 50, 1);
             enemies.push_back(std::make_shared<enemy::wolf>(wolf));
             break;
         }
@@ -37,6 +37,12 @@ std::shared_ptr<dungeon_server::domain::encounter> dungeon_server::domain::encou
 void dungeon_server::domain::encounter_manager::go_to_next_encounter()
 {
     level_++;
+    if(level_ > max_level_)
+    {        
+        std::cout << "GAME OVER - PLAYERS WON" << std::endl;
+        current_encounter->set_game_over(true);
+        return;
+    }    
     current_encounter = generate_encounter();
 }
 
@@ -63,11 +69,12 @@ void dungeon_server::domain::encounter_manager::go_to_next_turn()
     remove_dead_creatures();
     if(current_encounter->players.empty())
     {
-        std::cout << "GAME OVER" << std::endl;
+        std::cout << "GAME OVER - PLAYERS LOST" << std::endl;
+        current_encounter->set_game_over(false);
     }
     else if(current_encounter->enemies.empty())
     {
-        std::cout << "PLAYERS WIN" << std::endl;
+        std::cout << "ENCOUNTER END - PLAYERS WON" << std::endl;
         go_to_next_encounter();        
     }
     else

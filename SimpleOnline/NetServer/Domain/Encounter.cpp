@@ -30,3 +30,9 @@ void encounter::go_to_next_turn()
     else
         active_creature = *next_it;
 }
+
+void encounter::set_game_over(const bool players_won_encounter)
+{
+    game_over = true;
+    this->players_won = players_won_encounter;
+}

@@ -23,6 +23,8 @@ namespace dungeon_server
         void on_message(const std::shared_ptr<dungeon_common::connection<dungeon_common::custom_msg_types>> client, dungeon_common::message<dungeon_common::custom_msg_types>& msg) override;
 
     public:
+        bool running = true;
+        
         void update(const size_t max_messages = -1, const bool wait = false) override;//TODO: isso vira protected
         void on_game_room_message(const std::shared_ptr<domain::message::emitter_message>& emitter_msg);
         explicit server(const uint16_t n_port);

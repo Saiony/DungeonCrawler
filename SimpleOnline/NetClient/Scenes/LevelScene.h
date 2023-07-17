@@ -10,6 +10,7 @@ namespace dungeon_client::scene
     private:
         std::shared_ptr<client> client_ptr_ = nullptr;
         
+        void on_game_over(bool players_won) const;
     public:        
         explicit level_scene(const std::shared_ptr<client>& client_ptr);
         void show() override;

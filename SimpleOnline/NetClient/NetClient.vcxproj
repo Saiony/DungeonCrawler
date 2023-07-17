@@ -219,8 +219,10 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scenes\BaseScene.cpp" />
     <ClCompile Include="Scenes\CharacterCreationScene.cpp" />
+    <ClCompile Include="Scenes\game_over_loss_scene.cpp" />
     <ClCompile Include="Scenes\LevelScene.cpp" />
     <ClCompile Include="Scenes\LobbyScene.cpp" />
+    <ClCompile Include="Scenes\game_over_win_scene.cpp" />
     <ClInclude Include="client.h" />
     <ClInclude Include="Domain\action.h" />
     <ClInclude Include="Domain\base_creature.h" />
@@ -231,8 +233,10 @@
     <ClInclude Include="Domain\player_complete.h" />
     <ClInclude Include="Scenes\BaseScene.h" />
     <ClInclude Include="Scenes\CharacterCreationScene.h" />
+    <ClInclude Include="Scenes\game_over_loss_scene.h" />
     <ClInclude Include="Scenes\LevelScene.h" />
     <ClInclude Include="Scenes\LobbyScene.h" />
+    <ClInclude Include="Scenes\game_over_win_scene.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetCommon\NetCommon.vcxproj">

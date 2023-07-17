@@ -6,6 +6,7 @@ namespace dungeon_server::domain
     class encounter_manager
     {
     private:
+        const uint8_t max_level_ = 2;
         uint8_t level_;
         std::vector<std::shared_ptr<player>> players_;
 

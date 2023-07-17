@@ -7,6 +7,6 @@ int main()
     server server(14414);
     server.start();
 
-    while (true)
+    while (server.running)
         server.update(150, false);
 }
