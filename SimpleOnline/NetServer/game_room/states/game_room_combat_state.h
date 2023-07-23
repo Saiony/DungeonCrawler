@@ -66,7 +66,10 @@ namespace dungeon_server::game_room
             if(now <=  next_turn_time_)
                 return;
             
-            encounter_manager_->current_encounter->go_to_next_turn();
+            encounter_manager_->current_encounter->go_to_next_turn();          
+            const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, "timeout");
+            send_message_function(msg);
+            
             handle_turn(send_message_function);
         }
 
