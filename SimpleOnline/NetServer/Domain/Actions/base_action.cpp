@@ -10,7 +10,8 @@ action::base_action::base_action(const dungeon_common::model::action_types& acti
 {
 }
 
-std::shared_ptr<base_creature> action::base_action::get_creature(const std::shared_ptr<encounter>& encounter_ptr, const std::string& creature_id)
+std::shared_ptr<base_creature> action::base_action::get_creature(
+                                                            const std::shared_ptr<encounter>& encounter_ptr, const std::string& creature_id)
 {    
     auto action_owner = *std::ranges::find_if(encounter_ptr->creatures, [this, &creature_id](auto enemy)
     {

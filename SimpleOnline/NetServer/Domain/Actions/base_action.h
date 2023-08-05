@@ -19,6 +19,11 @@ namespace dungeon_server::domain::action
             return "unknown";
         }
 
+        virtual std::uint8_t get_targets_count()
+        {
+            return -1;
+        }
+
         virtual std::string use(const std::shared_ptr<encounter>& encounter_ptr)
         {
             return "default log";

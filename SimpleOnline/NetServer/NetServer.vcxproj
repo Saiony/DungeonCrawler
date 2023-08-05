@@ -101,6 +101,7 @@
     </ClCompile>
     <ClCompile Include="Domain\Enemies\Wolf.cpp" />
     <ClCompile Include="Domain\Factory\action_factory.cpp" />
+    <ClCompile Include="Domain\Factory\player_factory.cpp" />
     <ClCompile Include="Domain\Lobby\lobby_domain.cpp" />
     <ClCompile Include="Domain\Lobby\player_lobby_domain.cpp" />
     <ClCompile Include="Domain\Player.cpp">
@@ -264,6 +265,7 @@
     <ClInclude Include="Domain\Enemies\BaseEnemy.h" />
     <ClInclude Include="Domain\Enemies\Wolf.h" />
     <ClInclude Include="Domain\Factory\action_factory.h" />
+    <ClInclude Include="Domain\Factory\player_factory.h" />
     <ClInclude Include="Domain\Lobby\lobby_domain.h" />
     <ClInclude Include="Domain\Lobby\player_lobby_domain.h" />
     <ClInclude Include="Domain\Message\emitter_message.h" />

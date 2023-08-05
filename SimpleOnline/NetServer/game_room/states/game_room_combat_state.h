@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "base_game_room_state.h"
+#include "NetServer/encounter_manager.h"
 #include "NetServer/Domain/Encounter.h"
 #include "NetServer/Domain/Player.h"
 #include "NetServer/Domain/Message/encounter_update_response.h"

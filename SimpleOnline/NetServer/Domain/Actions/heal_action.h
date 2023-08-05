@@ -12,5 +12,6 @@ namespace dungeon_server::domain::action
         ~heal_action() override;
         std::string get_name() override;
         std::string use(const std::shared_ptr<encounter>& encounter_ptr) override;
+        std::uint8_t get_targets_count() override{ return 1; }
     };
 }
