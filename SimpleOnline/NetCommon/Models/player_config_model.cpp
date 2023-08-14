@@ -3,10 +3,14 @@
 
 dungeon_common::model::player_config_model::player_config_model() = default;
 
-dungeon_common::model::player_config_model::player_config_model(const std::string& new_id, const std::string& new_name, const uint32_t health, const std::vector<player_action_model>& action_list)
-                           : max_health(health)
+dungeon_common::model::player_config_model::player_config_model(const std::string& new_id, const std::string& new_name,
+                                                                const player_class_model player_class, const uint16_t health,
+                                                                const uint16_t attack_damage, const uint16_t ability_power,
+                                                                const std::vector<player_action_model>& action_list)
+                                                                : player_class(player_class), max_health(health),
+                                                                attack_damage(attack_damage), ability_power(ability_power)
 {
-    std::copy(begin(new_id), end(new_id), id);
-    std::copy(begin(new_name), end(new_name), name);
+    std::ranges::copy(new_id, id);
+    std::ranges::copy(new_name, name);
     std::ranges::copy(action_list, std::begin(actions));
 }

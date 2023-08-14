@@ -1,9 +1,12 @@
 ﻿#include "client.h"
 
 #include "Domain/action.h"
+#include "Domain/player_class.h"
 #include "Domain/player_complete.h"
 #include "Models/action_use_model.h"
+#include "Models/create_player_model.h"
 #include "Models/encounter_model.h"
+#include "Models/player_classes_model.h"
 #include "Models/player_config_model.h"
 #include "Models/simple_answer_model.h"
 using namespace dungeon_common;
@@ -53,14 +56,20 @@ void client::validate_name(const char* name, const std::function<void(model::sim
     wait_message();
 }
 
-void client::create_player(const char* name, const std::function<void(domain::player_complete)>& callback)
+void client::get_player_classes(const std::function<void(std::vector<domain::player_class> player_classes)>& callback)
 {
-    message<custom_msg_types> msg(custom_msg_types::create_player);
+    const message<custom_msg_types> msg(custom_msg_types::get_player_classes);
+    
+    get_player_classes_callback = callback;
+    send(msg);
+    wait_message();
+}
 
-    //Copying to an array because we can't simply copy char* data
-    char player_name[40] = "";
-    strcpy_s(player_name, name);
-    msg << player_name;
+void client::create_player(const std::string& name, const enums::player_class_type player_class, const std::function<void(domain::player_complete)>& callback)
+{
+    const model::create_player_model model(name, player_class);
+    message<custom_msg_types> msg(custom_msg_types::create_player);
+    msg << model;
 
     create_player_callback = callback;
     send(msg);
@@ -179,6 +188,26 @@ bool client::handle_messages()
             }
             return false;
         }
+    case custom_msg_types::get_player_classes_response:
+        {
+            model::player_classes_model response;
+            msg >> response;
+            
+            std::vector<domain::player_class> player_classes;
+            std::ranges::for_each(response.classes, [&player_classes](auto player_class_model)
+            {
+                player_classes.emplace_back(player_class_model.id, player_class_model.name);
+            });
+            
+            if(get_player_classes_callback != nullptr)
+            {
+                get_player_classes_callback(player_classes);
+                get_player_classes_callback = nullptr;
+                return true;
+            }
+            
+            return false;
+        }
     case custom_msg_types::create_player:
         {
             model::player_config_model response;
@@ -190,8 +219,10 @@ bool client::handle_messages()
                 domain::action action(response.actions[i].id, response.actions[i].name, response.actions[i].targets_count);
                 actions[i] = action;
             }
-            
-            domain::player_complete player_complete(response.id, response.name, response.max_health, actions);
+
+            domain::player_class player_class(response.player_class.id, response.player_class.name);
+            domain::player_complete player_complete(response.id, response.name, player_class, response.attack_damage,
+                                                      response.ability_power, response.max_health, actions);
 
             if (create_player_callback != nullptr)
             {
@@ -238,7 +269,10 @@ bool client::handle_messages()
             for(auto& player_model : encounter_model.players)
             {
                 if(std::strlen(player_model.name) > 0)
-                    players.emplace_back(player_model.id, player_model.name, player_model.health);
+                {
+                    domain::player_class player_class(player_model.player_class.id, player_model.player_class.name);
+                    players.emplace_back(player_model.id, player_model.name, player_class, player_model.health);
+                }
             }
 
             domain::encounter encounter(enemies, players, encounter_model.active_creature_id, encounter_model.log,

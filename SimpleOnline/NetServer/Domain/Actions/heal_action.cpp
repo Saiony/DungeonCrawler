@@ -11,7 +11,7 @@ dungeon_server::domain::action::heal_action::heal_action(const dungeon_common::m
 
 std::string dungeon_server::domain::action::heal_action::get_name()
 {
-    return "Heal";
+    return "heal";
 }
 
 std::string dungeon_server::domain::action::heal_action::use(const std::shared_ptr<encounter>& encounter_ptr)

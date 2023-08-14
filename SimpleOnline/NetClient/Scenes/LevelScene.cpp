@@ -62,15 +62,6 @@ void dungeon_client::scene::level_scene::print_combat(const domain::encounter& e
     std::cout << std::endl << std::endl;
 }
 
-void dungeon_client::scene::level_scene::handle_wrong_turn_input(const domain::encounter& encounter) const
-{
-    client_ptr_->read_input([&encounter, this](const std::string& input)
-    {
-        print_combat(encounter);
-        handle_wrong_turn_input(encounter);
-    });
-}
-
 void dungeon_client::scene::level_scene::handle_player_input(domain::encounter& encounter) const
 {
     client_ptr_->read_input([this, &encounter](const std::string& input)
@@ -97,7 +88,7 @@ void dungeon_client::scene::level_scene::handle_player_input(domain::encounter& 
             std::cout << "Type the target: " << std::endl;
             client_ptr_->read_input([&](const std::string& target_name)
             {
-                auto target_creature = encounter.get_creature(target_name);
+                const auto target_creature = encounter.get_creature(target_name);
                 if(target_creature == nullptr)
                 {
                     std::cout << "CREATURE NOT FOUND" << std::endl;

@@ -11,6 +11,8 @@ namespace dungeon_common
         server_message,
         spell_consult,
         validate_name,
+        get_player_classes,
+        get_player_classes_response,
         create_player,
         player_ready,
         player_ready_response,

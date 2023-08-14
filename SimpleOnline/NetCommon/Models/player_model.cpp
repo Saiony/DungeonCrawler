@@ -4,8 +4,9 @@ using namespace dungeon_common::model;
 
 player_model::player_model() = default;
 
-player_model::player_model(const std::string& new_id, const std::string& new_name, const uint32_t health) : health(health)
+player_model::player_model(const std::string& new_id, const std::string& new_name, const player_class_model& player_class, const uint32_t health)
+                           : player_class(player_class), health(health)
 {
-    std::copy(begin(new_id), end(new_id), id);
-    std::copy(begin(new_name), end(new_name), name);
+    std::copy(std::begin(new_id), std::end(new_id), id);
+    std::copy(std::begin(new_name), std::end(new_name), name);
 }

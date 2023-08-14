@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "LobbyScene.h"
+#include "../../NetServer/Domain/Player.h"
 
 using namespace dungeon_client::scene;
 using namespace dungeon_common;
@@ -18,6 +19,11 @@ void character_creation_scene::show()
 }
 
 void character_creation_scene::create_character()
+{
+    create_name();
+}
+
+void character_creation_scene::create_name()
 {
     std::cout << "Adventurer, what's your name?" << std::endl;
 
@@ -43,20 +49,50 @@ void character_creation_scene::create_character()
                     return;
                 }
             }
-            std::cout << std::endl << input << " is a beautiful name" << std::endl;
-            confirm_character_creation(input);
+            
+            player_name_ = input;
+            std::cout << std::endl << player_name_ << " is a beautiful name" << std::endl;
+            create_class();
         });
     });
 }
 
-void character_creation_scene::confirm_character_creation(const std::string& player_name)
+void character_creation_scene::create_class()
+{
+    client_ptr_->get_player_classes([&](auto classes)
+    {
+        std::cout << std::endl << "Now choose a class: " << std::endl;
+        std::for_each(std::begin(classes), std::end(classes), [](auto player_class)
+        {
+            if(player_class.id == enums::player_class_type::unknown)
+                return;
+            
+            std::cout << " - " << player_class.name << std::endl;
+        });
+        
+        client_ptr_->read_input([&classes, this](auto answer)
+        {
+            auto answer_it = std::ranges::find_if(classes, [&answer](auto player_class){ return player_class.name == answer; });
+            if(answer_it == std::end(classes))
+            {
+                std::cout << std::endl << "Please type a valid class" << std::endl;
+                create_class();
+            }
+
+            player_class_ = (*answer_it).id;
+            confirm_character_creation();
+        });
+    });
+}
+
+void character_creation_scene::confirm_character_creation()
 {
     std::cout << "Confirm character creation? (yes/no)" << std::endl;
-    client_ptr_->read_input([&](std::string answer)
+    client_ptr_->read_input([&](auto answer)
     {
         if (answer == "yes")
         {
-            client_ptr_->create_player(player_name.c_str(), [&](domain::player_complete player)
+            client_ptr_->create_player(player_name_, player_class_,[&](domain::player_complete player)
             {   
                 client_ptr_->set_player(player);
                 std::cout << std::endl << "Character created successfully";
@@ -67,8 +103,8 @@ void character_creation_scene::confirm_character_creation(const std::string& pla
             create_character();
         else
         {
-            std::cout << "Please type only yes or no";
-            confirm_character_creation(player_name);
+            std::cout <<  "Please type only yes or no";
+            confirm_character_creation();
         }
     });
 }

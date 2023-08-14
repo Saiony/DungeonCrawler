@@ -1,9 +1,8 @@
-﻿#include "server.h"
-
-#include <memory>
+﻿#include <memory>
 #include<string>
-
+#include "server.h"
 #include "Domain/Encounter.h"
+#include "Domain/player_classes.h"
 #include "Domain/Enemies/Wolf.h"
 #include "Domain/Factory/action_factory.h"
 #include "Domain/Factory/player_factory.h"
@@ -11,11 +10,14 @@
 #include "Domain/Message/encounter_update_response.h"
 #include "Domain/Message/match_start_response.h"
 #include "Models/action_use_model.h"
+#include "Models/create_player_model.h"
 #include "Models/encounter_model.h"
 #include "Models/lobby_model.h"
+#include "Models/player_classes_model.h"
 #include "Models/player_config_model.h"
 #include "Models/player_model.h"
 #include "Models/simple_answer_model.h"
+
 using namespace dungeon_server;
 
 server::server(const uint16_t n_port) : base_server<dungeon_common::custom_msg_types>(n_port)
@@ -80,9 +82,12 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
             }
             for (size_t i = 0; i < encounter->players.size(); i++)
             {
-                encounter_model.players[i] = dungeon_common::model::player_model(encounter->players[i]->public_id,
-                                                                                 encounter->players[i]->name,
-                                                                                 encounter->players[i]->health);
+                const auto player_ptr = encounter->players[i];
+                dungeon_common::model::player_class_model player_class_model(player_ptr->player_class.id, player_ptr->player_class.name);
+                encounter_model.players[i] = dungeon_common::model::player_model(player_ptr->public_id,
+                                                                                 player_ptr->name,
+                                                                                 player_class_model,
+                                                                                 player_ptr->health);
             }
 
             std::ranges::copy(encounter->active_creature->public_id, encounter_model.active_creature_id);
@@ -101,15 +106,15 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
 
             for (size_t i = 0; i < encounter->enemies.size(); i++)
             {
-                encounter_model.enemies[i] = dungeon_common::model::enemy_model(encounter->enemies[i]->public_id,
-                                                                                encounter->enemies[i]->name,
-                                                                                encounter->enemies[i]->health);
+                const auto enemy_ptr = encounter->enemies[i];
+                encounter_model.enemies[i] = dungeon_common::model::enemy_model(enemy_ptr->public_id, enemy_ptr->name, enemy_ptr->health);
             }
             for (size_t i = 0; i < encounter->players.size(); i++)
             {
-                encounter_model.players[i] = dungeon_common::model::player_model(encounter->players[i]->public_id,
-                                                                                 encounter->players[i]->name,
-                                                                                 encounter->players[i]->health);
+                const auto player_ptr = encounter->players[i];
+                dungeon_common::model::player_class_model player_class_model(player_ptr->player_class.id, player_ptr->player_class.name);
+                encounter_model.players[i] = dungeon_common::model::player_model(player_ptr->public_id, player_ptr->name,
+                                                                                 player_class_model, player_ptr->health);
             }
 
             std::ranges::copy(encounter->active_creature->public_id, encounter_model.active_creature_id);
@@ -138,26 +143,29 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
     {
     case dungeon_common::custom_msg_types::create_player:
         {
-            const auto player_name = msg.read_body().substr(0, msg.read_body().find('\0', 0));
+            dungeon_common::model::create_player_model model;
+            msg >> model;
 
             //create player domain and add to the list
-            auto player = domain::action::player_factory::create_player(client->get_id(), player_name, domain::warrior);
+            auto player = domain::factory::player_factory::create_player(client->get_id(), model.name, model.player_class_type);
             players_.push_back(player);
 
             //add player to lobby domain
             const auto player_lobby = domain::lobby::player_lobby_domain(player->private_id, player->name, false);
             lobby_.players_ready.push_back(player_lobby);
 
-            //create player actions model
+            //create models
             std::vector<player_action_model> player_actions;
             std::ranges::for_each(player->actions, [&player_actions, &player](auto action)
             {
-                auto action_domain = domain::action::action_factory::create_action(action, player->public_id);
+                auto action_domain = domain::factory::action_factory::create_action(action, player->public_id);
                 const player_action_model action_model(action, action_domain->get_name(), action_domain->get_targets_count());
                 player_actions.push_back(action_model);
             });
+            dungeon_common::model::player_class_model player_class_model(player->player_class.id, player->player_class.name);
 
-            const dungeon_common::model::player_config_model player_model(player->public_id, player_name, player->health, player_actions);
+            const dungeon_common::model::player_config_model player_model(player->public_id, player->name, player_class_model, player->health,
+                                                                          player->attack_damage, player->ability_power, player_actions);
             dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::create_player);
             answer << player_model;
             message_client(client->get_id(), answer);
@@ -180,6 +188,24 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
             const dungeon_common::model::simple_answer_model body(valid, error_code);
             answer << body;
 
+            message_client(client->get_id(), answer);
+            break;
+        }
+    case dungeon_common::custom_msg_types::get_player_classes:
+        {
+            dungeon_common::model::player_classes_model model;
+            domain::player_classes player_classes;
+
+            auto classes = player_classes.classes;
+            for (int i = 0; i < 2; i++)
+            {
+                dungeon_common::model::player_class_model player_class_model(classes[i].id, classes[i].name);
+                model.classes[i] = player_class_model;
+            }
+
+            //answer
+            dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::get_player_classes_response);
+            answer << model;            
             message_client(client->get_id(), answer);
             break;
         }
@@ -233,7 +259,7 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
         {
             dungeon_common::model::action_use_model action_use_model;
             msg >> action_use_model;
-            auto action = ::domain::action::action_factory::create_action(action_use_model);
+            auto action = ::domain::factory::action_factory::create_action(action_use_model);
             game_room_ptr_->handle_player_input(action);
 
             break;

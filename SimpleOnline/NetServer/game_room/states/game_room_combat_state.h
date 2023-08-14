@@ -14,7 +14,7 @@ namespace dungeon_server::game_room
         std::shared_ptr<domain::encounter_manager> encounter_manager_;
         combat::base_combat_state state_;
         std::time_t next_turn_time_;
-        const int turn_duration_ = 10;
+        const int turn_duration_ = 30;
 
     public:
         explicit game_room_combat_state(std::shared_ptr<domain::encounter_manager> encounter_manager) : encounter_manager_(std::move(encounter_manager))

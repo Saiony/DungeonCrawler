@@ -5,7 +5,6 @@ namespace dungeon_client::domain
 {
     class base_creature
     {
-    private:
     public:
         std::string public_id;
         std::string name;
