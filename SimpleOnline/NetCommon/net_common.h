@@ -11,11 +11,11 @@
 #include <chrono>
 #include <cstdint>
 
+#ifdef _WIN32
+#define WIN32_WINNT 0x0A00
+#endif
+
 #define ASIO_STANDALONE
 #include <asio.hpp>
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
-
-#ifdef _WIN32
-#define WIN32_WINNT 0x0A00
-#endif

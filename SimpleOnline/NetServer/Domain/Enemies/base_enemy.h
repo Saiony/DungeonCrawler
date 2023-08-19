@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include <iostream>
 #include <string>
 #include "NetClient/Domain/encounter.h"
 #include "NetServer/Domain/base_creature.h"

@@ -1,4 +1,7 @@
 ﻿#include "encounter_manager.h"
+
+#include <iostream>
+
 #include "Domain/Enemies/Wolf.h"
 
 dungeon_server::domain::encounter_manager::encounter_manager(std::vector<std::shared_ptr<player>> players)

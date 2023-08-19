@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "BaseEnemy.h"
+#include "base_enemy.h"
 
 namespace dungeon_server::domain::enemy
 {

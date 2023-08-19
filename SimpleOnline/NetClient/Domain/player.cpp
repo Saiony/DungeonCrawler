@@ -1,4 +1,4 @@
-﻿#include "Player.h"
+﻿#include "player.h"
 
 dungeon_client::domain::player::player() : base_creature()
 {

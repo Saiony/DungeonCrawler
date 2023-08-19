@@ -2,7 +2,7 @@
 #include <memory>
 #include <vector>
 #include "Player.h"
-#include "Enemies/BaseEnemy.h"
+#include "Enemies/base_enemy.h"
 
 namespace dungeon_server::domain
 {

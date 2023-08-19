@@ -55,7 +55,19 @@ void dungeon_client::scene::level_scene::print_combat(const domain::encounter& e
     }
     
     if (encounter.check_active_player(client_ptr_->get_player()))
-        std::cout << "Your turn...";
+    {
+        std::cout << "SKILLS" << std::endl;
+        const auto actions = client_ptr_->get_player().actions;
+        for(size_t i = 0; i < actions.size(); i++)
+        {
+            std::cout << "- " << actions[i].name;            
+
+            if(i % 2 != 0)
+                std::cout << std::endl;
+        }
+        
+        std::cout << "Your turn..." << std::endl;
+    }
     else
         std::cout << encounter.active_creature_ptr->name << "'s turn...";
 
