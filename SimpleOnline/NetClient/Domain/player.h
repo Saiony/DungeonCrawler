@@ -13,6 +13,6 @@ namespace dungeon_client::domain
         player_class my_class;   
         
         player();
-        player(const std::string& id, const std::string& name, player_class player_class, uint32_t health);
+        player(const std::string& id, const std::string& name, player_class player_class, uint16_t health, uint16_t max_health);
     };
 }

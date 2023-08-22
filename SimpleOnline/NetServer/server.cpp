@@ -76,18 +76,15 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
 
             for (size_t i = 0; i < encounter->enemies.size(); i++)
             {
-                encounter_model.enemies[i] = dungeon_common::model::enemy_model(encounter->enemies[i]->public_id,
-                                                                                encounter->enemies[i]->name,
-                                                                                encounter->enemies[i]->health);
+                auto enemy = encounter->enemies[i];
+                encounter_model.enemies[i] = dungeon_common::model::enemy_model(enemy->public_id, enemy->name, enemy->health, enemy->max_health);
             }
             for (size_t i = 0; i < encounter->players.size(); i++)
             {
                 const auto player_ptr = encounter->players[i];
                 dungeon_common::model::player_class_model player_class_model(player_ptr->player_class.id, player_ptr->player_class.name);
-                encounter_model.players[i] = dungeon_common::model::player_model(player_ptr->public_id,
-                                                                                 player_ptr->name,
-                                                                                 player_class_model,
-                                                                                 player_ptr->health);
+                encounter_model.players[i] = dungeon_common::model::player_model(player_ptr->public_id, player_ptr->name, player_class_model,
+                                                                                 player_ptr->health, player_ptr->max_health);
             }
 
             std::ranges::copy(encounter->active_creature->public_id, encounter_model.active_creature_id);
@@ -107,14 +104,16 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
             for (size_t i = 0; i < encounter->enemies.size(); i++)
             {
                 const auto enemy_ptr = encounter->enemies[i];
-                encounter_model.enemies[i] = dungeon_common::model::enemy_model(enemy_ptr->public_id, enemy_ptr->name, enemy_ptr->health);
+                encounter_model.enemies[i] = dungeon_common::model::enemy_model(enemy_ptr->public_id, enemy_ptr->name,
+                                                                                enemy_ptr->health, enemy_ptr->max_health);
             }
             for (size_t i = 0; i < encounter->players.size(); i++)
             {
                 const auto player_ptr = encounter->players[i];
                 dungeon_common::model::player_class_model player_class_model(player_ptr->player_class.id, player_ptr->player_class.name);
                 encounter_model.players[i] = dungeon_common::model::player_model(player_ptr->public_id, player_ptr->name,
-                                                                                 player_class_model, player_ptr->health);
+                                                                                 player_class_model, player_ptr->health,
+                                                                                 player_ptr->max_health);
             }
 
             std::ranges::copy(encounter->active_creature->public_id, encounter_model.active_creature_id);
@@ -151,7 +150,7 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
             players_.push_back(player);
 
             //add player to lobby domain
-            const auto player_lobby = domain::lobby::player_lobby_domain(player->private_id, player->name, false);
+            const auto player_lobby = domain::lobby::player_lobby_domain(player->private_id, player->name, player->player_class, false);
             lobby_.players_ready.push_back(player_lobby);
 
             //create models
@@ -164,7 +163,7 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
             });
             dungeon_common::model::player_class_model player_class_model(player->player_class.id, player->player_class.name);
 
-            const dungeon_common::model::player_config_model player_model(player->public_id, player->name, player_class_model, player->health,
+            const dungeon_common::model::player_config_model player_model(player->public_id, player->name, player_class_model, player->health, player->max_health,
                                                                           player->attack_damage, player->ability_power, player_actions);
             dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::create_player);
             answer << player_model;
@@ -227,6 +226,8 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
             for (size_t i = 0; i < lobby_.players_ready.size(); i++)
             {
                 strcpy_s(lobby_model.players_lobby_status[i].name, lobby_.players_ready[i].get_name());
+                lobby_model.players_lobby_status[i].player_class = dungeon_common::model::player_class_model(lobby_.players_ready[i].get_player_class().id,
+                                                                                                             lobby_.players_ready[i].get_player_class().name);
                 lobby_model.players_lobby_status[i].ready = lobby_.players_ready[i].get_ready();
             }
             lobby_model.start_match = lobby_.can_start_match();

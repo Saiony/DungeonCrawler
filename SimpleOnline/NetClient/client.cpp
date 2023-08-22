@@ -221,8 +221,8 @@ bool client::handle_messages()
             }
 
             domain::player_class player_class(response.player_class.id, response.player_class.name);
-            domain::player_complete player_complete(response.id, response.name, player_class, response.attack_damage,
-                                                      response.ability_power, response.max_health, actions);
+            domain::player_complete player_complete(response.id, response.name, player_class, response.attack_damage, response.ability_power,
+                                                    response.health, response.max_health, actions);
 
             if (create_player_callback != nullptr)
             {
@@ -263,7 +263,7 @@ bool client::handle_messages()
             for (auto& enemy_model : encounter_model.enemies)
             {
                 if(std::strlen(enemy_model.id) > 0)
-                    enemies.emplace_back(enemy_model.id, enemy_model.name, enemy_model.health);
+                    enemies.emplace_back(enemy_model.id, enemy_model.name, enemy_model.health, enemy_model.max_health);
             }
 
             for(auto& player_model : encounter_model.players)
@@ -271,7 +271,7 @@ bool client::handle_messages()
                 if(std::strlen(player_model.name) > 0)
                 {
                     domain::player_class player_class(player_model.player_class.id, player_model.player_class.name);
-                    players.emplace_back(player_model.id, player_model.name, player_class, player_model.health);
+                    players.emplace_back(player_model.id, player_model.name, player_class, player_model.health, player_model.max_health);
                 }
             }
 

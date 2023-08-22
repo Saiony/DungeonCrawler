@@ -32,12 +32,12 @@ void dungeon_client::scene::level_scene::print_combat(const domain::encounter& e
     std::cout << "-----------------------------------------" << std::endl;
     for (auto& enemy : encounter.enemies)
     {
-        std::cout << enemy.name << " - " << enemy.health << "hp" << std::endl;
+        std::cout << enemy.name << " - " << enemy.health << " / " << enemy.max_health << "hp" << std::endl;
     }
     std::cout << "-----------------------------------------" << std::endl;
     for (auto& player : encounter.players)
     {
-        std::cout << player.name << " - " << player.health << "hp" << std::endl;
+        std::cout << player.name << " - " << player.health << " / " << player.max_health << " hp" << std::endl;
     }
     std::cout << "-----------------------------------------" << std::endl;
 

@@ -9,8 +9,9 @@ namespace dungeon_common::model
         char id[39]{};
         char name[40]{};
         uint16_t health;
+        uint16_t max_health;
 
-        enemy_model(std::string new_id, std::string name_string, uint16_t health);
+        enemy_model(std::string new_id, std::string name_string, uint16_t health, uint16_t max_health);
         enemy_model();
     };
     

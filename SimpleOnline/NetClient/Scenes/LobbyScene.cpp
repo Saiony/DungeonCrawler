@@ -66,11 +66,12 @@ void lobby_scene::start_match(const domain::lobby& lobby) const
 void lobby_scene::print_lobby(domain::lobby lobby) const
 {
     system("CLS");
-    cout << "Waiting for other players..." << endl;
-    cout << "-----------------------------------------" << endl;
+    cout << "Waiting for other players..." << endl << endl;
+    cout << "Name\t\t\tClass\t\tStatus" << endl;
+    cout << "-------------------------------------------------" << endl;
     for (auto& player_lobby : lobby.players_ready)
     {
-        cout << player_lobby.get_name() << "                     " << player_lobby.get_ready_text() << endl;
+        cout << player_lobby.get_name() << "\t\t\t" << player_lobby.get_class().name << "\t\t" << player_lobby.get_ready_text() << endl;
     }
-    cout << "-----------------------------------------" << endl;
+    cout << "-------------------------------------------------" << endl;
 }

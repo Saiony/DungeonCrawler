@@ -4,12 +4,12 @@
 using namespace dungeon_common::model;
 using namespace std;
 
-player_lobby_model::player_lobby_model(const char* player_name, const bool ready) : ready(ready)
+player_lobby_model::player_lobby_model(const char* player_name, player_class_model player_class, const bool ready) : player_class(player_class), ready(ready)
 {
     strcpy_s(begin(name), size(name), player_name);
 }
 
-player_lobby_model::player_lobby_model() : name("-")
+player_lobby_model::player_lobby_model() : name("-"), player_class(enums::player_class_type::unknown, "-"), ready(false)
 {    
 }
 

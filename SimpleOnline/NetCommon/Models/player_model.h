@@ -10,8 +10,10 @@ namespace dungeon_common::model
         char name[40]{};
         player_class_model player_class;
         uint32_t health{};
+        uint32_t max_health{};
         
         player_model();
-        player_model(const std::string& new_id, const std::string& new_name, const player_class_model& player_class, const uint32_t health);
+        player_model(const std::string& new_id, const std::string& new_name, const player_class_model& player_class,
+                     const uint32_t health, const uint32_t max_health);
     };
 }

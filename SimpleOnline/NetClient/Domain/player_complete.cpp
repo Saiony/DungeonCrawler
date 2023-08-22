@@ -5,8 +5,8 @@
 dungeon_client::domain::player_complete::player_complete(const std::string& id, const std::string& name,
                                                          const player_class& player_class,
                                                          const uint16_t attack_damage, const uint16_t ability_power,
-                                                         const uint32_t health, std::array<action, 4> actions)
-                                                         : player(id, name, player_class, health), attack_damage(attack_damage),
+                                                         const uint16_t health, const uint16_t max_health, std::array<action, 4> actions)
+                                                         : player(id, name, player_class, health, max_health), attack_damage(attack_damage),
                                                          ability_power(ability_power), actions(std::move(actions))
 {
 }

@@ -7,6 +7,6 @@ namespace dungeon_client::domain
     class enemy : public base_creature
     {
     public:
-        enemy(const char* id, const char* name, uint16_t health);
+        enemy(const char* id, const char* name, uint16_t health, uint16_t max_health);
     };
 }
