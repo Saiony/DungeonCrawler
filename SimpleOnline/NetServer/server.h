@@ -25,7 +25,7 @@ namespace dungeon_server
     public:
         bool running = true;
         
-        void update(const size_t max_messages = -1, const bool wait = false) override;//TODO: isso vira protected
+        void update(const size_t max_messages = -1, const bool wait = false) override;
         void on_game_room_message(const std::shared_ptr<domain::message::emitter_message>& emitter_msg);
         explicit server(const uint16_t n_port);
     };

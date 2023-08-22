@@ -15,8 +15,7 @@ std::string dungeon_server::domain::action::sword_slash_action::use(const std::s
 {
     const auto action_owner = get_creature(encounter_ptr, action_owner_id);
     const auto target = get_creature(encounter_ptr, target_id);
-    
-    std::string log = action_owner->name + " used " + get_name() +" on " +target->name;
+    std::string log = action_owner->name + " used " + get_name() + " on " +target->name;
     target->take_damage(action_owner->attack_damage, log);
     
     return log;

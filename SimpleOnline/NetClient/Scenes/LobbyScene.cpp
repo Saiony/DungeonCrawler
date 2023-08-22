@@ -2,6 +2,8 @@
 #include "LevelScene.h"
 #include <iostream>
 
+#include "../Utility/custom_print.h"
+
 using namespace dungeon_client::scene;
 using namespace std;
 
@@ -67,11 +69,16 @@ void lobby_scene::print_lobby(domain::lobby lobby) const
 {
     system("CLS");
     cout << "Waiting for other players..." << endl << endl;
-    cout << "Name\t\t\tClass\t\tStatus" << endl;
-    cout << "-------------------------------------------------" << endl;
+    utility::custom_print::print_aligned("Name", 20);
+    utility::custom_print::print_aligned("Class", 20);
+    utility::custom_print::print_aligned("Status", 20);
+    std::cout << std::endl << "-------------------------------------------------" << std::endl;
     for (auto& player_lobby : lobby.players_ready)
     {
-        cout << player_lobby.get_name() << "\t\t\t" << player_lobby.get_class().name << "\t\t" << player_lobby.get_ready_text() << endl;
+        utility::custom_print::print_aligned(player_lobby.get_name(), 20);
+        utility::custom_print::print_aligned(player_lobby.get_class().name, 20);
+        utility::custom_print::print_aligned(player_lobby.get_ready_text(), 20);
+        std::cout << std::endl;
     }
     cout << "-------------------------------------------------" << endl;
 }

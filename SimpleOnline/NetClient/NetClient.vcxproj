@@ -175,6 +175,7 @@
     <ClInclude Include="Scenes\LevelScene.h" />
     <ClInclude Include="Scenes\LobbyScene.h" />
     <ClInclude Include="Scenes\game_over_win_scene.h" />
+    <ClInclude Include="Utility\custom_print.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetCommon\NetCommon.vcxproj">

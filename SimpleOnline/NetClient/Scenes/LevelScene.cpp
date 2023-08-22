@@ -4,7 +4,7 @@
 
 #include "game_over_loss_scene.h"
 #include "game_over_win_scene.h"
-
+#include "../Utility/custom_print.h"
 
 dungeon_client::scene::level_scene::level_scene(const std::shared_ptr<client>& client_ptr)
 {
@@ -32,12 +32,14 @@ void dungeon_client::scene::level_scene::print_combat(const domain::encounter& e
     std::cout << "-----------------------------------------" << std::endl;
     for (auto& enemy : encounter.enemies)
     {
-        std::cout << enemy.name << " - " << enemy.health << " / " << enemy.max_health << "hp" << std::endl;
+        utility::custom_print::print_aligned(enemy.name, 30);
+        std::cout << enemy.health << "/" << enemy.max_health << "hp" << std::endl;
     }
     std::cout << "-----------------------------------------" << std::endl;
     for (auto& player : encounter.players)
     {
-        std::cout << player.name << " - " << player.health << " / " << player.max_health << " hp" << std::endl;
+        utility::custom_print::print_aligned(player.name, 30);
+        std::cout << player.health << "/" << player.max_health << "hp" << std::endl;
     }
     std::cout << "-----------------------------------------" << std::endl;
 
@@ -60,7 +62,7 @@ void dungeon_client::scene::level_scene::print_combat(const domain::encounter& e
         const auto actions = client_ptr_->get_player().actions;
         for(size_t i = 0; i < actions.size(); i++)
         {
-            std::cout << "- " << actions[i].name;            
+            utility::custom_print::print_aligned("- " + actions[i].name, 20);
 
             if(i % 2 != 0)
                 std::cout << std::endl;
@@ -71,7 +73,7 @@ void dungeon_client::scene::level_scene::print_combat(const domain::encounter& e
     else
         std::cout << encounter.active_creature_ptr->name << "'s turn...";
 
-    std::cout << std::endl << std::endl;
+    std::cout << std::endl;
 }
 
 void dungeon_client::scene::level_scene::handle_player_input(domain::encounter& encounter) const
