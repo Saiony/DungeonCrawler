@@ -5,6 +5,8 @@ namespace dungeon_server::domain::action
 {
     class sword_slash_action final : public base_action
     {
+    private:
+        const float_t variance_ = 0.3f;
     public:
         std::string target_id{};
         

@@ -5,6 +5,8 @@ namespace dungeon_server::domain::action
 {
     class heal_action final : public base_action
     {
+    private:
+        const float_t variance_ = 0.2f;
     public:
         std::string target_id;
         

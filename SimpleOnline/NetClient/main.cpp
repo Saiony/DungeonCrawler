@@ -22,7 +22,7 @@ int main()
 {
     std::cout << "<-~- . - ~-> DUNGEON CRAWLER <-~- . - ~->" << std::endl << std::endl;
     auto client_ptr = std::make_shared<client>();
-    client_ptr->connect("cauezao.gandhi-on-fire.com", 14414, [&client_ptr](const model::simple_answer_model response)
+    client_ptr->connect("179.84.83.232", 14414, [&client_ptr](const model::simple_answer_model response)
     {
         if (!response.ok)
         {

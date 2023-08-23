@@ -11,6 +11,7 @@ namespace dungeon_server::domain::action
         virtual ~base_action();
         dungeon_common::model::action_types id;
         std::string action_owner_id{};
+        float_t variance{};
 
         explicit base_action(const dungeon_common::model::action_types& action_type, std::string new_action_owner_id);
 
@@ -30,5 +31,6 @@ namespace dungeon_server::domain::action
         }
 
         std::shared_ptr<base_creature> get_creature(const std::shared_ptr<encounter>& encounter_ptr, const std::string& creature_id);
+        float_t randomize_damage(float_t damage, float_t damage_variance) const;
     };
 }
