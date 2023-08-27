@@ -9,6 +9,7 @@ namespace dungeon_common::model
         sword_slash,
         heal,
         bite,
+        shield_bash,
     };
 
     struct action_use_model

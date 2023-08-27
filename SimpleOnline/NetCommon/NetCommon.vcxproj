@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Enum\creature_status_types.h" />
     <ClInclude Include="Enum\player_class_types.h" />
     <ClInclude Include="error_code_type.h" />
     <ClInclude Include="Models\create_player_model.h" />

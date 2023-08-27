@@ -45,8 +45,13 @@ namespace dungeon_server::game_room
                 auto enemy_action_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
                 enemy_action_time += 5;
                 while(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()) < enemy_action_time){}
+
+                std::string action_log;
                 
-                auto action_log = enemy_ptr->execute_turn(encounter_manager_->current_encounter);
+                enemy_ptr->on_begin_of_turn(encounter_manager_->current_encounter, action_log);
+                enemy_ptr->execute_turn(encounter_manager_->current_encounter, action_log);
+                enemy_ptr->on_end_of_turn(encounter_manager_->current_encounter, action_log);
+                
                 encounter_manager_->go_to_next_turn();
                 
                 const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, action_log);
@@ -57,6 +62,18 @@ namespace dungeon_server::game_room
             else if(const auto player_ptr = std::dynamic_pointer_cast<domain::player>(encounter_manager_->current_encounter->active_creature))
             {
                 std::cout <<  player_ptr->name << "'s turn" << std::endl;
+                std::string action_log;
+
+                player_ptr->on_begin_of_turn(encounter_manager_->current_encounter, action_log);                
+                if(!player_ptr->can_execute_turn())
+                {
+                    player_ptr->on_end_of_turn(encounter_manager_->current_encounter, action_log);
+                    encounter_manager_->go_to_next_turn();
+                    const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, action_log);
+                    send_message_function(msg);
+                    handle_turn(send_message_function);
+                }
+                                
                 start_timeout_timer();
             }
         }

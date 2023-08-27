@@ -7,7 +7,7 @@
 #include "Models/action_use_model.h"
 
 namespace dungeon_server::domain
-{
+{    
     class player final : public base_creature
     {
     public:

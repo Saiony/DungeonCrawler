@@ -1,6 +1,7 @@
 ﻿#include "action_factory.h"
 
 #include "NetServer/Domain/Actions/heal_action.h"
+#include "NetServer/Domain/Actions/shield_bash.h"
 #include "NetServer/Domain/Actions/sword_slash_action.h"
 
 std::shared_ptr<dungeon_server::domain::action::base_action> dungeon_server::domain::factory::action_factory::create_action
@@ -24,6 +25,10 @@ std::shared_ptr<dungeon_server::domain::action::base_action> dungeon_server::dom
     case (dungeon_common::model::action_types::heal):
         {
             return std::make_shared<action::heal_action>(action_type, owner_id, target_id);
+        }
+        case(dungeon_common::model::action_types::shield_bash):
+        {
+            return std::make_shared<action::shield_bash>(action_type, owner_id, target_id);
         }
     default :
         {

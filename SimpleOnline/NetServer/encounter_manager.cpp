@@ -3,6 +3,8 @@
 #include <iostream>
 
 #include "Domain/Enemies/Wolf.h"
+#include "Domain/Status/base_creature_status.h"
+#include "Domain/Status/stunned_status.h"
 
 dungeon_server::domain::encounter_manager::encounter_manager(std::vector<std::shared_ptr<player>> players)
                                             : level_(1), players_(std::move(players)), current_encounter(generate_encounter())
@@ -16,7 +18,7 @@ std::shared_ptr<dungeon_server::domain::encounter> dungeon_server::domain::encou
     {
     case 1:
         {
-            const enemy::wolf wolf("wolf", 10, 5, 1);
+            enemy::wolf wolf("wolf", 10, 1, 1);
             enemies.push_back(std::make_shared<enemy::wolf>(wolf));
             break;
         }

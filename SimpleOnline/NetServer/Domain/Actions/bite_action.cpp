@@ -1,11 +1,13 @@
 ﻿#include "bite_action.h"
 
+#include "NetServer/Domain/Status/stunned_status.h"
+
 dungeon_server::domain::action::bite_action::~bite_action()
 {
 }
 
 dungeon_server::domain::action::bite_action::bite_action(const dungeon_common::model::action_types& action_type,
-                                                        std::string new_action_owner_id, std::string target_id)
+                                                         const std::string& new_action_owner_id, std::string target_id)
                                                         : base_action(action_type, new_action_owner_id), target_id(std::move(target_id))
 {
 }

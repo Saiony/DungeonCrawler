@@ -22,6 +22,7 @@
     <ClCompile Include="Domain\Actions\base_action.cpp" />
     <ClCompile Include="Domain\Actions\bite_action.cpp" />
     <ClCompile Include="Domain\Actions\heal_action.cpp" />
+    <ClCompile Include="Domain\Actions\shield_bash.cpp" />
     <ClCompile Include="Domain\Actions\sword_slash_action.cpp" />
     <ClCompile Include="Domain\Encounter.cpp" />
     <ClCompile Include="Domain\Enemies\base_enemy.cpp" />
@@ -31,12 +32,16 @@
     <ClCompile Include="Domain\Lobby\lobby_domain.cpp" />
     <ClCompile Include="Domain\Lobby\player_lobby_domain.cpp" />
     <ClCompile Include="Domain\player.cpp" />
+    <ClCompile Include="Domain\Status\base_creature_status.cpp" />
+    <ClCompile Include="Domain\Status\creature_status_manager.cpp" />
+    <ClCompile Include="Domain\Status\stunned_status.cpp" />
     <ClCompile Include="encounter_manager.cpp" />
     <ClCompile Include="game_room\game_room.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClInclude Include="Domain\Actions\base_action.h" />
     <ClInclude Include="Domain\Actions\bite_action.h" />
     <ClInclude Include="Domain\Actions\heal_action.h" />
+    <ClInclude Include="Domain\Actions\shield_bash.h" />
     <ClInclude Include="Domain\Actions\sword_slash_action.h" />
     <ClInclude Include="Domain\base_creature.h" />
     <ClInclude Include="Domain\Encounter.h" />
@@ -51,6 +56,9 @@
     <ClInclude Include="Domain\Message\match_start_response.h" />
     <ClInclude Include="Domain\player.h" />
     <ClInclude Include="Domain\player_classes.h" />
+    <ClInclude Include="Domain\Status\base_creature_status.h" />
+    <ClInclude Include="Domain\Status\creature_status_manager.h" />
+    <ClInclude Include="Domain\Status\stunned_status.h" />
     <ClInclude Include="encounter_manager.h" />
     <ClInclude Include="game_room\combat\base_combat_state.h" />
     <ClInclude Include="game_room\combat\combat_state_player_turn.h" />

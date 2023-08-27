@@ -9,6 +9,7 @@ std::vector<dungeon_common::model::action_types> get_player_actions(const dungeo
     {
     case dungeon_common::enums::warrior:
         actions.push_back(dungeon_common::model::action_types::sword_slash);
+        actions.push_back(dungeon_common::model::action_types::shield_bash);
         break;
     case dungeon_common::enums::cleric:
         actions.push_back(dungeon_common::model::action_types::heal);
