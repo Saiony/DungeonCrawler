@@ -22,8 +22,8 @@ std::uint8_t dungeon_server::domain::action::shield_bash::get_targets_count()
 
 std::string dungeon_server::domain::action::shield_bash::use(const std::shared_ptr<encounter>& encounter_ptr)
 {
-    const auto action_owner = get_creature(encounter_ptr, action_owner_id);
-    const auto target = get_creature(encounter_ptr, target_id);
+    const auto action_owner = encounter_ptr->get_creature(action_owner_id);
+    const auto target = encounter_ptr->get_creature(target_id);
     const auto base_dmg = static_cast<uint16_t>(static_cast<float_t>(action_owner->attack_damage) * dmg_multiplier_);
     const auto final_dmg = static_cast<uint16_t>(randomize_damage(base_dmg, variance_));
     
@@ -37,5 +37,6 @@ std::string dungeon_server::domain::action::shield_bash::use(const std::shared_p
         log += "\n" + target->name + " is stunned";
     }
     
+    action_owner->on_attack(encounter_ptr, target_id, log);    
     return log;
 }

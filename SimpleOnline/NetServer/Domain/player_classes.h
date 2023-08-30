@@ -28,12 +28,13 @@ namespace dungeon_server::domain
             {
                 {dungeon_common::enums::player_class_type::warrior, "warrior"},
                 {dungeon_common::enums::player_class_type::cleric, "cleric"},
+                {dungeon_common::enums::player_class_type::archer, "archer"},
             };
         }
 
         player_class get_class(const dungeon_common::enums::player_class_type class_type)
         {
-            const auto it = std::find_if(std::begin(classes), std::end(classes), [class_type](auto player_class)
+            const auto it = std::ranges::find_if(classes, [class_type](auto player_class)
             {
                 return player_class.id == class_type;
             });

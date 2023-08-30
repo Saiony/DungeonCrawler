@@ -62,22 +62,27 @@ namespace dungeon_server::domain
             return hp_increased;
         }
 
-        void add_status(const std::shared_ptr<base_creature_status>& status)
+        void add_status(const std::shared_ptr<base_creature_status>& status) const
         {
             status_manager_->add_status(status);
         }
 
-        void on_begin_of_turn(std::shared_ptr<encounter> encounter, std::string& action_log)
+        void on_begin_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log) const
         {
             status_manager_->on_begin_of_turn(encounter, action_log);
         }
 
-        void on_end_of_turn(std::shared_ptr<encounter> encounter, std::string& action_log)
+        void on_attack(const std::shared_ptr<encounter>& encounter, const std::string& attacked_creature_id, std::string& action_log) const
+        {
+            status_manager_->on_attack(encounter, attacked_creature_id, action_log);
+        }
+
+        void on_end_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log) const
         {
             status_manager_->on_end_of_turn(encounter, action_log);
         }
 
-        bool can_execute_turn()
+        bool can_execute_turn() const
         {
             return !status_manager_->contains(dungeon_common::enums::stun);
         }

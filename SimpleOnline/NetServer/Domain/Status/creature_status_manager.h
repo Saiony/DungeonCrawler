@@ -20,6 +20,7 @@ namespace dungeon_server::domain
         void add_status(const std::shared_ptr<base_creature_status>& status);
         bool contains(dungeon_common::enums::creature_status_type status);
         void on_begin_of_turn(std::shared_ptr<encounter> encounter, std::string& action_log);
+        void on_attack(std::shared_ptr<encounter> encounter, const std::string& attacked_creature_id, std::string& action_log);
         void on_end_of_turn(std::shared_ptr<encounter> encounter, std::string& action_log);
     };
 }

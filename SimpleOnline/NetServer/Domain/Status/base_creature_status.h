@@ -20,12 +20,14 @@ namespace dungeon_server::domain
         
         virtual void on_begin_of_turn(std::shared_ptr<encounter> encounter, std::string& action_log)
         {
-            std::cout << "base begin of turn";
+        }
+
+        virtual void on_attack(std::shared_ptr<encounter> encounter, const std::string& attacked_creature_id, std::string& action_log)
+        {
         }
         
         virtual void on_end_of_turn(std::shared_ptr<encounter> encounter, std::string& action_log)
         {
-            std::cout << "base end of turn";
         }
     };
 }

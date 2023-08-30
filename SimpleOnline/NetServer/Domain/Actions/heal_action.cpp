@@ -16,8 +16,8 @@ std::string dungeon_server::domain::action::heal_action::get_name()
 
 std::string dungeon_server::domain::action::heal_action::use(const std::shared_ptr<encounter>& encounter_ptr)
 {
-    const auto action_owner = get_creature(encounter_ptr, action_owner_id);
-    const auto target = get_creature(encounter_ptr, target_id);
+    const auto action_owner = encounter_ptr->get_creature(action_owner_id);
+    const auto target = encounter_ptr->get_creature(target_id);
     const auto randomized_value = static_cast<uint16_t>(randomize_damage(action_owner->ability_power, variance_));
     const auto hp_healed = target->heal(randomized_value);
 

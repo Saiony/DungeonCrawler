@@ -13,6 +13,11 @@ std::vector<dungeon_common::model::action_types> get_player_actions(const dungeo
         break;
     case dungeon_common::enums::cleric:
         actions.push_back(dungeon_common::model::action_types::heal);
+        actions.push_back(dungeon_common::model::action_types::holy_light);
+        break;
+    case dungeon_common::enums::archer:
+        actions.push_back(dungeon_common::model::action_types::pet_the_eagle);
+        actions.push_back(dungeon_common::model::action_types::fire_at_will);
         break;
     case dungeon_common::enums::unknown:
         break;
@@ -29,6 +34,8 @@ uint16_t get_player_hp(const dungeon_server::domain::player_class& player_class)
         return 15;
     case dungeon_common::enums::cleric:
         return 10;
+    case dungeon_common::enums::archer:
+        return 12;
     default:
         return -1;
     }
@@ -42,6 +49,8 @@ uint16_t get_player_attack_damage(const dungeon_server::domain::player_class& pl
         return 3;
     case dungeon_common::enums::cleric:
         return 1;
+    case dungeon_common::enums::archer:
+        return 2;   
     default:
         return -1;
     }
@@ -55,6 +64,8 @@ uint16_t get_player_ability_power(const dungeon_server::domain::player_class& pl
         return 0;
     case dungeon_common::enums::cleric:
         return 3;
+    case dungeon_common::enums::archer:
+        return 2;
     default:
         return -1;
     }

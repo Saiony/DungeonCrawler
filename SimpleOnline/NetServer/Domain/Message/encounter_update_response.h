@@ -7,10 +7,10 @@ namespace dungeon_server::domain::message
     class encounter_update_response : public emitter_message
     {
     public:
-        std::shared_ptr<domain::encounter> encounter_ptr;
+        std::shared_ptr<encounter> encounter_ptr;
         std::string log;
         
-        explicit encounter_update_response(std::shared_ptr<domain::encounter> encounter_ptr, std::string action_log)
+        explicit encounter_update_response(std::shared_ptr<encounter> encounter_ptr, std::string action_log)
                                            : encounter_ptr(std::move(encounter_ptr)), log(std::move(action_log))
         {
         }

@@ -22,5 +22,6 @@ namespace dungeon_server::domain
         encounter(std::vector<std::shared_ptr<base_enemy>> enemies, std::vector<std::shared_ptr<player>> players, std::shared_ptr<base_creature> active_creature);
         void go_to_next_turn();
         void set_game_over(bool players_won_encounter);
+        std::shared_ptr<base_creature> get_creature(const std::string& creature_id);
     };
 }

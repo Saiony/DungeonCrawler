@@ -196,7 +196,7 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
             domain::player_classes player_classes;
 
             auto classes = player_classes.classes;
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < std::size(classes); i++)
             {
                 dungeon_common::model::player_class_model player_class_model(classes[i].id, classes[i].name);
                 model.classes[i] = player_class_model;

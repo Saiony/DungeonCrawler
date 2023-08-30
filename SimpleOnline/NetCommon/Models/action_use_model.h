@@ -10,6 +10,9 @@ namespace dungeon_common::model
         heal,
         bite,
         shield_bash,
+        holy_light,
+        fire_at_will,
+        pet_the_eagle,
     };
 
     struct action_use_model

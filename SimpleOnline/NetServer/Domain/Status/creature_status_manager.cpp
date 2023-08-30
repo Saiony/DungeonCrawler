@@ -24,6 +24,16 @@ void dungeon_server::domain::creature_status_manager::on_begin_of_turn(std::shar
     });
 }
 
+void dungeon_server::domain::creature_status_manager::on_attack(std::shared_ptr<encounter> encounter,
+                                                                const std::string& attacked_creature_id,
+                                                                std::string& action_log)
+{
+    std::ranges::for_each(statuses_, [&action_log, &encounter, &attacked_creature_id](auto status)
+    {
+        status->on_attack(encounter, attacked_creature_id, action_log);
+    });
+}
+
 void dungeon_server::domain::creature_status_manager::on_end_of_turn(std::shared_ptr<encounter> encounter, std::string& action_log)
 {
     std::ranges::for_each(statuses_, [&action_log, &encounter](auto status)

@@ -11,16 +11,6 @@ action::base_action::base_action(const dungeon_common::model::action_types& acti
 {
 }
 
-std::shared_ptr<base_creature> action::base_action::get_creature(const std::shared_ptr<encounter>& encounter_ptr, const std::string& creature_id)
-{    
-    auto action_owner = *std::ranges::find_if(encounter_ptr->creatures, [this, &creature_id](auto enemy)
-    {
-       return enemy->public_id == creature_id;
-    });
-
-    return action_owner;
-}
-
 float_t action::base_action::randomize_damage(const float_t damage, const float_t damage_variance) const
 {
     std::random_device dev;

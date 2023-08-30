@@ -4,6 +4,7 @@ namespace dungeon_common::enums
 {
     enum creature_status_type
     {
-        stun = 1,
+        stun,
+        eagle_petted,
     };
 }

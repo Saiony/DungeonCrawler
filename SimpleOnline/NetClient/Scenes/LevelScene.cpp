@@ -98,20 +98,26 @@ void dungeon_client::scene::level_scene::handle_player_input(domain::encounter& 
         }
 
         if(player_action_ptr->needs_target())
+            read_action_target(encounter, player_action_ptr);
+        else
+            client_ptr_->send_action(player_action_ptr->id, "");
+    });
+}
+
+void dungeon_client::scene::level_scene::read_action_target(domain::encounter& encounter, const std::shared_ptr<domain::action> player_action_ptr) const
+{
+    std::cout << "Type the target: " << std::endl;
+    client_ptr_->read_input([&](const std::string& target_name)
+    {
+        const auto target_creature = encounter.get_creature(target_name);
+        if(target_creature == nullptr)
         {
-            std::cout << "Type the target: " << std::endl;
-            client_ptr_->read_input([&](const std::string& target_name)
-            {
-                const auto target_creature = encounter.get_creature(target_name);
-                if(target_creature == nullptr)
-                {
-                    std::cout << "CREATURE NOT FOUND" << std::endl;
-                    return;
-                }
-                
-                client_ptr_->send_action(player_action_ptr->id, target_creature->public_id);
-            });
-        }        
+            std::cout << "CREATURE NOT FOUND" << std::endl;
+            read_action_target(encounter, player_action_ptr);
+            return;
+        }
+            
+        client_ptr_->send_action(player_action_ptr->id, target_creature->public_id);
     });
 }
 
