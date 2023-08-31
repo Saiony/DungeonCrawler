@@ -27,8 +27,8 @@ namespace dungeon_server::game_room
                           const std::shared_ptr<domain::action::base_action>& action) override
         {
             std::string action_log = action->use(encounter_manager_->current_encounter);
-            encounter_manager_->go_to_next_turn();
             std::cout << action_log << "\n-\n"; 
+            encounter_manager_->go_to_next_turn();
             
             const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, action_log);
             send_message_function(msg);
@@ -58,6 +58,8 @@ namespace dungeon_server::game_room
                 send_message_function(msg);
                 handle_turn(send_message_function);
                 start_timeout_timer();
+
+                std::cout << action_log;
             }
             else if(const auto player_ptr = std::dynamic_pointer_cast<domain::player>(encounter_manager_->current_encounter->active_creature))
             {

@@ -54,6 +54,7 @@ void server::on_client_connect(const std::shared_ptr<dungeon_common::connection<
 void server::on_client_disconnect(const std::shared_ptr<dungeon_common::connection<dungeon_common::custom_msg_types>> client)
 {
     std::cout << "Removing client [" << client->get_id() << "]\n";
+    connections_.erase(std::ranges::remove(connections_, client).begin(), connections_.end());
 }
 
 void server::update(const size_t max_messages, const bool wait)
@@ -76,7 +77,7 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
 
             for (size_t i = 0; i < encounter->enemies.size(); i++)
             {
-                auto enemy = encounter->enemies[i];
+                const auto enemy = encounter->enemies[i];
                 encounter_model.enemies[i] = dungeon_common::model::enemy_model(enemy->public_id, enemy->name, enemy->health, enemy->max_health);
             }
             for (size_t i = 0; i < encounter->players.size(); i++)

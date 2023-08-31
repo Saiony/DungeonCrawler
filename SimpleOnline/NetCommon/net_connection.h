@@ -17,6 +17,8 @@ namespace dungeon_common
     template <typename T>
     class connection : public std::enable_shared_from_this<connection<T>>
     {
+    private:
+        std::function<void(std::shared_ptr<connection>)> on_disconnect_listener_;
     protected:
         tcp::socket socket_;
         asio::io_context& asio_context_;
@@ -60,20 +62,20 @@ namespace dungeon_common
                 return;
 
             asio::async_connect(socket_, endpoints,
-                                [this](std::error_code error_code, tcp::endpoint const& endpoint)
-                                {
-                                    if (!error_code)
-                                    {
-                                        read_header();
-                                    }
-                                });
+                [this](std::error_code error_code, tcp::endpoint const& endpoint)
+                {
+                    if (error_code)
+                        return;
+                    
+                    read_header();
+                });
         }
 
 
         void disconnect()
         {
             if (is_connected())
-                asio::post(asio_context_, [this]() { socket_.close(); });
+                asio::post(asio_context_, [this]() { on_client_disconnect(); });
         }
 
         bool is_connected() const
@@ -84,66 +86,77 @@ namespace dungeon_common
         void send(const message<T>& msg)
         {
             asio::post(asio_context_,
-                       [this, msg]()
-                       {
-                           const bool writing_messages = !messages_out_.empty();
-                           messages_out_.push_back(msg);
-                           if (!writing_messages)
-                           {
-                               write_header();
-                           }
-                       });
+               [this, msg]()
+               {
+                   const bool writing_messages = !messages_out_.empty();
+                   messages_out_.push_back(msg);
+                   if (!writing_messages)
+                   {
+                       write_header();
+                   }
+               });
         }
 
         void read_header()
         {
             asio::async_read(socket_, asio::buffer(&temporary_message_in_.header, sizeof(message_header<T>)),
-                             [this](const std::error_code error_code, size_t length)
-                             {
-                                 if (!error_code)
-                                 {
-                                     if (temporary_message_in_.header.body_size > 0)
-                                     {
-                                         temporary_message_in_.body.resize(temporary_message_in_.header.body_size);
-                                         read_body();
-                                     }
-                                     else
-                                         add_to_incoming_message_queue();
-                                 }
-                                 else
-                                 {
-                                     std::cout << "\n[" << id_ << "] Connection Lost\n";
-                                     socket_.close();
-                                 }
-                             });
+                 [this](const std::error_code error_code, size_t length)
+                 {
+                     if (error_code)
+                     {
+                         std::cout << "\n[" << id_ << "] Connection Lost\n";
+
+                         on_client_disconnect();
+                         return;
+                     }
+                     
+                     if (temporary_message_in_.header.body_size > 0)
+                     {
+                         temporary_message_in_.body.resize(temporary_message_in_.header.body_size);
+                         read_body();
+                     }
+                     else
+                         add_to_incoming_message_queue();
+                 });
+        }
+
+        void subscribe_on_disconnect(const std::function<void(std::shared_ptr<connection>)>& callback)
+        {
+            on_disconnect_listener_ = callback;
         }
 
     private:
+        void on_client_disconnect()
+        {
+            socket_.close();
+            on_disconnect_listener_(this->shared_from_this());
+        }
+        
         void write_header()
         {
             asio::async_write(socket_, asio::buffer(&messages_out_.front().header, sizeof(message_header<T>)),
-                              [this](const std::error_code error_code, size_t length)
-                              {
-                                  if (!error_code)
-                                  {
-                                      if (messages_out_.front().body.size() > 0)
-                                          write_body();
-                                      else
-                                      {
-                                          messages_out_.pop_front();
+                  [this](const std::error_code error_code, size_t length)
+                  {
+                      if (!error_code)
+                      {
+                          if (messages_out_.front().body.size() > 0)
+                              write_body();
+                          else
+                          {
+                              messages_out_.pop_front();
 
-                                          if (!messages_out_.empty())
-                                          {
-                                              write_header();
-                                          }
-                                      }
-                                  }
-                                  else
-                                  {
-                                      std::cout << "[" << id_ << "] Write Header Fail.\n";
-                                      socket_.close();
-                                  }
-                              });
+                              if (!messages_out_.empty())
+                              {
+                                  write_header();
+                              }
+                          }
+                      }
+                      else
+                      {
+                          std::cout << "[" << id_ << "] Write Header Fail.\n";
+                          on_client_disconnect();
+                      }
+                  });
         }
 
         void write_body()
@@ -164,7 +177,7 @@ namespace dungeon_common
                     else
                     {
                         std::cout << "[" << id_ << "] Write Body Fail.\n";
-                        socket_.close();
+                        on_client_disconnect();
                     }
                 });
         }
@@ -175,13 +188,14 @@ namespace dungeon_common
                 socket_, asio::buffer(temporary_message_in_.body.data(), temporary_message_in_.body.size()),
                 [this](const std::error_code error_code, size_t length)
                 {
-                    if (!error_code)
-                        add_to_incoming_message_queue();
-                    else
+                    if (error_code)
                     {
-                        std::cout << "[" << id_ << "] Read Body Fail.\n";
-                        socket_.close();
+                        std::cout << "[" << id_ << "] Error: " + error_code.message() + "\n";
+                        on_client_disconnect();
+                        return;
                     }
+                    
+                    add_to_incoming_message_queue();
                 });
         }
 

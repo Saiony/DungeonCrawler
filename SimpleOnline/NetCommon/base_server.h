@@ -23,7 +23,7 @@ namespace dungeon_common
         {
         }
 
-        virtual void on_client_disconnect(std::shared_ptr<connection<T>>)
+        virtual void on_client_disconnect(std::shared_ptr<connection<custom_msg_types>>)
         {
         }
 
@@ -91,6 +91,7 @@ namespace dungeon_common
                     auto con_id = utility::guid_generator::create_guid();
                     new_con->connect_to_client(con_id);
                     on_client_connect(new_con);
+                    new_con->subscribe_on_disconnect(std::bind(&base_server::on_client_disconnect, this, std::placeholders::_1));
                     connections_.push_back(move(new_con));
                 }
 
@@ -100,11 +101,10 @@ namespace dungeon_common
 
         void message_client(std::string client_id, const message<T>& msg)
         {
-            auto client_it = find_if(begin(connections_), end(connections_),
-                                     [client_id](std::shared_ptr<connection<T>> con)
-                                     {
-                                         return con->get_id() == client_id;
-                                     });
+            auto client_it = find_if(begin(connections_), end(connections_),[client_id](std::shared_ptr<connection<T>> con)
+             {
+                 return con->get_id() == client_id;
+             });
 
             auto client = *client_it;
             if (client_it != end(connections_) && client->is_connected())
@@ -126,7 +126,7 @@ namespace dungeon_common
                 {
                     return con->private_id_ == client_id;
                 }))
-                    con->send(msg);
+                con->send(msg);
             });
         }
 

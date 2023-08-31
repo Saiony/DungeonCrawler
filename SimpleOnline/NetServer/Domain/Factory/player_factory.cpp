@@ -31,11 +31,11 @@ uint16_t get_player_hp(const dungeon_server::domain::player_class& player_class)
     switch (player_class.id)
     {
     case dungeon_common::enums::warrior:
-        return 15;
+        return 100;
     case dungeon_common::enums::cleric:
         return 10;
     case dungeon_common::enums::archer:
-        return 12;
+        return 100;
     default:
         return -1;
     }
@@ -46,11 +46,11 @@ uint16_t get_player_attack_damage(const dungeon_server::domain::player_class& pl
     switch (player_class.id)
     {
     case dungeon_common::enums::warrior:
-        return 3;
+        return 100;
     case dungeon_common::enums::cleric:
         return 1;
     case dungeon_common::enums::archer:
-        return 2;   
+        return 7;   
     default:
         return -1;
     }
