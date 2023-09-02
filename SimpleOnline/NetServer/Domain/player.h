@@ -4,6 +4,7 @@
 #include <vector>
 #include "base_creature.h"
 #include "player_classes.h"
+#include "Message/emitter_message.h"
 #include "Models/action_use_model.h"
 
 namespace dungeon_server::domain
@@ -12,6 +13,7 @@ namespace dungeon_server::domain
     {
     public:
         std::string private_id;
+        std::uint16_t aggro;
         player_class player_class;
         std::vector<dungeon_common::model::action_types> actions;
         

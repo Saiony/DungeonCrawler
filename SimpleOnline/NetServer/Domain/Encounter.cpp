@@ -39,9 +39,19 @@ void encounter::set_game_over(const bool players_won_encounter)
 
 std::shared_ptr<base_creature> encounter::get_creature(const std::string& creature_id)
 {
-    auto action_owner = *std::ranges::find_if(creatures, [this, &creature_id](auto enemy)
+    auto action_owner = *std::ranges::find_if(creatures, [this, &creature_id](auto creature)
     {
-       return enemy->public_id == creature_id;
+       return creature->public_id == creature_id;
+    });
+
+    return action_owner;
+}
+
+std::shared_ptr<player> encounter::get_player(const std::string& player_id)
+{
+    auto action_owner = *std::ranges::find_if(players, [this, &player_id](auto player)
+    {
+       return player->public_id == player_id;
     });
 
     return action_owner;

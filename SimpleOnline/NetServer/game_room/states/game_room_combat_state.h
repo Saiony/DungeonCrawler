@@ -29,6 +29,7 @@ namespace dungeon_server::game_room
             std::string action_log = action->use(encounter_manager_->current_encounter);
             std::cout << action_log << "\n-\n"; 
             encounter_manager_->go_to_next_turn();
+            encounter_manager_->current_encounter->active_creature->on_begin_of_turn(encounter_manager_->current_encounter, action_log);  
             
             const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, action_log);
             send_message_function(msg);
@@ -53,6 +54,7 @@ namespace dungeon_server::game_room
                 enemy_ptr->on_end_of_turn(encounter_manager_->current_encounter, action_log);
                 
                 encounter_manager_->go_to_next_turn();
+                encounter_manager_->current_encounter->active_creature->on_begin_of_turn(encounter_manager_->current_encounter, action_log);  
                 
                 const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, action_log);
                 send_message_function(msg);
@@ -65,12 +67,12 @@ namespace dungeon_server::game_room
             {
                 std::cout <<  player_ptr->name << "'s turn" << std::endl;
                 std::string action_log;
-
-                player_ptr->on_begin_of_turn(encounter_manager_->current_encounter, action_log);                
+              
                 if(!player_ptr->can_execute_turn())
                 {
                     player_ptr->on_end_of_turn(encounter_manager_->current_encounter, action_log);
                     encounter_manager_->go_to_next_turn();
+                    encounter_manager_->current_encounter->active_creature->on_begin_of_turn(encounter_manager_->current_encounter, action_log);  
                     const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, action_log);
                     send_message_function(msg);
                     handle_turn(send_message_function);

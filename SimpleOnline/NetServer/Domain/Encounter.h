@@ -23,5 +23,6 @@ namespace dungeon_server::domain
         void go_to_next_turn();
         void set_game_over(bool players_won_encounter);
         std::shared_ptr<base_creature> get_creature(const std::string& creature_id);
+        std::shared_ptr<player> get_player(const std::string& player_id);
     };
 }

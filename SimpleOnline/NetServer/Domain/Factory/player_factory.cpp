@@ -9,6 +9,7 @@ std::vector<dungeon_common::model::action_types> get_player_actions(const dungeo
     {
     case dungeon_common::enums::warrior:
         actions.push_back(dungeon_common::model::action_types::sword_slash);
+        actions.push_back(dungeon_common::model::action_types::provoke);
         actions.push_back(dungeon_common::model::action_types::shield_bash);
         break;
     case dungeon_common::enums::cleric:
@@ -31,11 +32,11 @@ uint16_t get_player_hp(const dungeon_server::domain::player_class& player_class)
     switch (player_class.id)
     {
     case dungeon_common::enums::warrior:
-        return 100;
+        return 15;
     case dungeon_common::enums::cleric:
         return 10;
     case dungeon_common::enums::archer:
-        return 100;
+        return 12;
     default:
         return -1;
     }
@@ -46,11 +47,11 @@ uint16_t get_player_attack_damage(const dungeon_server::domain::player_class& pl
     switch (player_class.id)
     {
     case dungeon_common::enums::warrior:
-        return 100;
+        return 3;
     case dungeon_common::enums::cleric:
         return 1;
     case dungeon_common::enums::archer:
-        return 7;   
+        return 2;   
     default:
         return -1;
     }

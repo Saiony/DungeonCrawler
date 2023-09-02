@@ -13,6 +13,7 @@ namespace dungeon_common::model
         holy_light,
         fire_at_will,
         pet_the_eagle,
+        provoke,
     };
 
     struct action_use_model

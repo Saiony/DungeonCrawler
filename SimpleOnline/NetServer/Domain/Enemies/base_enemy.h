@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <string>
-#include "NetClient/Domain/encounter.h"
 #include "NetServer/Domain/base_creature.h"
+#include "NetServer/Domain/player.h"
 
 namespace dungeon_server::domain
 {
@@ -21,5 +21,7 @@ namespace dungeon_server::domain
             
             on_execute_turn(encounter_ptr, action_log);
         }
+
+        std::shared_ptr<player> get_random_player(const std::shared_ptr<encounter>& encounter_ptr) const;
     };
 }

@@ -25,6 +25,7 @@
     <ClCompile Include="Domain\Actions\heal_action.cpp" />
     <ClCompile Include="Domain\Actions\holy_light.cpp" />
     <ClCompile Include="Domain\Actions\pet_the_eagle_action.cpp" />
+    <ClCompile Include="Domain\Actions\provoke_action.cpp" />
     <ClCompile Include="Domain\Actions\shield_bash.cpp" />
     <ClCompile Include="Domain\Actions\sword_slash_action.cpp" />
     <ClCompile Include="Domain\Encounter.cpp" />
@@ -38,6 +39,7 @@
     <ClCompile Include="Domain\Status\base_creature_status.cpp" />
     <ClCompile Include="Domain\Status\creature_status_manager.cpp" />
     <ClCompile Include="Domain\Status\eagle_petted_status.cpp" />
+    <ClCompile Include="Domain\Status\provoking_status.cpp" />
     <ClCompile Include="Domain\Status\stunned_status.cpp" />
     <ClCompile Include="encounter_manager.cpp" />
     <ClCompile Include="game_room\game_room.cpp" />
@@ -49,6 +51,7 @@
     <ClInclude Include="Domain\Actions\heal_action.h" />
     <ClInclude Include="Domain\Actions\holy_light.h" />
     <ClInclude Include="Domain\Actions\pet_the_eagle_action.h" />
+    <ClInclude Include="Domain\Actions\provoke_action.h" />
     <ClInclude Include="Domain\Actions\shield_bash.h" />
     <ClInclude Include="Domain\Actions\sword_slash_action.h" />
     <ClInclude Include="Domain\base_creature.h" />
@@ -67,6 +70,7 @@
     <ClInclude Include="Domain\Status\base_creature_status.h" />
     <ClInclude Include="Domain\Status\creature_status_manager.h" />
     <ClInclude Include="Domain\Status\eagle_petted_status.h" />
+    <ClInclude Include="Domain\Status\provoking_status.h" />
     <ClInclude Include="Domain\Status\stunned_status.h" />
     <ClInclude Include="encounter_manager.h" />
     <ClInclude Include="game_room\combat\base_combat_state.h" />

@@ -12,7 +12,8 @@ dungeon_server::domain::player::player(std::string client_id, const std::string&
                                        const uint16_t new_health, const uint16_t new_damage,
                                        const uint16_t new_ability_power, std::vector<dungeon_common::model::action_types> actions)
                                        : base_creature(new_name, new_health, new_damage, new_ability_power),
-                                       private_id(std::move(client_id)), player_class(std::move(player_class)), actions(std::move(actions))
+                                       private_id(std::move(client_id)), aggro(1),
+                                       player_class(std::move(player_class)), actions(std::move(actions))
 {
     public_id = dungeon_common::utility::guid_generator::create_guid();
 }
