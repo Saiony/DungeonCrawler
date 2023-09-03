@@ -33,7 +33,7 @@ std::string dungeon_server::domain::action::shield_bash::use(const std::shared_p
     const auto stun_chance = static_cast<uint16_t>(randomize_damage(50, 0.5f));
     if(stun_chance > 50)
     {
-        target->add_status(std::make_shared<stunned_status>(dungeon_common::enums::stun, 1, target->public_id));
+        target->add_status(std::make_shared<stunned_status>(target->public_id));
         log += "\n" + target->name + " is stunned";
     }
     

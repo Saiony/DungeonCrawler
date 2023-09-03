@@ -23,7 +23,7 @@ std::uint8_t dungeon_server::domain::action::pet_the_eagle_action::get_targets_c
 std::string dungeon_server::domain::action::pet_the_eagle_action::use(const std::shared_ptr<encounter>& encounter_ptr)
 {
     const auto action_owner = encounter_ptr->get_creature(action_owner_id);
-    action_owner->add_status(std::make_shared<eagle_petted_status>(dungeon_common::enums::eagle_petted, 3, action_owner_id));
+    action_owner->add_status(std::make_shared<eagle_petted_status>(action_owner_id));
 
     return "\nEagle enjoys being petted";
 }

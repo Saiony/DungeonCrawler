@@ -4,13 +4,17 @@
 
 #include "NetServer/Domain/Encounter.h"
 
-dungeon_server::domain::stunned_status::stunned_status(const dungeon_common::enums::creature_status_type status_type, const uint8_t quantity,
-                                                       const std::string& creature_id)
-                                                               : base_creature_status(status_type, quantity, creature_id)
+dungeon_server::domain::stunned_status::stunned_status(const std::string& creature_id)
+                                                       : base_creature_status(creature_id, 1)
 {
 }
 
-void dungeon_server::domain::stunned_status::on_begin_of_turn(std::shared_ptr<encounter> encounter, std::string& action_log)
+dungeon_common::enums::creature_status_type dungeon_server::domain::stunned_status::get_type()
+{
+    return dungeon_common::enums::stun;
+}
+
+void dungeon_server::domain::stunned_status::on_begin_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log)
 {
     const auto this_creature = std::ranges::find_if(encounter->creatures, [this](auto creature)
     {
@@ -19,7 +23,7 @@ void dungeon_server::domain::stunned_status::on_begin_of_turn(std::shared_ptr<en
     action_log += "\n" + (*this_creature)->name + " is stunned";
 }
 
-void dungeon_server::domain::stunned_status::on_end_of_turn(std::shared_ptr<encounter> encounter, std::string& action_log)
+void dungeon_server::domain::stunned_status::on_end_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log)
 {
     quantity--;
 }

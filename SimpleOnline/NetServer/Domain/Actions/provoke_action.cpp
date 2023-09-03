@@ -23,7 +23,7 @@ std::uint8_t dungeon_server::domain::action::provoke_action::get_targets_count()
 std::string dungeon_server::domain::action::provoke_action::use(const std::shared_ptr<encounter>& encounter_ptr)
 {
     const auto action_owner = encounter_ptr->get_creature(action_owner_id);
-    action_owner->add_status(std::make_shared<provoking_status>(dungeon_common::enums::creature_status_type::provoking, 3, action_owner_id, encounter_ptr));
+    action_owner->add_status(std::make_shared<provoking_status>(action_owner_id, encounter_ptr));
 
     return "\n" + action_owner->name + " used " + get_name() + ". Aggro is raised for 3 turns";
 }

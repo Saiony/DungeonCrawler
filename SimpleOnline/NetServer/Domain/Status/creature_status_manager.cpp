@@ -6,11 +6,11 @@ void dungeon_server::domain::creature_status_manager::add_status(const std::shar
     statuses_.push_back(status);
 }
 
-bool dungeon_server::domain::creature_status_manager::contains(const dungeon_common::enums::creature_status_type status)
+bool dungeon_server::domain::creature_status_manager::contains(const dungeon_common::enums::creature_status_type status_type)
 {
-    const auto it = std::ranges::find_if(statuses_, [&status](auto x)
+    const auto it = std::ranges::find_if(statuses_, [&status_type](auto x)
     {
-        return x->status_type == status;
+        return x->get_type() == status_type;
     });
 
     return it != std::end(statuses_);
