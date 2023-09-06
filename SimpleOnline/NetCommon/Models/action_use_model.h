@@ -14,6 +14,9 @@ namespace dungeon_common::model
         fire_at_will,
         pet_the_eagle,
         provoke,
+        arrow_shower,
+        arrow_shot,
+        distracting_slash,
     };
 
     struct action_use_model

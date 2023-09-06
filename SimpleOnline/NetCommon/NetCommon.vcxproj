@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Enum\action_target_types.h" />
     <ClInclude Include="Enum\creature_status_types.h" />
     <ClInclude Include="Enum\player_class_types.h" />
     <ClInclude Include="error_code_type.h" />
@@ -41,6 +42,7 @@
     <ClInclude Include="Utility\guid_generator.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Enum\action_target_types.cpp" />
     <ClCompile Include="Models\create_player_model.cpp" />
     <ClCompile Include="Models\player_action_model.cpp" />
     <ClCompile Include="Models\action_use_model.cpp" />

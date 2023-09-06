@@ -19,8 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Domain\Actions\arrow_shot_action.cpp" />
+    <ClCompile Include="Domain\Actions\arrow_shower_action.cpp" />
     <ClCompile Include="Domain\Actions\base_action.cpp" />
     <ClCompile Include="Domain\Actions\bite_action.cpp" />
+    <ClCompile Include="Domain\Actions\distracting_slash_action.cpp" />
     <ClCompile Include="Domain\Actions\fire_at_will_action.cpp" />
     <ClCompile Include="Domain\Actions\heal_action.cpp" />
     <ClCompile Include="Domain\Actions\holy_light.cpp" />
@@ -30,6 +33,8 @@
     <ClCompile Include="Domain\Actions\sword_slash_action.cpp" />
     <ClCompile Include="Domain\Encounter.cpp" />
     <ClCompile Include="Domain\Enemies\base_enemy.cpp" />
+    <ClCompile Include="Domain\Enemies\goblin_archer.cpp" />
+    <ClCompile Include="Domain\Enemies\goblin_warrior.cpp" />
     <ClCompile Include="Domain\Enemies\Wolf.cpp" />
     <ClCompile Include="Domain\Factory\action_factory.cpp" />
     <ClCompile Include="Domain\Factory\player_factory.cpp" />
@@ -45,8 +50,11 @@
     <ClCompile Include="game_room\game_room.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Utility\randomizer.cpp" />
+    <ClInclude Include="Domain\Actions\arrow_shot_action.h" />
+    <ClInclude Include="Domain\Actions\arrow_shower_action.h" />
     <ClInclude Include="Domain\Actions\base_action.h" />
     <ClInclude Include="Domain\Actions\bite_action.h" />
+    <ClInclude Include="Domain\Actions\distracting_slash_action.h" />
     <ClInclude Include="Domain\Actions\fire_at_will_action.h" />
     <ClInclude Include="Domain\Actions\heal_action.h" />
     <ClInclude Include="Domain\Actions\holy_light.h" />
@@ -57,6 +65,8 @@
     <ClInclude Include="Domain\base_creature.h" />
     <ClInclude Include="Domain\Encounter.h" />
     <ClInclude Include="Domain\Enemies\base_enemy.h" />
+    <ClInclude Include="Domain\Enemies\goblin_archer.h" />
+    <ClInclude Include="Domain\Enemies\goblin_warrior.h" />
     <ClInclude Include="Domain\Enemies\Wolf.h" />
     <ClInclude Include="Domain\Factory\action_factory.h" />
     <ClInclude Include="Domain\Factory\player_factory.h" />
