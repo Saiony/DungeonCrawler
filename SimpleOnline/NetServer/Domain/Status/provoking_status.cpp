@@ -12,7 +12,7 @@ dungeon_server::domain::provoking_status::provoking_status(const std::string& cr
 
 dungeon_common::enums::creature_status_type dungeon_server::domain::provoking_status::get_type()
 {
-    return dungeon_common::enums::provoking;
+    return dungeon_common::enums::creature_status_type::provoking;
 }
 
 

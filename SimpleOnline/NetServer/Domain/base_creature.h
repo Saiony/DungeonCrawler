@@ -84,7 +84,7 @@ namespace dungeon_server::domain
 
         bool can_execute_turn() const
         {
-            return !status_manager_->contains(dungeon_common::enums::stun);
+            return !status_manager_->contains(dungeon_common::enums::creature_status_type::stun);
         }
     };
 

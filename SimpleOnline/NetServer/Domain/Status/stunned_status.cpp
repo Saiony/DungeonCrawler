@@ -11,7 +11,7 @@ dungeon_server::domain::stunned_status::stunned_status(const std::string& creatu
 
 dungeon_common::enums::creature_status_type dungeon_server::domain::stunned_status::get_type()
 {
-    return dungeon_common::enums::stun;
+    return dungeon_common::enums::creature_status_type::stun;
 }
 
 void dungeon_server::domain::stunned_status::on_begin_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log)

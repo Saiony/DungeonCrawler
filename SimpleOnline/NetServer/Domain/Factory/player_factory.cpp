@@ -7,20 +7,20 @@ std::vector<dungeon_common::model::action_types> get_player_actions(const dungeo
 
     switch (player_class.id)
     {
-    case dungeon_common::enums::warrior:
+    case dungeon_common::enums::player_class_type::warrior:
         actions.push_back(dungeon_common::model::action_types::sword_slash);
         actions.push_back(dungeon_common::model::action_types::provoke);
         actions.push_back(dungeon_common::model::action_types::shield_bash);
         break;
-    case dungeon_common::enums::cleric:
+    case dungeon_common::enums::player_class_type::cleric:
         actions.push_back(dungeon_common::model::action_types::heal);
         actions.push_back(dungeon_common::model::action_types::holy_light);
         break;
-    case dungeon_common::enums::archer:
+    case dungeon_common::enums::player_class_type::archer:
         actions.push_back(dungeon_common::model::action_types::pet_the_eagle);
         actions.push_back(dungeon_common::model::action_types::fire_at_will);
         break;
-    case dungeon_common::enums::unknown:
+    case dungeon_common::enums::player_class_type::unknown:
         break;
     }
 
@@ -31,11 +31,11 @@ uint16_t get_player_hp(const dungeon_server::domain::player_class& player_class)
 {
     switch (player_class.id)
     {
-    case dungeon_common::enums::warrior:
+    case dungeon_common::enums::player_class_type::warrior:
         return 15;
-    case dungeon_common::enums::cleric:
+    case dungeon_common::enums::player_class_type::cleric:
         return 10;
-    case dungeon_common::enums::archer:
+    case dungeon_common::enums::player_class_type::archer:
         return 12;
     default:
         return -1;
@@ -46,11 +46,11 @@ uint16_t get_player_attack_damage(const dungeon_server::domain::player_class& pl
 {
     switch (player_class.id)
     {
-    case dungeon_common::enums::warrior:
+    case dungeon_common::enums::player_class_type::warrior:
         return 3;
-    case dungeon_common::enums::cleric:
+    case dungeon_common::enums::player_class_type::cleric:
         return 1;
-    case dungeon_common::enums::archer:
+    case dungeon_common::enums::player_class_type::archer:
         return 2;   
     default:
         return -1;
@@ -61,11 +61,11 @@ uint16_t get_player_ability_power(const dungeon_server::domain::player_class& pl
 {
     switch (player_class.id)
     {
-    case dungeon_common::enums::warrior:
+    case dungeon_common::enums::player_class_type::warrior:
         return 0;
-    case dungeon_common::enums::cleric:
+    case dungeon_common::enums::player_class_type::cleric:
         return 3;
-    case dungeon_common::enums::archer:
+    case dungeon_common::enums::player_class_type::archer:
         return 2;
     default:
         return -1;

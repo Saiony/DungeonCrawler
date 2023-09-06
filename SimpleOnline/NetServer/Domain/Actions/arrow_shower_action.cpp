@@ -5,7 +5,7 @@ dungeon_server::domain::action::arrow_shower_action::arrow_shower_action(const d
                                                                          const dungeon_common::enums::action_target_types target_type)
     : base_action(action_type, new_action_owner_id), target_type_(target_type)
 {
-    if (target_type_ == dungeon_common::enums::action_target_types::unknownn)
+    if (target_type_ == dungeon_common::enums::action_target_types::unknown)
         throw std::exception("Invalid target type");
 }
 
