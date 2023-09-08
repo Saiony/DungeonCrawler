@@ -5,8 +5,9 @@
 #include "NetServer/Domain/Actions/arrow_shower_action.h"
 
 dungeon_server::domain::enemy::goblin_archer::goblin_archer(const std::string& name, const uint16_t health,
-                                                            const uint16_t attack_damage, const uint16_t ability_power)
-                                                              : base_enemy(name, health, attack_damage, ability_power)
+                                                            const uint16_t attack_damage, const uint16_t ability_power,
+                                                            const dungeon_common::enums::elemental_property_type elemental_property)
+                                                              : base_enemy(name, health, attack_damage, ability_power, elemental_property)
 {
 }
 

@@ -20,13 +20,16 @@ std::shared_ptr<dungeon_server::domain::encounter> dungeon_server::domain::encou
     {
     case 1:
         {
-            enemies.push_back(std::make_shared<enemy::wolf>("wolf", 10, 5, 1));
+            enemies.push_back(std::make_shared<enemy::wolf>("wolf", 10, 5, 1,
+                                                                dungeon_common::enums::elemental_property_type::normal));
             break;
         }
     case 2:
         {
-            enemies.push_back(std::make_shared<enemy::goblin_warrior>("goblin warrior", 25, 3, 1));
-            enemies.push_back(std::make_shared<enemy::goblin_archer>("goblin archer", 15, 6, 1));
+            enemies.push_back(std::make_shared<enemy::goblin_warrior>("goblin warrior", 25, 3, 1,
+                                                                          dungeon_common::enums::elemental_property_type::earth));
+            enemies.push_back(std::make_shared<enemy::goblin_archer>("goblin archer", 15, 6, 1,
+                                                                         dungeon_common::enums::elemental_property_type::earth));
             break;
         }
     default:

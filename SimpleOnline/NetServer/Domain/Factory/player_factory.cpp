@@ -82,6 +82,7 @@ std::shared_ptr<dungeon_server::domain::player> dungeon_server::domain::factory:
     const auto ad = get_player_attack_damage(player_class);
     const auto ap = get_player_ability_power(player_class);
     
-    player player(player_id, player_name, player_class, hp,ad,ap, get_player_actions(player_class));
+    player player(player_id, player_name, player_class, hp,ad,ap, get_player_actions(player_class),
+                    dungeon_common::enums::elemental_property_type::normal);
     return std::make_shared<class player>(player);
 }

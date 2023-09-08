@@ -3,6 +3,8 @@
 #include <memory>
 #include <string>
 
+#include "elemental_property_type.h"
+#include "../Utility/weakness_util.h"
 #include "Status/creature_status_manager.h"
 
 namespace dungeon_server::domain
@@ -22,30 +24,36 @@ namespace dungeon_server::domain
         uint16_t max_health;
         uint16_t attack_damage;
         uint16_t ability_power;
+        dungeon_common::enums::elemental_property_type elemental_property;
         bool alive;
 
         virtual ~base_creature();
 
-        base_creature(std::string name, const uint16_t health, const uint16_t damage, const uint16_t ability_power)
-            : name(std::move(name)), health(health), max_health(health), attack_damage(damage), ability_power(ability_power), alive(true)
+        base_creature(std::string name, const uint16_t health, const uint16_t damage, const uint16_t ability_power,
+                      const dungeon_common::enums::elemental_property_type elemental_property)
+                      : name(std::move(name)), health(health), max_health(health), attack_damage(damage), ability_power(ability_power),
+                      elemental_property(elemental_property), alive(true)
         {
             status_manager_ = std::make_shared<creature_status_manager>();
         }
 
-        void take_damage(const int dmg, std::string& log)
+        void take_damage(const int dmg, std::string& log,
+                         const dungeon_common::enums::elemental_property_type attack_property = dungeon_common::enums::elemental_property_type::normal)
         {
             std::string additional_log;
+            const auto dmg_multiplier = utility::weakness_util::get_attack_multiplier(attack_property, elemental_property);
+            const auto final_dmg = dmg * dmg_multiplier;
 
-            if (health - dmg <= 0)
+            health -= final_dmg;
+            
+            if (health <= 0)
             {
                 health = 0;
                 alive = false;
                 additional_log += "\n" + name + " died!";
             }
-            else
-                health -= dmg;
 
-            log += "\n" + name + " lost " + std::to_string(dmg) + " hp" + additional_log;
+            log += "\n" + name + " lost " + std::to_string(final_dmg) + " hp" + additional_log;
         }
 
         int heal(const int value)

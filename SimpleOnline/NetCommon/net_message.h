@@ -5,7 +5,7 @@ namespace dungeon_common
 {
     enum class custom_msg_types : uint32_t
     {
-        unknown,
+        unknown = 0,
         server_connection_response,
         message_all,
         server_message,

@@ -50,6 +50,7 @@
     <ClCompile Include="game_room\game_room.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Utility\randomizer.cpp" />
+    <ClCompile Include="Utility\weakness_util.cpp" />
     <ClInclude Include="Domain\Actions\arrow_shot_action.h" />
     <ClInclude Include="Domain\Actions\arrow_shower_action.h" />
     <ClInclude Include="Domain\Actions\base_action.h" />
@@ -166,6 +167,7 @@
       <AdditionalIncludeDirectories>C:\Users\cauec\source\repos\SimpleOnline\;</AdditionalIncludeDirectories>
     </ClInclude>
     <ClInclude Include="Utility\randomizer.h" />
+    <ClInclude Include="Utility\weakness_util.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetCommon\NetCommon.vcxproj">

@@ -22,6 +22,7 @@
     <ClInclude Include="Enum\action_target_types.h" />
     <ClInclude Include="Enum\creature_status_types.h" />
     <ClInclude Include="Enum\player_class_types.h" />
+    <ClInclude Include="Enum\elemental_property_type.h" />
     <ClInclude Include="error_code_type.h" />
     <ClInclude Include="Models\create_player_model.h" />
     <ClInclude Include="Models\player_action_model.h" />
