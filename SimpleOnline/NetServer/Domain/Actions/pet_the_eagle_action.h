@@ -11,6 +11,6 @@ namespace dungeon_server::domain::action
         ~pet_the_eagle_action() override;
         std::string get_name() override;
         std::uint8_t get_targets_count() override;
-        std::string use(const std::shared_ptr<encounter>& encounter_ptr) override;
+        void use(const std::shared_ptr<encounter>& encounter_ptr, std::string& action_log) override;
     };
 }

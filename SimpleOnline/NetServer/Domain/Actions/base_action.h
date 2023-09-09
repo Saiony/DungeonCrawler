@@ -25,9 +25,8 @@ namespace dungeon_server::domain::action
             return -1;
         }
 
-        virtual std::string use(const std::shared_ptr<encounter>& encounter_ptr)
+        virtual void use(const std::shared_ptr<encounter>& encounter_ptr, std::string& action_log)
         {
-            return "default log";
         }
 
         float_t randomize_damage(float_t damage, float_t damage_variance) const;

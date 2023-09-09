@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include <string>
+
+#include "Enum/elemental_property_type.h"
 #include "NetServer/Domain/base_creature.h"
 #include "NetServer/Domain/player.h"
 

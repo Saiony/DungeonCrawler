@@ -3,9 +3,9 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include "creature_status_types.h"
 #include "creature_status_manager.h"
 #include "base_creature_status.h"
+#include "Enum/creature_status_types.h"
 
 namespace dungeon_server::domain
 {

@@ -3,8 +3,8 @@
 #include <memory>
 #include <string>
 
-#include "elemental_property_type.h"
 #include "../Utility/weakness_util.h"
+#include "Enum/elemental_property_type.h"
 #include "Status/creature_status_manager.h"
 
 namespace dungeon_server::domain
@@ -44,15 +44,14 @@ namespace dungeon_server::domain
             const auto dmg_multiplier = utility::weakness_util::get_attack_multiplier(attack_property, elemental_property);
             const auto final_dmg = dmg * dmg_multiplier;
 
-            health -= final_dmg;
-            
-            if (health <= 0)
+            if (health - final_dmg <= 0)
             {
                 health = 0;
                 alive = false;
                 additional_log += "\n" + name + " died!";
             }
-
+            
+            health -= final_dmg;
             log += "\n" + name + " lost " + std::to_string(final_dmg) + " hp" + additional_log;
         }
 

@@ -15,6 +15,6 @@ namespace dungeon_server::domain::action
         explicit shield_bash(const dungeon_common::model::action_types& action_type, std::string new_action_owner_id, std::string target_id = {});
         std::string get_name() override;
         std::uint8_t get_targets_count() override;
-        std::string use(const std::shared_ptr<encounter>& encounter_ptr) override;
+        void use(const std::shared_ptr<encounter>& encounter_ptr, std::string& action_log) override;
     };
 }

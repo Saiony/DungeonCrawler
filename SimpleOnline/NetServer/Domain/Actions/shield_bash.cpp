@@ -20,23 +20,22 @@ std::uint8_t dungeon_server::domain::action::shield_bash::get_targets_count()
     return 1;
 }
 
-std::string dungeon_server::domain::action::shield_bash::use(const std::shared_ptr<encounter>& encounter_ptr)
+void dungeon_server::domain::action::shield_bash::use(const std::shared_ptr<encounter>& encounter_ptr, std::string& action_log)
 {
     const auto action_owner = encounter_ptr->get_creature(action_owner_id);
     const auto target = encounter_ptr->get_creature(target_id);
     const auto base_dmg = static_cast<uint16_t>(static_cast<float_t>(action_owner->attack_damage) * dmg_multiplier_);
     const auto final_dmg = static_cast<uint16_t>(randomize_damage(base_dmg, variance_));
     
-    std::string log = action_owner->name + " used " + get_name() +" on " +target->name;
-    target->take_damage(final_dmg, log);
+    action_log += action_owner->name + " used " + get_name() +" on " +target->name;
+    target->take_damage(final_dmg, action_log);
 
     const auto stun_chance = static_cast<uint16_t>(randomize_damage(50, 0.5f));
     if(stun_chance > 50)
     {
         target->add_status(std::make_shared<stunned_status>(target->public_id));
-        log += "\n" + target->name + " is stunned";
+        action_log += "\n" + target->name + " is stunned";
     }
     
-    action_owner->on_attack(encounter_ptr, target_id, log);    
-    return log;
+    action_owner->on_attack(encounter_ptr, target_id, action_log);    
 }

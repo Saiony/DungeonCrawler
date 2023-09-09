@@ -26,8 +26,10 @@ namespace dungeon_server::game_room
         void handle_input(const std::function<void(std::shared_ptr<domain::message::emitter_message>)>& send_message_function,
                           const std::shared_ptr<domain::action::base_action>& action) override
         {
-            std::string action_log = action->use(encounter_manager_->current_encounter);
-            std::cout << action_log << "\n-\n"; 
+            std::string action_log;
+            action->use(encounter_manager_->current_encounter, action_log);
+            std::cout << action_log << "\n-\n";
+            
             encounter_manager_->go_to_next_turn();
             encounter_manager_->current_encounter->active_creature->on_begin_of_turn(encounter_manager_->current_encounter, action_log);  
             

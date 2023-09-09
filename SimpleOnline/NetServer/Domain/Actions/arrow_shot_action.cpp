@@ -20,16 +20,14 @@ std::uint8_t dungeon_server::domain::action::arrow_shot_action::get_targets_coun
     return 1;
 }
 
-std::string dungeon_server::domain::action::arrow_shot_action::use(const std::shared_ptr<encounter>& encounter_ptr)
+void dungeon_server::domain::action::arrow_shot_action::use(const std::shared_ptr<encounter>& encounter_ptr, std::string& action_log)
 {
     const auto action_owner = encounter_ptr->get_creature(action_owner_id);
     const auto target = encounter_ptr->get_creature(target_id_);
     const auto damage = static_cast<uint16_t>(randomize_damage(action_owner->attack_damage, variance_));
     
-    std::string log = action_owner->name + " used " + get_name() +" on " +target->name;
-    target->take_damage(damage, log);
-    action_owner->on_attack(encounter_ptr, target_id_, log);
-    
-    return log;
+    action_log += action_owner->name + " used " + get_name() +" on " +target->name;
+    target->take_damage(damage, action_log);
+    action_owner->on_attack(encounter_ptr, target_id_, action_log);
 }
 

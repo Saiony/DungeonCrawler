@@ -28,5 +28,5 @@ void dungeon_server::domain::enemy::goblin_archer::on_execute_turn(const std::sh
                                                     public_id, target->public_id);
     }
     
-    action_log += action->use(encounter_ptr);
+    action->use(encounter_ptr, action_log);
 }

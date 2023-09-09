@@ -16,7 +16,7 @@ void dungeon_server::domain::enemy::goblin_warrior::on_execute_turn(const std::s
     const auto percentage = utility::randomizer::randomize(0, 100);
     std::shared_ptr<action::base_action> action;
     
-    if(percentage <= 30)
+    if(percentage <= 80)
     {
         action = std::make_shared<action::distracting_slash_action>(dungeon_common::model::action_types::distracting_slash,
                                                     public_id, target->public_id);
@@ -27,6 +27,6 @@ void dungeon_server::domain::enemy::goblin_warrior::on_execute_turn(const std::s
                                                     public_id, target->public_id);
     }
     
-    action_log += action->use(encounter_ptr);
+    action->use(encounter_ptr, action_log);
 }
 

@@ -1,5 +1,4 @@
 ﻿#include "Wolf.h"
-
 #include "NetServer/Domain/Actions/bite_action.h"
 
 dungeon_server::domain::enemy::wolf::wolf(const std::string& name, uint16_t health, uint16_t attack_damage, uint16_t ability_power,
@@ -11,6 +10,6 @@ void dungeon_server::domain::enemy::wolf::on_execute_turn(const std::shared_ptr<
 {    
     const auto target = get_random_player(encounter_ptr);
     action::bite_action action(dungeon_common::model::action_types::bite, public_id, target->public_id);
-    action_log += action.use(encounter_ptr);
+    action.use(encounter_ptr, action_log);
 }
 

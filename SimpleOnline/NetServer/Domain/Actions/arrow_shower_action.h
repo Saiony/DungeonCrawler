@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include "action_target_types.h"
 #include "base_action.h"
+#include "Enum/action_target_types.h"
 
 namespace dungeon_server::domain::action
 {
@@ -16,8 +16,10 @@ namespace dungeon_server::domain::action
         ~arrow_shower_action() override;
         std::string get_name() override;
         std::uint8_t get_targets_count() override;
-        std::string use(const std::shared_ptr<encounter>& encounter_ptr) override;
-        std::string shoot_arrow(const std::shared_ptr<encounter>& encounter, const std::shared_ptr<base_creature>& action_owner,
-                                const std::shared_ptr<base_creature>& target);
+        void use(const std::shared_ptr<encounter>& encounter_ptr, std::string& action_log) override;
+        void shoot_arrow(const std::shared_ptr<encounter>& encounter,
+                                const std::shared_ptr<base_creature>& action_owner,
+                                const std::shared_ptr<base_creature>& target,
+                                std::string& action_log);
     };
 }

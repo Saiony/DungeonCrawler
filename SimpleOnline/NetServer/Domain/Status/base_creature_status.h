@@ -2,7 +2,7 @@
 #include <cstdint>
 #include <iostream>
 
-#include "creature_status_types.h"
+#include "Enum/creature_status_types.h"
 
 namespace dungeon_server::domain
 {
