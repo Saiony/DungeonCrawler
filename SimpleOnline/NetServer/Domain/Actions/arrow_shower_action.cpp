@@ -23,6 +23,21 @@ std::uint8_t dungeon_server::domain::action::arrow_shower_action::get_targets_co
     return 0;
 }
 
+dungeon_server::enums::offensive_stats_type dungeon_server::domain::action::arrow_shower_action::get_offensive_stat_type()
+{
+    return enums::offensive_stats_type::attack_damage;
+}
+
+float_t dungeon_server::domain::action::arrow_shower_action::get_damage_variance()
+{
+    return 0.3f;
+}
+
+float_t dungeon_server::domain::action::arrow_shower_action::get_offensive_stat_multiplier()
+{
+    return 0.8f;
+}
+
 void dungeon_server::domain::action::arrow_shower_action::use(const std::shared_ptr<encounter>& encounter_ptr, std::string& action_log)
 {
     const auto action_owner = encounter_ptr->get_creature(action_owner_id);
@@ -51,7 +66,7 @@ void dungeon_server::domain::action::arrow_shower_action::shoot_arrow(const std:
                                                                              std::string& action_log)
 {
     action_log += action_owner->name + " used " + get_name() + " on " + target->name;
-    const auto damage = static_cast<uint16_t>(randomize_damage(action_owner->attack_damage, variance_));
+    const auto damage = calculate_final_attack(encounter);
 
     target->take_damage(damage, action_log);
     action_owner->on_attack(encounter, action_owner->public_id, action_log);

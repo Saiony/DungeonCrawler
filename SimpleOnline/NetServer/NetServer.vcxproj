@@ -46,6 +46,7 @@
     <ClCompile Include="Domain\Lobby\player_lobby_domain.cpp" />
     <ClCompile Include="Domain\player.cpp" />
     <ClCompile Include="Domain\Status\base_creature_status.cpp" />
+    <ClCompile Include="Domain\Status\concentrating_status.cpp" />
     <ClCompile Include="Domain\Status\creature_status_manager.cpp" />
     <ClCompile Include="Domain\Status\eagle_petted_status.cpp" />
     <ClCompile Include="Domain\Status\provoking_status.cpp" />
@@ -87,11 +88,13 @@
     <ClInclude Include="Domain\player.h" />
     <ClInclude Include="Domain\player_classes.h" />
     <ClInclude Include="Domain\Status\base_creature_status.h" />
+    <ClInclude Include="Domain\Status\concentrating_status.h" />
     <ClInclude Include="Domain\Status\creature_status_manager.h" />
     <ClInclude Include="Domain\Status\eagle_petted_status.h" />
     <ClInclude Include="Domain\Status\provoking_status.h" />
     <ClInclude Include="Domain\Status\stunned_status.h" />
     <ClInclude Include="encounter_manager.h" />
+    <ClInclude Include="Enum\offensive_stats_type.h" />
     <ClInclude Include="game_room\combat\base_combat_state.h" />
     <ClInclude Include="game_room\combat\combat_state_player_turn.h" />
     <ClInclude Include="game_room\game_room.h" />

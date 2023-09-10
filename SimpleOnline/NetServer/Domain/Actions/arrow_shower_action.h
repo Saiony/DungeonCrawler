@@ -7,8 +7,8 @@ namespace dungeon_server::domain::action
     class arrow_shower_action final : public base_action
     {
     private:
-        const float_t variance_ = 0.5f;
         dungeon_common::enums::action_target_types target_type_;
+        
     public:
         arrow_shower_action(const dungeon_common::model::action_types& action_type,
                             const std::string& new_action_owner_id,
@@ -16,6 +16,10 @@ namespace dungeon_server::domain::action
         ~arrow_shower_action() override;
         std::string get_name() override;
         std::uint8_t get_targets_count() override;
+        enums::offensive_stats_type get_offensive_stat_type() override;
+        float_t get_damage_variance() override;
+        float_t get_offensive_stat_multiplier() override;
+        
         void use(const std::shared_ptr<encounter>& encounter_ptr, std::string& action_log) override;
         void shoot_arrow(const std::shared_ptr<encounter>& encounter,
                                 const std::shared_ptr<base_creature>& action_owner,

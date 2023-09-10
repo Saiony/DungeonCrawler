@@ -8,5 +8,6 @@ namespace dungeon_common::enums
         stun,
         eagle_petted,
         provoking,
+        concentrating,
     };
 }

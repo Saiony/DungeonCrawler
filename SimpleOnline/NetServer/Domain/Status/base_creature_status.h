@@ -23,7 +23,12 @@ namespace dungeon_server::domain
         {
         }
 
-        virtual void on_attack(const std::shared_ptr<encounter>& encounter, const std::string& attacked_creature_id, std::string& action_log)
+        virtual int16_t get_attack_multiplier()
+        {
+            return -1;
+        }
+
+        virtual void on_after_attack(const std::shared_ptr<encounter>& encounter, const std::string& attacked_creature_id, std::string& action_log)
         {
         }
         

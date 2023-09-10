@@ -12,5 +12,6 @@ namespace dungeon_common::enums
         electric,
         holy,
         death,
+        arcane,
     };
 }

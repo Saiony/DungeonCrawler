@@ -17,6 +17,21 @@ std::string dungeon_server::domain::action::fire_at_will_action::get_name()
     return "fire at will";
 }
 
+dungeon_server::enums::offensive_stats_type dungeon_server::domain::action::fire_at_will_action::get_offensive_stat_type()
+{
+    return enums::offensive_stats_type::attack_damage;
+}
+
+float_t dungeon_server::domain::action::fire_at_will_action::get_damage_variance()
+{
+    return 0.3f;
+}
+
+float_t dungeon_server::domain::action::fire_at_will_action::get_offensive_stat_multiplier()
+{
+    return 0.5;
+}
+
 void dungeon_server::domain::action::fire_at_will_action::use(const std::shared_ptr<encounter>& encounter_ptr, std::string& action_log)
 {
     const uint8_t shot_count = 3;
@@ -29,7 +44,7 @@ void dungeon_server::domain::action::fire_at_will_action::use(const std::shared_
         const int random_index = utility::randomizer::randomize(0, static_cast<int>(std::size(encounter_ptr->enemies) - 1));
         const auto target = encounter_ptr->enemies[random_index];
 
-        const auto damage = static_cast<uint16_t>(randomize_damage(static_cast<float_t>(action_owner->attack_damage) * dmg_multiplier_, variance_));
+        const auto damage = calculate_final_attack(encounter_ptr);
         target->take_damage(damage, action_log);
         action_owner->on_attack(encounter_ptr, target->public_id, action_log);
     }

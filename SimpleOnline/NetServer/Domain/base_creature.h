@@ -93,6 +93,11 @@ namespace dungeon_server::domain
         {
             return !status_manager_->contains(dungeon_common::enums::creature_status_type::stun);
         }
+
+        uint16_t get_attack_multipliers() const
+        {
+            return status_manager_->get_attack_multipliers();
+        }
     };
 
     inline base_creature::~base_creature() = default;

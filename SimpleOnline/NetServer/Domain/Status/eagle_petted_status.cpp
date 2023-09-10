@@ -12,7 +12,7 @@ dungeon_common::enums::creature_status_type dungeon_server::domain::eagle_petted
     return dungeon_common::enums::creature_status_type::eagle_petted;
 }
 
-void dungeon_server::domain::eagle_petted_status::on_attack(const std::shared_ptr<encounter>& encounter, const std::string& attacked_creature_id, std::string& action_log)
+void dungeon_server::domain::eagle_petted_status::on_after_attack(const std::shared_ptr<encounter>& encounter, const std::string& attacked_creature_id, std::string& action_log)
 {
     const auto attacked_creature = encounter->get_creature(attacked_creature_id);
     action_log += "\nEagle attacked " + attacked_creature->name;
