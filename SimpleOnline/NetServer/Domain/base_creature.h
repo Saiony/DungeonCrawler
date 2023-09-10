@@ -69,9 +69,9 @@ namespace dungeon_server::domain
             return hp_increased;
         }
 
-        void add_status(const std::shared_ptr<base_creature_status>& status) const
+        std::shared_ptr<base_creature_status> add_status(const std::shared_ptr<base_creature_status>& status) const
         {
-            status_manager_->add_status(status);
+            return status_manager_->add_status(status);
         }
 
         void on_begin_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log) const

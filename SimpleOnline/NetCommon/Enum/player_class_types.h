@@ -7,5 +7,6 @@ namespace dungeon_common::enums
         warrior = 1,
         cleric = 2,
         archer = 3,
+        mage = 4,
     };
 }

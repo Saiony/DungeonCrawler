@@ -22,6 +22,6 @@ namespace dungeon_common::model
     class player_classes_model
     {
     public:
-        std::array<player_class_model, 3> classes;
+        std::array<player_class_model, 4> classes;
     };
 }

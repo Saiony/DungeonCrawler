@@ -29,6 +29,7 @@ namespace dungeon_server::domain
                 {dungeon_common::enums::player_class_type::warrior, "warrior"},
                 {dungeon_common::enums::player_class_type::cleric, "cleric"},
                 {dungeon_common::enums::player_class_type::archer, "archer"},
+                {dungeon_common::enums::player_class_type::mage, "mage"},
             };
         }
 

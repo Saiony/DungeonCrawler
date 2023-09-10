@@ -28,3 +28,8 @@ void dungeon_server::domain::eagle_petted_status::on_end_of_turn(const std::shar
     if(quantity <= 0)
         action_log += "\nEagle does not feel cared anymore";
 }
+
+void dungeon_server::domain::eagle_petted_status::on_overriding_status_added(std::shared_ptr<base_creature_status> status)
+{
+    quantity += status->quantity;
+}

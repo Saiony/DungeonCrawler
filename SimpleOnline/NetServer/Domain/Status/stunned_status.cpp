@@ -27,3 +27,7 @@ void dungeon_server::domain::stunned_status::on_end_of_turn(const std::shared_pt
 {
     quantity--;
 }
+
+void dungeon_server::domain::stunned_status::on_overriding_status_added(std::shared_ptr<base_creature_status> status)
+{
+}

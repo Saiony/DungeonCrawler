@@ -5,9 +5,12 @@ namespace dungeon_server::domain::action
 {
     class arcane_blast_action final : public base_action
     {
-    public:
-        std::string target_id{};
+    private:
+        std::string target_id_{};
         
+    public:
+        arcane_blast_action(const dungeon_common::model::action_types& action_type, const std::string& new_action_owner_id, std::string target_id);
+
         ~arcane_blast_action() override;
         std::string get_name() override;
         std::uint8_t get_targets_count() override;

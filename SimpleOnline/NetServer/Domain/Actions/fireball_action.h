@@ -6,14 +6,17 @@ namespace dungeon_server::domain::action
     class fireball_action final : public base_action
     {
     private:
-        const float_t variance_ = 0;
-        const float_t dmg_multiplier_ = 1;
+        std::string target_id_{};
     public:
-        std::string target_id{};
-        
+        fireball_action(const dungeon_common::model::action_types& action_type, const std::string& new_action_owner_id, std::string target_id);
+
         ~fireball_action() override;
         std::string get_name() override;
         std::uint8_t get_targets_count() override;
+        enums::offensive_stats_type get_offensive_stat_type() override;
+        float_t get_damage_variance() override;
+        float_t get_offensive_stat_multiplier() override;
+        
         void use(const std::shared_ptr<encounter>& encounter_ptr, std::string& action_log) override;
     };
 }

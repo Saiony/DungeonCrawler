@@ -1,19 +1,23 @@
 ﻿#include "creature_status_manager.h"
 #include <algorithm>
 
-void dungeon_server::domain::creature_status_manager::add_status(const std::shared_ptr<base_creature_status>& status)
+std::shared_ptr<dungeon_server::domain::base_creature_status> dungeon_server::domain::creature_status_manager::add_status(
+    const std::shared_ptr<base_creature_status>& status)
 {
-    statuses_.push_back(status);
+    if(!contains(status->get_type()))
+    {
+        statuses_[status->get_type()] = status;
+        return statuses_[status->get_type()];
+    }
+
+    auto updated_status = statuses_[status->get_type()];
+    updated_status->on_overriding_status_added(status);
+    return updated_status;
 }
 
-bool dungeon_server::domain::creature_status_manager::contains(const dungeon_common::enums::creature_status_type status_type)
+bool dungeon_server::domain::creature_status_manager::contains(const dungeon_common::enums::creature_status_type status_type) const
 {
-    const auto it = std::ranges::find_if(statuses_, [&status_type](auto x)
-    {
-        return x->get_type() == status_type;
-    });
-
-    return it != std::end(statuses_);
+    return statuses_.contains(status_type);
 }
 
 uint16_t dungeon_server::domain::creature_status_manager::get_attack_multipliers()
@@ -21,7 +25,7 @@ uint16_t dungeon_server::domain::creature_status_manager::get_attack_multipliers
     uint16_t multiplier = 1;
     std::ranges::for_each(statuses_, [&multiplier](auto status)
     {
-        auto status_multiplier = status->get_attack_multiplier();
+        auto status_multiplier = status.second->get_attack_multiplier();
         if (status_multiplier == -1)
             return;
         
@@ -35,7 +39,7 @@ void dungeon_server::domain::creature_status_manager::on_begin_of_turn(std::shar
 {
     std::ranges::for_each(statuses_, [&action_log, &encounter](auto status)
     {
-        status->on_begin_of_turn(encounter, action_log);
+        status.second->on_begin_of_turn(encounter, action_log);
     });
 }
 
@@ -45,7 +49,7 @@ void dungeon_server::domain::creature_status_manager::on_attack(std::shared_ptr<
 {
     std::ranges::for_each(statuses_, [&action_log, &encounter, &attacked_creature_id](auto status)
     {
-        status->on_after_attack(encounter, attacked_creature_id, action_log);
+        status.second->on_after_attack(encounter, attacked_creature_id, action_log);
     });
 }
 
@@ -53,11 +57,11 @@ void dungeon_server::domain::creature_status_manager::on_end_of_turn(std::shared
 {
     std::ranges::for_each(statuses_, [&action_log, &encounter](auto status)
     {
-        status->on_end_of_turn(encounter, action_log);
+        status.second->on_end_of_turn(encounter, action_log);
     });
 
     std::erase_if(statuses_, [](auto status)
     {
-        return status->quantity <= 0;
+        return status.second->quantity <= 0;
     });
 }

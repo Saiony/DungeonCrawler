@@ -7,6 +7,8 @@ std::vector<dungeon_common::model::action_types> get_player_actions(const dungeo
 
     switch (player_class.id)
     {
+    case dungeon_common::enums::player_class_type::unknown:
+        break;
     case dungeon_common::enums::player_class_type::warrior:
         actions.push_back(dungeon_common::model::action_types::sword_slash);
         actions.push_back(dungeon_common::model::action_types::provoke);
@@ -20,7 +22,11 @@ std::vector<dungeon_common::model::action_types> get_player_actions(const dungeo
         actions.push_back(dungeon_common::model::action_types::pet_the_eagle);
         actions.push_back(dungeon_common::model::action_types::fire_at_will);
         break;
-    case dungeon_common::enums::player_class_type::unknown:
+    case dungeon_common::enums::player_class_type::mage:
+        actions.push_back(dungeon_common::model::action_types::concentrate);
+        actions.push_back(dungeon_common::model::action_types::arcane_blast);
+        actions.push_back(dungeon_common::model::action_types::fireball);
+        actions.push_back(dungeon_common::model::action_types::frostbite);
         break;
     }
 
@@ -37,6 +43,8 @@ uint16_t get_player_hp(const dungeon_server::domain::player_class& player_class)
         return 10;
     case dungeon_common::enums::player_class_type::archer:
         return 12;
+    case dungeon_common::enums::player_class_type::mage:
+        return 10;
     default:
         return -1;
     }
@@ -51,7 +59,9 @@ uint16_t get_player_attack_damage(const dungeon_server::domain::player_class& pl
     case dungeon_common::enums::player_class_type::cleric:
         return 1;
     case dungeon_common::enums::player_class_type::archer:
-        return 2;   
+        return 2;
+    case dungeon_common::enums::player_class_type::mage:
+        return 1;
     default:
         return -1;
     }
@@ -67,6 +77,8 @@ uint16_t get_player_ability_power(const dungeon_server::domain::player_class& pl
         return 3;
     case dungeon_common::enums::player_class_type::archer:
         return 2;
+    case dungeon_common::enums::player_class_type::mage:
+        return 5;
     default:
         return -1;
     }
@@ -81,8 +93,8 @@ std::shared_ptr<dungeon_server::domain::player> dungeon_server::domain::factory:
     const auto hp = get_player_hp(player_class);
     const auto ad = get_player_attack_damage(player_class);
     const auto ap = get_player_ability_power(player_class);
-    
-    player player(player_id, player_name, player_class, hp,ad,ap, get_player_actions(player_class),
-                    dungeon_common::enums::elemental_property_type::normal);
+
+    player player(player_id, player_name, player_class, hp, ad, ap, get_player_actions(player_class),
+                  dungeon_common::enums::elemental_property_type::normal);
     return std::make_shared<class player>(player);
 }

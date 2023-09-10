@@ -1,6 +1,10 @@
 ﻿#include "action_factory.h"
 
+#include "NetServer/Domain/Actions/arcane_blast_action.h"
+#include "NetServer/Domain/Actions/concentrate_action.h"
+#include "NetServer/Domain/Actions/fireball_action.h"
 #include "NetServer/Domain/Actions/fire_at_will_action.h"
+#include "NetServer/Domain/Actions/frostbite_action.h"
 #include "NetServer/Domain/Actions/heal_action.h"
 #include "NetServer/Domain/Actions/holy_light.h"
 #include "NetServer/Domain/Actions/pet_the_eagle_action.h"
@@ -50,9 +54,25 @@ std::shared_ptr<dungeon_server::domain::action::base_action> dungeon_server::dom
         {
             return std::make_shared<action::provoke_action>(action_type, owner_id);
         }
+    case dungeon_common::model::action_types::concentrate:
+        {
+            return std::make_shared<action::concentrate_action>(action_type, owner_id);
+        }
+    case dungeon_common::model::action_types::fireball:
+        {
+            return std::make_shared<action::fireball_action>(action_type, owner_id, target_id);
+        }
+    case dungeon_common::model::action_types::frostbite:
+        {
+            return std::make_shared<action::frostbite_action>(action_type, owner_id, target_id);
+        }
+    case dungeon_common::model::action_types::arcane_blast:
+        {
+            return std::make_shared<action::arcane_blast_action>(action_type, owner_id, target_id);
+        }
     default:
         {
-            return std::make_shared<action::sword_slash_action>(action_type, owner_id, target_id);
+            return nullptr;
         }
     }
 }

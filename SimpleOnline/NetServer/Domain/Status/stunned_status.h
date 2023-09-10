@@ -11,5 +11,6 @@ namespace dungeon_server::domain
         
         void on_begin_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log) override;
         void on_end_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log) override;
+        void on_overriding_status_added(std::shared_ptr<base_creature_status> status) override;
     };
 }

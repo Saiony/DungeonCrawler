@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -15,10 +16,10 @@ namespace dungeon_server::domain
     class creature_status_manager
     {
     private:
-        std::vector<std::shared_ptr<base_creature_status>> statuses_{};
+        std::map<dungeon_common::enums::creature_status_type, std::shared_ptr<base_creature_status>> statuses_{};
     public:
-        void add_status(const std::shared_ptr<base_creature_status>& status);
-        bool contains(dungeon_common::enums::creature_status_type status_type);
+        std::shared_ptr<base_creature_status> add_status(const std::shared_ptr<base_creature_status>& status);
+        bool contains(dungeon_common::enums::creature_status_type status_type) const;
         uint16_t get_attack_multipliers();
         void on_begin_of_turn(std::shared_ptr<encounter> encounter, std::string& action_log);
         void on_attack(std::shared_ptr<encounter> encounter, const std::string& attacked_creature_id, std::string& action_log);

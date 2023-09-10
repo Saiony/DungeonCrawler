@@ -17,6 +17,10 @@ namespace dungeon_common::model
         arrow_shower,
         arrow_shot,
         distracting_slash,
+        concentrate,
+        fireball,
+        frostbite,
+        arcane_blast,
     };
 
     struct action_use_model
