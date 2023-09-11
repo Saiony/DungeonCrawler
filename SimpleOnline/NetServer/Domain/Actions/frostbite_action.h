@@ -7,6 +7,7 @@ namespace dungeon_server::domain::action
     {
     private:
         std::string target_id_{};
+        const std::uint16_t freeze_chance_ = 100.0f; 
         
     public:
         frostbite_action(const dungeon_common::model::action_types& action_type, const std::string& new_action_owner_id, std::string target_id);

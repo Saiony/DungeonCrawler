@@ -42,7 +42,7 @@ void dungeon_server::domain::action::arrow_shot_action::use(const std::shared_pt
     action_log += action_owner->name + " used " + get_name() +" on " +target->name;
     
     const auto damage = calculate_final_attack(encounter_ptr);
-    target->take_damage(damage, action_log);
+    target->take_damage(damage, action_log, encounter_ptr);
     action_owner->on_attack(encounter_ptr, target_id_, action_log);
 }
 

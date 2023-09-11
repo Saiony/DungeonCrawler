@@ -3,6 +3,7 @@
 #include <utility>
 
 #include "NetServer/Domain/Status/stunned_status.h"
+#include "NetServer/Utility/randomizer.h"
 
 dungeon_server::domain::action::shield_bash::~shield_bash() = default;
 
@@ -44,9 +45,9 @@ void dungeon_server::domain::action::shield_bash::use(const std::shared_ptr<enco
     action_log += action_owner->name + " used " + get_name() +" on " +target->name;
 
     const auto damage = calculate_final_attack(encounter_ptr);
-    target->take_damage(damage, action_log);
+    target->take_damage(damage, action_log, encounter_ptr);
 
-    const auto stun_chance = static_cast<uint16_t>(randomize_damage(50, 0.5f));
+    const auto stun_chance = static_cast<uint16_t>(utility::randomizer::randomize(0, 100));
     if(stun_chance > 50)
     {
         target->add_status(std::make_shared<stunned_status>(target->public_id));

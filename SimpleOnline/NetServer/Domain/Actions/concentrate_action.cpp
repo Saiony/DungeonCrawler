@@ -1,4 +1,5 @@
-﻿#include "concentrate_action.h"
+﻿#include <memory>
+#include "concentrate_action.h"
 
 #include "NetServer/Domain/Status/concentrating_status.h"
 
@@ -15,7 +16,7 @@ std::string dungeon_server::domain::action::concentrate_action::get_name()
     return "concentrate";
 }
 
-std::uint8_t dungeon_server::domain::action::concentrate_action::get_targets_count()
+uint8_t dungeon_server::domain::action::concentrate_action::get_targets_count()
 {
     return 0;
 }

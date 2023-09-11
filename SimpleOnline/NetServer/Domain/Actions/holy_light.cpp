@@ -33,7 +33,7 @@ void dungeon_server::domain::action::holy_light::use(const std::shared_ptr<encou
 
     const auto damage = calculate_final_attack(encounter_ptr);
     
-    target->take_damage(damage, action_log, dungeon_common::enums::elemental_property_type::holy);
+    target->take_damage(damage, action_log, encounter_ptr, dungeon_common::enums::elemental_property_type::holy);
     action_owner->on_attack(encounter_ptr, target_id, action_log);
 }
 

@@ -31,7 +31,6 @@ namespace dungeon_server::game_room
             std::cout << action_log << "\n-\n";
             
             encounter_manager_->go_to_next_turn();
-            encounter_manager_->current_encounter->active_creature->on_begin_of_turn(encounter_manager_->current_encounter, action_log);  
             
             const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, action_log);
             send_message_function(msg);

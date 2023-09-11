@@ -9,5 +9,7 @@ namespace dungeon_common::enums
         eagle_petted,
         provoking,
         concentrating,
+        frozen,
+        burning,
     };
 }

@@ -4,9 +4,17 @@
 std::shared_ptr<dungeon_server::domain::base_creature_status> dungeon_server::domain::creature_status_manager::add_status(
     const std::shared_ptr<base_creature_status>& status)
 {
-    if(!contains(status->get_type()))
+    if (!contains(status->get_type()))
     {
         statuses_[status->get_type()] = status;
+        statuses_[status->get_type()]->add_on_end_listener([&](const std::shared_ptr<base_creature_status>& ended_status)
+        {
+            if(!statuses_.contains(ended_status->get_type()))
+                return;
+
+            statuses_.erase(ended_status->get_type());
+        });
+        
         return statuses_[status->get_type()];
     }
 
@@ -28,7 +36,7 @@ uint16_t dungeon_server::domain::creature_status_manager::get_attack_multipliers
         auto status_multiplier = status.second->get_attack_multiplier();
         if (status_multiplier == -1)
             return;
-        
+
         multiplier *= status_multiplier;
     });
 
@@ -50,6 +58,16 @@ void dungeon_server::domain::creature_status_manager::on_attack(std::shared_ptr<
     std::ranges::for_each(statuses_, [&action_log, &encounter, &attacked_creature_id](auto status)
     {
         status.second->on_after_attack(encounter, attacked_creature_id, action_log);
+    });
+}
+
+void dungeon_server::domain::creature_status_manager::on_attacked(const std::shared_ptr<encounter>& encounter,
+                                                                  std::string& action_log, uint16_t damage,
+                                                                  dungeon_common::enums::elemental_property_type elemental_property)
+{
+    std::ranges::for_each(statuses_, [&action_log, &elemental_property, &damage, &encounter](auto status)
+    {
+        status.second->on_attacked(encounter, action_log, damage, elemental_property);
     });
 }
 

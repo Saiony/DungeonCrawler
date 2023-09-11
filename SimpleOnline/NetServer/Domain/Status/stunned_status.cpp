@@ -1,11 +1,8 @@
 ﻿#include "stunned_status.h"
-
-#include <iostream>
-
 #include "NetServer/Domain/Encounter.h"
 
 dungeon_server::domain::stunned_status::stunned_status(const std::string& creature_id)
-                                                       : base_creature_status(creature_id, 1)
+    : base_creature_status(creature_id, 1)
 {
 }
 

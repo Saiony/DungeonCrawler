@@ -45,7 +45,7 @@ void dungeon_server::domain::action::fire_at_will_action::use(const std::shared_
         const auto target = encounter_ptr->enemies[random_index];
 
         const auto damage = calculate_final_attack(encounter_ptr);
-        target->take_damage(damage, action_log);
+        target->take_damage(damage, action_log, encounter_ptr);
         action_owner->on_attack(encounter_ptr, target->public_id, action_log);
     }
 }

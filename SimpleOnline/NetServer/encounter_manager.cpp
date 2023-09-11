@@ -20,7 +20,7 @@ std::shared_ptr<dungeon_server::domain::encounter> dungeon_server::domain::encou
     {
     case 1:
         {
-            enemies.push_back(std::make_shared<enemy::wolf>("wolf", 10, 5, 1,
+            enemies.push_back(std::make_shared<enemy::wolf>("wolf", 100, 5, 1,
                                                                 dungeon_common::enums::elemental_property_type::normal));
             break;
         }
