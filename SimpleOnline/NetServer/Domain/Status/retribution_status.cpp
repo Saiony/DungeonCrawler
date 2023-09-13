@@ -49,7 +49,7 @@ void dungeon_server::domain::retribution_status::on_attacked(const std::shared_p
         return creature->public_id == attacker_id;
     });
 
-    const auto retribution_dmg = static_cast<uint16_t>(static_cast<float_t>(this_creature->attack_damage) * multiplier_);
+    const auto retribution_dmg = static_cast<uint16_t>(static_cast<float_t>(this_creature->get_attack_damage()) * multiplier_);
     action_log += "\n" + this_creature->name + " counter attacks";
     attacker->take_damage(retribution_dmg, action_log, encounter, creature_id_, dungeon_common::enums::elemental_property_type::normal);
 }

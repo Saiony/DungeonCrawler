@@ -32,9 +32,9 @@ uint16_t action::base_action::calculate_final_attack(const std::shared_ptr<encou
     float_t damage = 0;
 
     if (get_offensive_stat_type() == enums::offensive_stats_type::attack_damage)
-        damage = static_cast<float_t>(action_owner->attack_damage);
+        damage = static_cast<float_t>(action_owner->get_attack_damage());
     else if (get_offensive_stat_type() == enums::offensive_stats_type::ability_power)
-        damage = static_cast<float_t>(action_owner->ability_power);
+        damage = static_cast<float_t>(action_owner->get_ability_power());
 
     damage *= get_offensive_stat_multiplier();
     damage = randomize_damage(damage, get_damage_variance());

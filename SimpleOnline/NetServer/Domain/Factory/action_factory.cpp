@@ -1,6 +1,7 @@
 ﻿#include "action_factory.h"
 
 #include "NetServer/Domain/Actions/arcane_blast_action.h"
+#include "NetServer/Domain/Actions/celestial_weakening_action.h"
 #include "NetServer/Domain/Actions/concentrate_action.h"
 #include "NetServer/Domain/Actions/fireball_action.h"
 #include "NetServer/Domain/Actions/fire_at_will_action.h"
@@ -74,6 +75,10 @@ std::shared_ptr<dungeon_server::domain::action::base_action> dungeon_server::dom
     case dungeon_common::model::action_types::retribution:
         {
             return std::make_shared<action::retribution_action>(action_type, owner_id);
+        }
+    case dungeon_common::model::action_types::celestial_weakening:
+        {
+            return std::make_shared<action::celestial_weakening_action>(action_type, owner_id, target_id);
         }
     default:
         {

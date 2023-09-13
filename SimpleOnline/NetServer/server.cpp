@@ -165,7 +165,7 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
             dungeon_common::model::player_class_model player_class_model(player->player_class.id, player->player_class.name);
 
             const dungeon_common::model::player_config_model player_model(player->public_id, player->name, player_class_model, player->health, player->max_health,
-                                                                          player->attack_damage, player->ability_power, player_actions);
+                                                                          player->get_attack_damage(), player->get_ability_power(), player_actions);
             dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::create_player);
             answer << player_model;
             message_client(client->get_id(), answer);

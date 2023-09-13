@@ -18,6 +18,7 @@ std::vector<dungeon_common::model::action_types> get_player_actions(const dungeo
     case dungeon_common::enums::player_class_type::cleric:
         actions.push_back(dungeon_common::model::action_types::heal);
         actions.push_back(dungeon_common::model::action_types::holy_light);
+        actions.push_back(dungeon_common::model::action_types::celestial_weakening);
         break;
     case dungeon_common::enums::player_class_type::archer:
         actions.push_back(dungeon_common::model::action_types::pet_the_eagle);

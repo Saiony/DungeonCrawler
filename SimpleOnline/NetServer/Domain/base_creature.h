@@ -4,6 +4,7 @@
 #include <string>
 
 #include "../Utility/weakness_util.h"
+#include "../Enum/offensive_stats_type.h"
 #include "Enum/elemental_property_type.h"
 #include "Status/creature_status_manager.h"
 
@@ -15,6 +16,11 @@ namespace dungeon_server::domain
     class base_creature
     {
     private:
+        uint16_t base_ad_;
+        int16_t ad_modifier_;
+        
+        uint16_t base_ap_;
+        int16_t ap_modifier_;
         dungeon_common::enums::elemental_property_type original_elemental_property_;
     protected:
         std::shared_ptr<creature_status_manager> status_manager_;
@@ -23,8 +29,6 @@ namespace dungeon_server::domain
         std::string name;
         uint16_t health;
         uint16_t max_health;
-        uint16_t attack_damage;
-        uint16_t ability_power;
         dungeon_common::enums::elemental_property_type elemental_property;
         bool alive;
 
@@ -32,12 +36,32 @@ namespace dungeon_server::domain
 
         base_creature(std::string name, const uint16_t health, const uint16_t damage, const uint16_t ability_power,
                       const dungeon_common::enums::elemental_property_type elemental_property)
-                      : name(std::move(name)), health(health), max_health(health), attack_damage(damage), ability_power(ability_power),
-                      elemental_property(elemental_property), alive(true)
+                      : base_ad_(damage), ad_modifier_(0), base_ap_(ability_power), ap_modifier_(0), name(std::move(name)),
+                        health(health), max_health(health), elemental_property(elemental_property), alive(true)
         {
             status_manager_ = std::make_shared<creature_status_manager>();
             original_elemental_property_ = elemental_property;
         }
+
+        uint16_t get_attack_damage() const
+        {
+            uint16_t final_ad = base_ad_ + ad_modifier_;
+            
+            if(final_ad < 1)
+                final_ad = 1;
+
+            return final_ad;
+        }
+
+        uint16_t get_ability_power() const
+        {
+            uint16_t final_ap = base_ap_ + ap_modifier_;
+            
+            if(final_ap < 1)
+                final_ap = 1;
+
+            return final_ap;
+        }        
 
         void take_damage(const int dmg, std::string& log, const std::shared_ptr<encounter>& encounter,
                          const std::string& attacker_id = nullptr,
@@ -76,6 +100,27 @@ namespace dungeon_server::domain
         std::shared_ptr<base_creature_status> add_status(const std::shared_ptr<base_creature_status>& status) const
         {
             return status_manager_->add_status(status);
+        }
+
+        void modify_offensive_stat(const enums::offensive_stats_type stat_type, const int16_t value)
+        {
+            switch (stat_type)
+            {
+            case enums::offensive_stats_type::attack_damage:
+                {
+                    ad_modifier_ += value;
+                    break;
+                }
+            case enums::offensive_stats_type::ability_power:
+                {
+                    ap_modifier_ += value;
+                    break;
+                }
+            default:
+                {
+                    throw std::exception("Invalid offensive stat type");
+                }
+            }
         }
 
         void on_begin_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log) const

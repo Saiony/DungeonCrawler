@@ -22,7 +22,8 @@ namespace dungeon_common::model
         frostbite,
         arcane_blast,
         retribution,
-        aegis_of_faith,        
+        aegis_of_faith,
+        celestial_weakening,
     };
 
     struct action_use_model
