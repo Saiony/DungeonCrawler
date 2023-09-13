@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include <cstdint>
 #include <functional>
-#include <iostream>
 
 #include "creature_status_manager.h"
 #include "elemental_property_type.h"
@@ -9,13 +8,14 @@
 
 namespace dungeon_server::domain
 {
+    class base_creature;
     class encounter;
 
     class base_creature_status
     {
     protected:
         std::string creature_id_;
-        std::function<void(const std::shared_ptr<base_creature_status>&)> on_end_listener_;
+        std::function<void(const std::shared_ptr<base_creature_status>&)> on_end_action_;
     public:
         virtual ~base_creature_status() = default;
         uint8_t quantity;
@@ -39,6 +39,7 @@ namespace dungeon_server::domain
 
         virtual void on_attacked(const std::shared_ptr<encounter>& encounter,
                                  std::string& action_log,
+                                 const std::string& attacker_id,
                                  uint16_t damage,
                                  dungeon_common::enums::elemental_property_type)
         {            

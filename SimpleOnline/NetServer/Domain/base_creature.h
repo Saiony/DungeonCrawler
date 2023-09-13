@@ -11,7 +11,6 @@ namespace dungeon_server::domain
 {
     class encounter;
     class creature_status_manager;
-    class base_creature_status;
 
     class base_creature
     {
@@ -41,6 +40,7 @@ namespace dungeon_server::domain
         }
 
         void take_damage(const int dmg, std::string& log, const std::shared_ptr<encounter>& encounter,
+                         const std::string& attacker_id = nullptr,
                          const dungeon_common::enums::elemental_property_type attack_property = dungeon_common::enums::elemental_property_type::normal)
         {
             std::string additional_log;
@@ -56,7 +56,7 @@ namespace dungeon_server::domain
             
             health -= final_dmg;
             log += "\n" + name + " lost " + std::to_string(final_dmg) + " hp" + additional_log;
-            on_attacked(encounter, log, dmg, attack_property);
+            on_attacked(encounter, log, attacker_id, dmg, attack_property);
         }
 
         int heal(const int value)
@@ -89,10 +89,10 @@ namespace dungeon_server::domain
         }
 
         void on_attacked(const std::shared_ptr<encounter>& encounter,
-                         std::string& action_log, const uint16_t damage,
+                         std::string& action_log, const std::string& attacker_id, const uint16_t damage,
                          const dungeon_common::enums::elemental_property_type attack_property) const
         {
-            status_manager_->on_attacked(encounter, action_log, damage, attack_property);
+            status_manager_->on_attacked(encounter, action_log, attacker_id, damage, attack_property);
         }
 
         void on_end_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log) const

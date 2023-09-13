@@ -13,6 +13,7 @@ std::vector<dungeon_common::model::action_types> get_player_actions(const dungeo
         actions.push_back(dungeon_common::model::action_types::sword_slash);
         actions.push_back(dungeon_common::model::action_types::provoke);
         actions.push_back(dungeon_common::model::action_types::shield_bash);
+        actions.push_back(dungeon_common::model::action_types::retribution);
         break;
     case dungeon_common::enums::player_class_type::cleric:
         actions.push_back(dungeon_common::model::action_types::heal);

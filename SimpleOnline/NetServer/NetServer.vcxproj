@@ -19,11 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Domain\Actions\aegis_of_faith_action.cpp" />
     <ClCompile Include="Domain\Actions\arcane_blast_action.cpp" />
     <ClCompile Include="Domain\Actions\arrow_shot_action.cpp" />
     <ClCompile Include="Domain\Actions\arrow_shower_action.cpp" />
     <ClCompile Include="Domain\Actions\base_action.cpp" />
     <ClCompile Include="Domain\Actions\bite_action.cpp" />
+    <ClCompile Include="Domain\Actions\celestial_weakening_action.cpp" />
     <ClCompile Include="Domain\Actions\concentrate_action.cpp" />
     <ClCompile Include="Domain\Actions\distracting_slash_action.cpp" />
     <ClCompile Include="Domain\Actions\fireball_action.cpp" />
@@ -33,6 +35,7 @@
     <ClCompile Include="Domain\Actions\holy_light.cpp" />
     <ClCompile Include="Domain\Actions\pet_the_eagle_action.cpp" />
     <ClCompile Include="Domain\Actions\provoke_action.cpp" />
+    <ClCompile Include="Domain\Actions\retribution_action.cpp" />
     <ClCompile Include="Domain\Actions\shield_bash.cpp" />
     <ClCompile Include="Domain\Actions\sword_slash_action.cpp" />
     <ClCompile Include="Domain\Encounter.cpp" />
@@ -45,6 +48,8 @@
     <ClCompile Include="Domain\Lobby\lobby_domain.cpp" />
     <ClCompile Include="Domain\Lobby\player_lobby_domain.cpp" />
     <ClCompile Include="Domain\player.cpp" />
+    <ClCompile Include="Domain\Status\aegis_of_faith_status.cpp" />
+    <ClCompile Include="Domain\Status\attack_lowered_status.cpp" />
     <ClCompile Include="Domain\Status\base_creature_status.cpp" />
     <ClCompile Include="Domain\Status\burning_status.cpp" />
     <ClCompile Include="Domain\Status\concentrating_status.cpp" />
@@ -52,17 +57,20 @@
     <ClCompile Include="Domain\Status\eagle_petted_status.cpp" />
     <ClCompile Include="Domain\Status\frozen_status.cpp" />
     <ClCompile Include="Domain\Status\provoking_status.cpp" />
+    <ClCompile Include="Domain\Status\retribution_status.cpp" />
     <ClCompile Include="Domain\Status\stunned_status.cpp" />
     <ClCompile Include="encounter_manager.cpp" />
     <ClCompile Include="game_room\game_room.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Utility\randomizer.cpp" />
     <ClCompile Include="Utility\weakness_util.cpp" />
+    <ClInclude Include="Domain\Actions\aegis_of_faith_action.h" />
     <ClInclude Include="Domain\Actions\arcane_blast_action.h" />
     <ClInclude Include="Domain\Actions\arrow_shot_action.h" />
     <ClInclude Include="Domain\Actions\arrow_shower_action.h" />
     <ClInclude Include="Domain\Actions\base_action.h" />
     <ClInclude Include="Domain\Actions\bite_action.h" />
+    <ClInclude Include="Domain\Actions\celestial_weakening_action.h" />
     <ClInclude Include="Domain\Actions\concentrate_action.h" />
     <ClInclude Include="Domain\Actions\distracting_slash_action.h" />
     <ClInclude Include="Domain\Actions\fireball_action.h" />
@@ -72,6 +80,7 @@
     <ClInclude Include="Domain\Actions\holy_light.h" />
     <ClInclude Include="Domain\Actions\pet_the_eagle_action.h" />
     <ClInclude Include="Domain\Actions\provoke_action.h" />
+    <ClInclude Include="Domain\Actions\retribution_action.h" />
     <ClInclude Include="Domain\Actions\shield_bash.h" />
     <ClInclude Include="Domain\Actions\sword_slash_action.h" />
     <ClInclude Include="Domain\base_creature.h" />
@@ -89,6 +98,8 @@
     <ClInclude Include="Domain\Message\match_start_response.h" />
     <ClInclude Include="Domain\player.h" />
     <ClInclude Include="Domain\player_classes.h" />
+    <ClInclude Include="Domain\Status\aegis_of_faith_status.h" />
+    <ClInclude Include="Domain\Status\attack_lowered_status.h" />
     <ClInclude Include="Domain\Status\base_creature_status.h" />
     <ClInclude Include="Domain\Status\burning_status.h" />
     <ClInclude Include="Domain\Status\concentrating_status.h" />
@@ -96,6 +107,7 @@
     <ClInclude Include="Domain\Status\eagle_petted_status.h" />
     <ClInclude Include="Domain\Status\frozen_status.h" />
     <ClInclude Include="Domain\Status\provoking_status.h" />
+    <ClInclude Include="Domain\Status\retribution_status.h" />
     <ClInclude Include="Domain\Status\stunned_status.h" />
     <ClInclude Include="encounter_manager.h" />
     <ClInclude Include="Enum\offensive_stats_type.h" />

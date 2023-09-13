@@ -3,7 +3,6 @@
 #include <map>
 #include <memory>
 #include <string>
-#include <vector>
 #include "creature_status_manager.h"
 #include "base_creature_status.h"
 #include "elemental_property_type.h"
@@ -25,8 +24,8 @@ namespace dungeon_server::domain
         uint16_t get_attack_multipliers();
         void on_begin_of_turn(std::shared_ptr<encounter> encounter, std::string& action_log);
         void on_attack(std::shared_ptr<encounter> encounter, const std::string& attacked_creature_id, std::string& action_log);
-        void on_attacked(const std::shared_ptr<encounter>& encounter, std::string& action_log, uint16_t damage,
-                         dungeon_common::enums::elemental_property_type elemental_property);
+        void on_attacked(const std::shared_ptr<encounter>& encounter, std::string& action_log, const std::string& attacker_id,
+                         uint16_t damage, dungeon_common::enums::elemental_property_type elemental_property);
         void on_end_of_turn(std::shared_ptr<encounter> encounter, std::string& action_log);
     };
 }

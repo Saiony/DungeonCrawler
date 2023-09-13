@@ -9,6 +9,7 @@
 #include "NetServer/Domain/Actions/holy_light.h"
 #include "NetServer/Domain/Actions/pet_the_eagle_action.h"
 #include "NetServer/Domain/Actions/provoke_action.h"
+#include "NetServer/Domain/Actions/retribution_action.h"
 #include "NetServer/Domain/Actions/shield_bash.h"
 #include "NetServer/Domain/Actions/sword_slash_action.h"
 
@@ -69,6 +70,10 @@ std::shared_ptr<dungeon_server::domain::action::base_action> dungeon_server::dom
     case dungeon_common::model::action_types::arcane_blast:
         {
             return std::make_shared<action::arcane_blast_action>(action_type, owner_id, target_id);
+        }
+    case dungeon_common::model::action_types::retribution:
+        {
+            return std::make_shared<action::retribution_action>(action_type, owner_id);
         }
     default:
         {

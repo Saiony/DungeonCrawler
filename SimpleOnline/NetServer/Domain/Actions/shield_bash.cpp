@@ -45,7 +45,7 @@ void dungeon_server::domain::action::shield_bash::use(const std::shared_ptr<enco
     action_log += action_owner->name + " used " + get_name() +" on " +target->name;
 
     const auto damage = calculate_final_attack(encounter_ptr);
-    target->take_damage(damage, action_log, encounter_ptr);
+    target->take_damage(damage, action_log, encounter_ptr, action_owner_id);
 
     const auto stun_chance = static_cast<uint16_t>(utility::randomizer::randomize(0, 100));
     if(stun_chance > 50)

@@ -68,6 +68,6 @@ void dungeon_server::domain::action::arrow_shower_action::shoot_arrow(const std:
     action_log += action_owner->name + " used " + get_name() + " on " + target->name;
     const auto damage = calculate_final_attack(encounter);
 
-    target->take_damage(damage, action_log, encounter);
+    target->take_damage(damage, action_log, encounter, action_owner_id);
     action_owner->on_attack(encounter, action_owner->public_id, action_log);
 }

@@ -42,6 +42,6 @@ void dungeon_server::domain::action::arcane_blast_action::use(const std::shared_
     action_log += action_owner->name + " used " + get_name() + " on " + target->name;
 
     const auto damage = calculate_final_attack(encounter_ptr);
-    target->take_damage(damage, action_log, encounter_ptr, dungeon_common::enums::elemental_property_type::arcane);
+    target->take_damage(damage, action_log, encounter_ptr, action_owner_id, dungeon_common::enums::elemental_property_type::arcane);
     action_owner->on_attack(encounter_ptr, target_id_, action_log);
 }

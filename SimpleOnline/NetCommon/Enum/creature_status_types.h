@@ -11,5 +11,8 @@ namespace dungeon_common::enums
         concentrating,
         frozen,
         burning,
+        aegis_of_faith,
+        retribution,
+        attack_lowered,
     };
 }

@@ -45,7 +45,8 @@ void dungeon_server::domain::frozen_status::on_overriding_status_added(std::shar
 {
 }
 
-void dungeon_server::domain::frozen_status::on_attacked(const std::shared_ptr<encounter>& encounter, std::string& action_log, const uint16_t damage,
+void dungeon_server::domain::frozen_status::on_attacked(const std::shared_ptr<encounter>& encounter, std::string& action_log,
+                                                        const std::string& attacker_id, const uint16_t damage,
                                                         const dungeon_common::enums::elemental_property_type elemental_property)
 {
     if (quantity <= 0)
@@ -60,7 +61,7 @@ void dungeon_server::domain::frozen_status::on_attacked(const std::shared_ptr<en
     action_log += "\nThe ice shatters and " + this_creature->name + " takes additional damage";
     end_status(encounter);
     
-    this_creature->take_damage(ice_shatter_dmg, action_log, encounter, elemental_property);    
+    this_creature->take_damage(ice_shatter_dmg, action_log, encounter, nullptr, elemental_property);    
 }
 
 void dungeon_server::domain::frozen_status::end_status(const std::shared_ptr<encounter>& encounter)
@@ -71,5 +72,5 @@ void dungeon_server::domain::frozen_status::end_status(const std::shared_ptr<enc
     });
 
     this_creature->set_original_elemental_property();
-    on_end_listener_(std::make_shared<frozen_status>(*this));
+    on_end_action_(std::make_shared<frozen_status>(*this));
 }

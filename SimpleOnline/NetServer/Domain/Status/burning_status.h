@@ -3,7 +3,7 @@
 
 namespace dungeon_server::domain
 {
-    class burning_status : public base_creature_status
+    class burning_status final : public base_creature_status
     {
     private:
         uint16_t damage_;

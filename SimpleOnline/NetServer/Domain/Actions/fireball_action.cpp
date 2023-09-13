@@ -46,7 +46,7 @@ void dungeon_server::domain::action::fireball_action::use(const std::shared_ptr<
     action_log += action_owner->name + " used " + get_name() + " on " + target->name;
 
     const auto damage = calculate_final_attack(encounter_ptr);
-    target->take_damage(damage, action_log, encounter_ptr, dungeon_common::enums::elemental_property_type::ice);
+    target->take_damage(damage, action_log, encounter_ptr, action_owner_id, dungeon_common::enums::elemental_property_type::ice);
 
     const auto percentage = static_cast<uint16_t>(utility::randomizer::randomize(0, 100));
     if(percentage <= burn_chance_)

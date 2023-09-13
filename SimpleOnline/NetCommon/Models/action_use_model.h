@@ -21,6 +21,8 @@ namespace dungeon_common::model
         fireball,
         frostbite,
         arcane_blast,
+        retribution,
+        aegis_of_faith,        
     };
 
     struct action_use_model

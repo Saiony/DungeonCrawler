@@ -62,12 +62,14 @@ void dungeon_server::domain::creature_status_manager::on_attack(std::shared_ptr<
 }
 
 void dungeon_server::domain::creature_status_manager::on_attacked(const std::shared_ptr<encounter>& encounter,
-                                                                  std::string& action_log, uint16_t damage,
+                                                                  std::string& action_log,
+                                                                  const std::string& attacker_id,
+                                                                  uint16_t damage,
                                                                   dungeon_common::enums::elemental_property_type elemental_property)
 {
-    std::ranges::for_each(statuses_, [&action_log, &elemental_property, &damage, &encounter](auto status)
+    std::ranges::for_each(statuses_, [&action_log, &elemental_property, &attacker_id, &damage, &encounter](auto status)
     {
-        status.second->on_attacked(encounter, action_log, damage, elemental_property);
+        status.second->on_attacked(encounter, action_log, attacker_id, damage, elemental_property);
     });
 }
 

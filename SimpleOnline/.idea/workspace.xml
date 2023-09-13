@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a0282678-3a6e-480f-a6dd-0d10bf42c4f4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/NetCommon/Enum/creature_status_types.h" beforeDir="false" afterPath="$PROJECT_DIR$/NetCommon/Enum/creature_status_types.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NetServer/Domain/Actions/arcane_blast_action.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/NetServer/Domain/Actions/arcane_blast_action.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NetServer/Domain/Actions/arrow_shot_action.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/NetServer/Domain/Actions/arrow_shot_action.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NetServer/Domain/Actions/arrow_shower_action.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/NetServer/Domain/Actions/arrow_shower_action.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NetServer/Domain/Actions/bite_action.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/NetServer/Domain/Actions/bite_action.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NetServer/Domain/Actions/distracting_slash_action.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/NetServer/Domain/Actions/distracting_slash_action.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NetServer/Domain/Actions/fire_at_will_action.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/NetServer/Domain/Actions/fire_at_will_action.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NetServer/Domain/Actions/fireball_action.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/NetServer/Domain/Actions/fireball_action.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NetServer/Domain/Actions/frostbite_action.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/NetServer/Domain/Actions/frostbite_action.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NetServer/Domain/Actions/holy_light.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/NetServer/Domain/Actions/holy_light.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NetServer/Domain/Actions/shield_bash.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/NetServer/Domain/Actions/shield_bash.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NetServer/Domain/Actions/sword_slash_action.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/NetServer/Domain/Actions/sword_slash_action.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NetServer/Domain/Status/base_creature_status.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/NetServer/Domain/Status/base_creature_status.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NetServer/Domain/Status/base_creature_status.h" beforeDir="false" afterPath="$PROJECT_DIR$/NetServer/Domain/Status/base_creature_status.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NetServer/Domain/Status/burning_status.h" beforeDir="false" afterPath="$PROJECT_DIR$/NetServer/Domain/Status/burning_status.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NetServer/Domain/Status/creature_status_manager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/NetServer/Domain/Status/creature_status_manager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NetServer/Domain/Status/creature_status_manager.h" beforeDir="false" afterPath="$PROJECT_DIR$/NetServer/Domain/Status/creature_status_manager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NetServer/Domain/Status/frozen_status.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/NetServer/Domain/Status/frozen_status.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NetServer/Domain/Status/frozen_status.h" beforeDir="false" afterPath="$PROJECT_DIR$/NetServer/Domain/Status/frozen_status.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NetServer/Domain/base_creature.h" beforeDir="false" afterPath="$PROJECT_DIR$/NetServer/Domain/base_creature.h" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="2VJKhSt7KQ4FBeS5i7eULaiawHB" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a0282678-3a6e-480f-a6dd-0d10bf42c4f4" name="Changes" comment="" />
+      <created>1694548863179</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1694548863179</updated>
+      <workItem from="1694548864881" duration="335000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
