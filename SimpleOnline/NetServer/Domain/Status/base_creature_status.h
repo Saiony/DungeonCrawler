@@ -15,7 +15,7 @@ namespace dungeon_server::domain
     {
     protected:
         std::string creature_id_;
-        std::function<void(const std::shared_ptr<base_creature_status>&)> on_end_action_;
+        std::function<void(const std::shared_ptr<base_creature_status>&)> end_status_;
     public:
         virtual ~base_creature_status() = default;
         uint8_t quantity;

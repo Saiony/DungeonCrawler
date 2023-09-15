@@ -48,7 +48,7 @@
     <ClCompile Include="Domain\Lobby\lobby_domain.cpp" />
     <ClCompile Include="Domain\Lobby\player_lobby_domain.cpp" />
     <ClCompile Include="Domain\player.cpp" />
-    <ClCompile Include="Domain\Status\aegis_of_faith_status.cpp" />
+    <ClCompile Include="Domain\Status\invulnerable_status.cpp" />
     <ClCompile Include="Domain\Status\attack_lowered_status.cpp" />
     <ClCompile Include="Domain\Status\base_creature_status.cpp" />
     <ClCompile Include="Domain\Status\burning_status.cpp" />
@@ -98,7 +98,7 @@
     <ClInclude Include="Domain\Message\match_start_response.h" />
     <ClInclude Include="Domain\player.h" />
     <ClInclude Include="Domain\player_classes.h" />
-    <ClInclude Include="Domain\Status\aegis_of_faith_status.h" />
+    <ClInclude Include="Domain\Status\invulnerable_status.h" />
     <ClInclude Include="Domain\Status\attack_lowered_status.h" />
     <ClInclude Include="Domain\Status\base_creature_status.h" />
     <ClInclude Include="Domain\Status\burning_status.h" />

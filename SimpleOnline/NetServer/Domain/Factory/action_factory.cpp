@@ -1,5 +1,6 @@
 ﻿#include "action_factory.h"
 
+#include "NetServer/Domain/Actions/aegis_of_faith_action.h"
 #include "NetServer/Domain/Actions/arcane_blast_action.h"
 #include "NetServer/Domain/Actions/celestial_weakening_action.h"
 #include "NetServer/Domain/Actions/concentrate_action.h"
@@ -79,6 +80,10 @@ std::shared_ptr<dungeon_server::domain::action::base_action> dungeon_server::dom
     case dungeon_common::model::action_types::celestial_weakening:
         {
             return std::make_shared<action::celestial_weakening_action>(action_type, owner_id, target_id);
+        }
+    case dungeon_common::model::action_types::aegis_of_faith:
+        {
+            return std::make_shared<action::aegis_of_faith_action>(action_type, owner_id, target_id);
         }
     default:
         {

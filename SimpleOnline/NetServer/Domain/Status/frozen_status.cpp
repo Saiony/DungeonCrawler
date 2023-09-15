@@ -72,5 +72,5 @@ void dungeon_server::domain::frozen_status::end_status(const std::shared_ptr<enc
     });
 
     this_creature->set_original_elemental_property();
-    on_end_action_(std::make_shared<frozen_status>(*this));
+    end_status_(std::make_shared<frozen_status>(*this));
 }

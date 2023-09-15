@@ -32,6 +32,6 @@ void dungeon_server::domain::attack_lowered_status::on_end_of_turn(const std::sh
         this_creature->modify_offensive_stat(enums::offensive_stats_type::attack_damage, debuff_value_);
 
         action_log += "\n" + this_creature->name + " 's attack is no longer lowered";
-        on_end_action_(std::make_shared<attack_lowered_status>(*this));
+        end_status_(std::make_shared<attack_lowered_status>(*this));
     }
 }

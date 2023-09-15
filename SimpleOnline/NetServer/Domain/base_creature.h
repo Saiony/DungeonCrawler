@@ -67,6 +67,12 @@ namespace dungeon_server::domain
                          const std::string& attacker_id = nullptr,
                          const dungeon_common::enums::elemental_property_type attack_property = dungeon_common::enums::elemental_property_type::normal)
         {
+            if(invulnerable())
+            {
+                on_attacked(encounter, log, attacker_id, dmg, attack_property);
+                return;
+            }
+            
             std::string additional_log;
             const auto dmg_multiplier = utility::weakness_util::get_attack_multiplier(attack_property, elemental_property);
             const auto final_dmg = dmg * dmg_multiplier;
@@ -149,6 +155,11 @@ namespace dungeon_server::domain
         {
             return !(status_manager_->contains(dungeon_common::enums::creature_status_type::stun) ||
                      status_manager_->contains(dungeon_common::enums::creature_status_type::frozen));
+        }
+
+        bool invulnerable() const
+        {
+            return status_manager_->contains(dungeon_common::enums::creature_status_type::invulnerable);
         }
 
         uint16_t get_attack_multipliers() const

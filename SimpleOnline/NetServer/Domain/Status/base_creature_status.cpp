@@ -9,5 +9,5 @@ dungeon_server::domain::base_creature_status::base_creature_status(std::string c
 
 void dungeon_server::domain::base_creature_status::add_on_end_listener(std::function<void(const std::shared_ptr<base_creature_status>&)> callback)
 {
-    on_end_action_ = std::move(callback);
+    end_status_ = std::move(callback);
 }

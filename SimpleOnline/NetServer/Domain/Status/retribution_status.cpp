@@ -30,7 +30,7 @@ void dungeon_server::domain::retribution_status::on_begin_of_turn(const std::sha
 
     if (quantity <= 0)
     {
-        on_end_action_(std::make_shared<retribution_status>(*this));
+        end_status_(std::make_shared<retribution_status>(*this));
         action_log += "\n" + this_creature->name + "'s retribution is no longer active";
     }
 }
