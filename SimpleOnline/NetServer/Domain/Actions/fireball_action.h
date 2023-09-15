@@ -7,7 +7,7 @@ namespace dungeon_server::domain::action
     {
     private:
         std::string target_id_{};
-        const std::uint16_t burn_chance_ = 50.0f;
+        const std::uint16_t burn_chance_ = 100.0f;
     public:
         fireball_action(const dungeon_common::model::action_types& action_type, const std::string& new_action_owner_id, std::string target_id);
 

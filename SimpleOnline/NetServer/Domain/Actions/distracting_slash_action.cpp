@@ -40,7 +40,9 @@ void dungeon_server::domain::action::distracting_slash_action::use(const std::sh
 {
     const auto action_owner = encounter_ptr->get_creature(action_owner_id);
     const auto target = encounter_ptr->get_creature(target_id_);
-    action_log += action_owner->name + " used " + get_name() + " on " + target->name;
+    const auto action_use_text = action_owner->name + " used " + get_name() + " on " + target->name;
+    action_log += action_use_text;
+    std::cout << action_use_text;
 
     const auto damage = calculate_final_attack(encounter_ptr);
     target->take_damage(damage, action_log, encounter_ptr, action_owner_id);

@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <iostream>
 #include <memory>
 #include <string>
 
@@ -18,10 +19,11 @@ namespace dungeon_server::domain
     private:
         uint16_t base_ad_;
         int16_t ad_modifier_;
-        
+
         uint16_t base_ap_;
         int16_t ap_modifier_;
         dungeon_common::enums::elemental_property_type original_elemental_property_;
+        std::function<void(const std::shared_ptr<base_creature>&)> on_died_callback_;
     protected:
         std::shared_ptr<creature_status_manager> status_manager_;
     public:
@@ -46,8 +48,8 @@ namespace dungeon_server::domain
         uint16_t get_attack_damage() const
         {
             uint16_t final_ad = base_ad_ + ad_modifier_;
-            
-            if(final_ad < 1)
+
+            if (final_ad < 1)
                 final_ad = 1;
 
             return final_ad;
@@ -56,36 +58,37 @@ namespace dungeon_server::domain
         uint16_t get_ability_power() const
         {
             uint16_t final_ap = base_ap_ + ap_modifier_;
-            
-            if(final_ap < 1)
+
+            if (final_ap < 1)
                 final_ap = 1;
 
             return final_ap;
-        }        
+        }
 
         void take_damage(const int dmg, std::string& log, const std::shared_ptr<encounter>& encounter,
-                         const std::string& attacker_id = nullptr,
+                         const std::string& attacker_id = "",
                          const dungeon_common::enums::elemental_property_type attack_property = dungeon_common::enums::elemental_property_type::normal)
         {
-            if(invulnerable())
+            if (invulnerable())
             {
                 on_attacked(encounter, log, attacker_id, dmg, attack_property);
                 return;
             }
-            
-            std::string additional_log;
+
             const auto dmg_multiplier = utility::weakness_util::get_attack_multiplier(attack_property, elemental_property);
             const auto final_dmg = dmg * dmg_multiplier;
+            log += "\n" + name + " lost " + std::to_string(final_dmg) + " hp" ;
 
             if (health - final_dmg <= 0)
             {
                 health = 0;
                 alive = false;
-                additional_log += "\n" + name + " died!";
+                log += "\n" + name + " died";
+                on_died_callback_(std::make_shared<base_creature>(*this));
+                return;
             }
-            
+
             health -= final_dmg;
-            log += "\n" + name + " lost " + std::to_string(final_dmg) + " hp" + additional_log;
             on_attacked(encounter, log, attacker_id, dmg, attack_property);
         }
 
@@ -105,6 +108,9 @@ namespace dungeon_server::domain
 
         std::shared_ptr<base_creature_status> add_status(const std::shared_ptr<base_creature_status>& status) const
         {
+            if(!alive)
+                return nullptr;
+            
             return status_manager_->add_status(status);
         }
 
@@ -148,13 +154,16 @@ namespace dungeon_server::domain
 
         void on_end_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log) const
         {
+            if(!alive)
+                return;
+            
             status_manager_->on_end_of_turn(encounter, action_log);
         }
 
         bool can_execute_turn() const
         {
-            return !(status_manager_->contains(dungeon_common::enums::creature_status_type::stun) ||
-                     status_manager_->contains(dungeon_common::enums::creature_status_type::frozen));
+            return alive && (!(status_manager_->contains(dungeon_common::enums::creature_status_type::stun) ||
+                status_manager_->contains(dungeon_common::enums::creature_status_type::frozen)));
         }
 
         bool invulnerable() const
@@ -169,7 +178,7 @@ namespace dungeon_server::domain
 
         void change_elemental_property(const dungeon_common::enums::elemental_property_type new_property)
         {
-            if(new_property == dungeon_common::enums::elemental_property_type::unknown)
+            if (new_property == dungeon_common::enums::elemental_property_type::unknown)
                 throw std::exception("Invalid elemental property");
 
             elemental_property = new_property;
@@ -178,6 +187,11 @@ namespace dungeon_server::domain
         void set_original_elemental_property()
         {
             elemental_property = original_elemental_property_;
+        }
+
+        void add_on_creature_died_listener(std::function<void(const std::shared_ptr<base_creature>&)> callback)
+        {
+            on_died_callback_ = std::move(callback);
         }
     };
 

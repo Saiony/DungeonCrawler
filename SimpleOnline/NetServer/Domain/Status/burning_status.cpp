@@ -20,8 +20,10 @@ void dungeon_server::domain::burning_status::on_begin_of_turn(const std::shared_
         return creature->public_id == creature_id_;
     });
 
-    this_creature->take_damage(damage_, action_log, encounter, nullptr, dungeon_common::enums::elemental_property_type::fire);
-    action_log += "\n" + this_creature->name + " loses " + std::to_string(damage_) + " hp due to burning\n";
+    this_creature->take_damage(damage_, action_log, encounter, "", dungeon_common::enums::elemental_property_type::fire);
+    const auto burn_log = " due to burning...";
+    action_log += burn_log;
+    std::cout << burn_log;
 }
 
 void dungeon_server::domain::burning_status::on_end_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log)

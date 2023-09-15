@@ -39,6 +39,9 @@ void dungeon_server::domain::retribution_status::on_attacked(const std::shared_p
                                                              const std::string& attacker_id, const uint16_t damage,
                                                              const dungeon_common::enums::elemental_property_type elemental_property)
 {
+    if(attacker_id == "")
+        return;
+    
     const auto this_creature = *std::ranges::find_if(encounter->creatures, [this](auto creature)
     {
         return creature->public_id == creature_id_;
