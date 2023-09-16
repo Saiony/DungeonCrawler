@@ -9,13 +9,16 @@ namespace dungeon_server::domain
         const uint8_t max_level_ = 2;
         uint8_t level_;
         std::vector<std::shared_ptr<player>> players_;
+        std::function<void(bool)> encounter_end_callback_;
 
         std::shared_ptr<encounter> generate_encounter() const;    
-        void go_to_next_encounter();
     public:
         std::shared_ptr<encounter> current_encounter;
-        
-        encounter_manager(std::vector<std::shared_ptr<player>> players);
-        void go_to_next_turn();
+
+        explicit encounter_manager(std::vector<std::shared_ptr<player>> players);
+        void add_encounter_end_listener(std::function<void(bool)> callback);
+        void go_to_next_turn() const;
+        void start_encounter();
+        void end_encounter();
     };
 }

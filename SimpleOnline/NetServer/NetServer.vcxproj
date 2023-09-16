@@ -111,11 +111,10 @@
     <ClInclude Include="Domain\Status\stunned_status.h" />
     <ClInclude Include="encounter_manager.h" />
     <ClInclude Include="Enum\offensive_stats_type.h" />
-    <ClInclude Include="game_room\combat\base_combat_state.h" />
-    <ClInclude Include="game_room\combat\combat_state_player_turn.h" />
     <ClInclude Include="game_room\game_room.h" />
     <ClInclude Include="game_room\states\base_game_room_state.h" />
     <ClInclude Include="game_room\states\game_room_combat_state.h" />
+    <ClInclude Include="game_room\states\game_room_story_state.h" />
     <ClInclude Include="server.h">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>

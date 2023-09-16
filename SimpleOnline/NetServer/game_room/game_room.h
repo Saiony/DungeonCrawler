@@ -13,14 +13,15 @@ namespace dungeon_server::game_room
     private:
         std::vector<std::shared_ptr<domain::player>> players_;
         std::shared_ptr<domain::encounter_manager> encounter_manager_;
-        std::unique_ptr<base_game_room_state> state_ptr_;
+        std::shared_ptr<base_game_room_state> state_ptr_;
 
     public:
         game_room(std::vector<std::shared_ptr<domain::player>> players, const std::function<void(std::shared_ptr<domain::message::emitter_message>)>& send_message_function);
         std::function<void(std::shared_ptr<domain::message::emitter_message>)> send_inner_message;
         void player_match_start_request(std::shared_ptr<domain::player>& player) const;
-        void set_state(const base_game_room_state& state);
+        void set_state(const std::shared_ptr<base_game_room_state>& state);
         void handle_player_input(const std::shared_ptr<domain::action::base_action>& action_ptr) const;
         void update() const;
+        void on_encounter_end(bool players_won);
     };
 }

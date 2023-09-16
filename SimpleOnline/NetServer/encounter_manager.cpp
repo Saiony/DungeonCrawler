@@ -1,6 +1,7 @@
 ﻿#include "encounter_manager.h"
 
 #include <iostream>
+#include <utility>
 
 #include "Domain/Enemies/goblin_archer.h"
 #include "Domain/Enemies/goblin_warrior.h"
@@ -8,7 +9,12 @@
 
 dungeon_server::domain::encounter_manager::encounter_manager(std::vector<std::shared_ptr<player>> players)
                                             : level_(1), players_(std::move(players)), current_encounter(generate_encounter())
+{    
+}
+
+void dungeon_server::domain::encounter_manager::add_encounter_end_listener(std::function<void(bool)> callback)
 {
+    encounter_end_callback_ = std::move(callback);
 }
 
 std::shared_ptr<dungeon_server::domain::encounter> dungeon_server::domain::encounter_manager::generate_encounter() const
@@ -39,29 +45,35 @@ std::shared_ptr<dungeon_server::domain::encounter> dungeon_server::domain::encou
     return std::make_shared<encounter>(enemies, players_, players_[0]);
 }
 
-void dungeon_server::domain::encounter_manager::go_to_next_encounter()
+void dungeon_server::domain::encounter_manager::end_encounter()
 {
     level_++;
+    
     if(level_ > max_level_)
     {        
         std::cout << "GAME OVER - PLAYERS WON" << std::endl;
         current_encounter->set_game_over(true);
+    }
+}
+
+void dungeon_server::domain::encounter_manager::start_encounter()
+{
+    if(level_ > max_level_)
         return;
-    }    
+    
     current_encounter = generate_encounter();
 }
-void dungeon_server::domain::encounter_manager::go_to_next_turn()
+
+void dungeon_server::domain::encounter_manager::go_to_next_turn() const
 {
     if(current_encounter->players.empty())
     {
         std::cout << "GAME OVER - PLAYERS LOST" << std::endl;
-        current_encounter->set_game_over(false);
+        encounter_end_callback_(false);
     }
     else if(current_encounter->enemies.empty())
     {
         std::cout << "ENCOUNTER END - PLAYERS WON" << std::endl;
-        go_to_next_encounter();        
+        encounter_end_callback_(true);   
     }
-    else
-        current_encounter->go_to_next_turn();
 }

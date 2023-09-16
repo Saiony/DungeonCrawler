@@ -4,7 +4,6 @@
 #include "NetServer/Domain/Encounter.h"
 #include "NetServer/Domain/Player.h"
 #include "NetServer/Domain/Message/encounter_update_response.h"
-#include "NetServer/game_room/combat/base_combat_state.h"
 
 namespace dungeon_server::game_room
 {
@@ -12,7 +11,6 @@ namespace dungeon_server::game_room
     {
     private:
         std::shared_ptr<domain::encounter_manager> encounter_manager_;
-        combat::base_combat_state state_;
         std::time_t next_turn_time_;
         const int turn_duration_ = 30;
 
@@ -97,10 +95,12 @@ namespace dungeon_server::game_room
 
         void on_start() override
         {
+            encounter_manager_->start_encounter();
         }
 
         void on_end() override
-        {
+        {            
+            encounter_manager_->end_encounter();
         }
 
         void start_timeout_timer()
