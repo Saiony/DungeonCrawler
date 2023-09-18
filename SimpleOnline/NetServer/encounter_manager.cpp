@@ -3,6 +3,7 @@
 #include <iostream>
 #include <utility>
 
+#include "Domain/Enemies/giant_spider.h"
 #include "Domain/Enemies/goblin_archer.h"
 #include "Domain/Enemies/goblin_warrior.h"
 #include "Domain/Enemies/Wolf.h"
@@ -22,18 +23,21 @@ std::shared_ptr<dungeon_server::domain::encounter> dungeon_server::domain::encou
     std::vector<std::shared_ptr<base_enemy>> enemies;
     switch (level_)
     {
-    case 1:
-        {
-            enemies.push_back(std::make_shared<enemy::wolf>("wolf", 10, 5, 1,
-                                                                dungeon_common::enums::elemental_property_type::normal));
-            break;
-        }
+    // case 1:
+    //     {
+    //         enemies.push_back(std::make_shared<enemy::wolf>("wolf", 10, 5, 1));
+    //         break;
+    //     }
     case 2:
         {
-            enemies.push_back(std::make_shared<enemy::goblin_warrior>("goblin warrior", 25, 3, 1,
-                                                                          dungeon_common::enums::elemental_property_type::earth));
-            enemies.push_back(std::make_shared<enemy::goblin_archer>("goblin archer", 15, 6, 1,
-                                                                         dungeon_common::enums::elemental_property_type::earth));
+            enemies.push_back(std::make_shared<enemy::goblin_warrior>("goblin warrior", 25, 3, 1));
+            enemies.push_back(std::make_shared<enemy::goblin_archer>("goblin archer", 15, 6, 1));
+            break;
+        }
+    case 1:
+        {
+            enemies.push_back(std::make_shared<enemy::giant_spider>("giant spider 1", 20, 4, 1));
+            enemies.push_back(std::make_shared<enemy::giant_spider>("giant spider 2", 20, 4, 1));
             break;
         }
     default:
@@ -76,4 +80,6 @@ void dungeon_server::domain::encounter_manager::go_to_next_turn() const
         std::cout << "ENCOUNTER END - PLAYERS WON" << std::endl;
         encounter_end_callback_(true);   
     }
+    else
+        current_encounter->go_to_next_turn();
 }

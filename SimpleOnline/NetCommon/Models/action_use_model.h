@@ -24,6 +24,8 @@ namespace dungeon_common::model
         retribution,
         aegis_of_faith,
         celestial_weakening,
+        venomous_bite,
+        silk_prison,
     };
 
     struct action_use_model

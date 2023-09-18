@@ -38,8 +38,8 @@ namespace dungeon_server::domain
 
         base_creature(std::string name, const uint16_t health, const uint16_t damage, const uint16_t ability_power,
                       const dungeon_common::enums::elemental_property_type elemental_property)
-                      : base_ad_(damage), ad_modifier_(0), base_ap_(ability_power), ap_modifier_(0), name(std::move(name)),
-                        health(health), max_health(health), elemental_property(elemental_property), alive(true)
+            : base_ad_(damage), ad_modifier_(0), base_ap_(ability_power), ap_modifier_(0), name(std::move(name)),
+              health(health), max_health(health), elemental_property(elemental_property), alive(true)
         {
             status_manager_ = std::make_shared<creature_status_manager>();
             original_elemental_property_ = elemental_property;
@@ -65,31 +65,32 @@ namespace dungeon_server::domain
             return final_ap;
         }
 
-        void take_damage(const int dmg, std::string& log, const std::shared_ptr<encounter>& encounter,
+        void take_damage(const int dmg, std::string& action_log, const std::shared_ptr<encounter>& encounter,
                          const std::string& attacker_id = "",
                          const dungeon_common::enums::elemental_property_type attack_property = dungeon_common::enums::elemental_property_type::normal)
         {
             if (invulnerable())
             {
-                on_attacked(encounter, log, attacker_id, dmg, attack_property);
+                on_attacked(encounter, action_log, attacker_id, dmg, attack_property);
                 return;
             }
 
             const auto dmg_multiplier = utility::weakness_util::get_attack_multiplier(attack_property, elemental_property);
             const auto final_dmg = dmg * dmg_multiplier;
-            log += "\n" + name + " lost " + std::to_string(final_dmg) + " hp" ;
+            action_log += "\n" + name + " lost " + std::to_string(final_dmg) + " hp";
 
             if (health - final_dmg <= 0)
             {
                 health = 0;
                 alive = false;
-                log += "\n" + name + " died";
+                action_log += "\n" + name + " died";
+                on_died(encounter, action_log);
                 on_died_callback_(std::make_shared<base_creature>(*this));
                 return;
             }
 
             health -= final_dmg;
-            on_attacked(encounter, log, attacker_id, dmg, attack_property);
+            on_attacked(encounter, action_log, attacker_id, dmg, attack_property);
         }
 
         int heal(const int value)
@@ -108,9 +109,9 @@ namespace dungeon_server::domain
 
         std::shared_ptr<base_creature_status> add_status(const std::shared_ptr<base_creature_status>& status) const
         {
-            if(!alive)
+            if (!alive)
                 return nullptr;
-            
+
             return status_manager_->add_status(status);
         }
 
@@ -154,16 +155,18 @@ namespace dungeon_server::domain
 
         void on_end_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log) const
         {
-            if(!alive)
+            if (!alive)
                 return;
-            
+
             status_manager_->on_end_of_turn(encounter, action_log);
         }
 
         bool can_execute_turn() const
         {
-            return alive && (!(status_manager_->contains(dungeon_common::enums::creature_status_type::stun) ||
-                status_manager_->contains(dungeon_common::enums::creature_status_type::frozen)));
+            return  alive &&
+                    !(status_manager_->contains(dungeon_common::enums::creature_status_type::stun) ||
+                    status_manager_->contains(dungeon_common::enums::creature_status_type::frozen) ||
+                    status_manager_->contains(dungeon_common::enums::creature_status_type::stuck_in_spiders_web));
         }
 
         bool invulnerable() const
@@ -193,6 +196,8 @@ namespace dungeon_server::domain
         {
             on_died_callback_ = std::move(callback);
         }
+
+        virtual void on_died(const std::shared_ptr<encounter>& encounter, std::string& action_log){}
     };
 
     inline base_creature::~base_creature() = default;

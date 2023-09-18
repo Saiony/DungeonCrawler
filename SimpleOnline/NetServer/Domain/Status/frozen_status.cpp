@@ -28,17 +28,17 @@ void dungeon_server::domain::frozen_status::on_begin_of_turn(const std::shared_p
 void dungeon_server::domain::frozen_status::on_end_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log)
 {
     quantity--;
-
+    
+    if (quantity > 0)
+        return;
+    
     const auto this_creature = std::ranges::find_if(encounter->creatures, [this](auto creature)
     {
         return creature->public_id == creature_id_;
     });
 
-    if (quantity <= 0)
-    {
-        end_status(encounter);
-        action_log += "\n" + (*this_creature)->name + " is no longer frozen";
-    }
+    end_status(encounter);
+    action_log += "\n" + (*this_creature)->name + " is no longer frozen";
 }
 
 void dungeon_server::domain::frozen_status::on_overriding_status_added(std::shared_ptr<base_creature_status> status)
@@ -60,8 +60,8 @@ void dungeon_server::domain::frozen_status::on_attacked(const std::shared_ptr<en
     const auto ice_shatter_dmg = damage / 2;
     action_log += "\nThe ice shatters and " + this_creature->name + " takes additional damage";
     end_status(encounter);
-    
-    this_creature->take_damage(ice_shatter_dmg, action_log, encounter, nullptr, elemental_property);    
+
+    this_creature->take_damage(ice_shatter_dmg, action_log, encounter, nullptr, elemental_property);
 }
 
 void dungeon_server::domain::frozen_status::end_status(const std::shared_ptr<encounter>& encounter)

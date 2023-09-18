@@ -17,7 +17,7 @@ namespace dungeon_common::model
     
     struct encounter_model
     {
-        std::array<enemy_model, 3> enemies{};
+        std::array<enemy_model, 10> enemies{};
         std::array<player_model, 3> players{};
         char active_creature_id[39]{};
         char log[250]{};

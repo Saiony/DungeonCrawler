@@ -13,5 +13,6 @@ namespace dungeon_common::enums
         holy,
         death,
         arcane,
+        poison,
     };
 }

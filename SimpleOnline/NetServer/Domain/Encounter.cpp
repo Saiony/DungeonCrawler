@@ -66,6 +66,12 @@ void encounter::on_creature_died(const std::shared_ptr<base_creature>& creature)
     });
 }
 
+void encounter::add_enemy(const std::shared_ptr<base_enemy>& new_enemy)
+{
+    creatures.push_back(new_enemy);
+    enemies.push_back(new_enemy);
+}
+
 std::shared_ptr<base_creature> encounter::get_creature(const std::string& creature_id)
 {
     auto action_owner = *std::ranges::find_if(creatures, [this, &creature_id](auto creature)

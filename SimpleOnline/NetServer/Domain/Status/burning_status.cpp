@@ -24,11 +24,12 @@ void dungeon_server::domain::burning_status::on_begin_of_turn(const std::shared_
     const auto burn_log = " due to burning...";
     action_log += burn_log;
     std::cout << burn_log;
-}
 
-void dungeon_server::domain::burning_status::on_end_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log)
-{
-    quantity--;
+    if (quantity > 0)
+        return;
+
+    end_status_(std::make_shared<burning_status>(*this));
+    action_log += "\n" + this_creature->name + " is no longer burning";
 }
 
 void dungeon_server::domain::burning_status::on_overriding_status_added(const std::shared_ptr<base_creature_status> status)

@@ -37,9 +37,9 @@ namespace dungeon_server::game_room
 
         void handle_turn(const std::function<void(std::shared_ptr<domain::message::emitter_message>)>& send_message_function)
         {
-            domain::base_creature active_creature = *encounter_manager_->current_encounter->active_creature;
+            const auto active_creature = encounter_manager_->current_encounter->active_creature;
             
-            if(const auto enemy_ptr = std::dynamic_pointer_cast<domain::base_enemy>(encounter_manager_->current_encounter->active_creature))
+            if(const auto enemy_ptr = std::dynamic_pointer_cast<domain::base_enemy>(active_creature))
             {
                 std::cout <<  enemy_ptr->name << "'s turn" << std::endl;
                 auto enemy_action_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
@@ -61,21 +61,25 @@ namespace dungeon_server::game_room
 
                 handle_turn(send_message_function);
             }
-            else if(const auto player_ptr = std::dynamic_pointer_cast<domain::player>(encounter_manager_->current_encounter->active_creature))
+            else if(const auto player_ptr = std::dynamic_pointer_cast<domain::player>(active_creature))
             {
                 std::cout <<  player_ptr->name << "'s turn" << std::endl;
                 std::string action_log;
-              
+                active_creature->on_begin_of_turn(encounter_manager_->current_encounter, action_log);  
+                
                 if(!player_ptr->can_execute_turn())
                 {
                     player_ptr->on_end_of_turn(encounter_manager_->current_encounter, action_log);
                     encounter_manager_->go_to_next_turn();
-                    encounter_manager_->current_encounter->active_creature->on_begin_of_turn(encounter_manager_->current_encounter, action_log);  
                     const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, action_log);
                     send_message_function(msg);
+                    
                     handle_turn(send_message_function);
+                    return;
                 }
-                                
+                     
+                const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, action_log);
+                send_message_function(msg);
                 start_timeout_timer();
             }
         }

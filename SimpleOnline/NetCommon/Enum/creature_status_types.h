@@ -14,5 +14,7 @@ namespace dungeon_common::enums
         invulnerable,
         retribution,
         attack_lowered,
+        poisoned,
+        stuck_in_spiders_web,
     };
 }
