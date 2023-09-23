@@ -9,8 +9,8 @@
 #include "Domain/Enemies/Wolf.h"
 
 dungeon_server::domain::encounter_manager::encounter_manager(std::vector<std::shared_ptr<player>> players)
-                                            : level_(1), players_(std::move(players)), current_encounter(generate_encounter())
-{    
+    : level_(1), players_(std::move(players)), current_encounter(generate_encounter())
+{
 }
 
 void dungeon_server::domain::encounter_manager::add_encounter_end_listener(std::function<void(bool)> callback)
@@ -20,24 +20,26 @@ void dungeon_server::domain::encounter_manager::add_encounter_end_listener(std::
 
 std::shared_ptr<dungeon_server::domain::encounter> dungeon_server::domain::encounter_manager::generate_encounter() const
 {
+    std::cout << "\nGenerating new encounter...";
     std::vector<std::shared_ptr<base_enemy>> enemies;
+
     switch (level_)
     {
-    // case 1:
-    //     {
-    //         enemies.push_back(std::make_shared<enemy::wolf>("wolf", 10, 5, 1));
-    //         break;
-    //     }
-    case 2:
-        {
-            enemies.push_back(std::make_shared<enemy::goblin_warrior>("goblin warrior", 25, 3, 1));
-            enemies.push_back(std::make_shared<enemy::goblin_archer>("goblin archer", 15, 6, 1));
-            break;
-        }
     case 1:
         {
-            enemies.push_back(std::make_shared<enemy::giant_spider>("giant spider 1", 20, 4, 1));
-            enemies.push_back(std::make_shared<enemy::giant_spider>("giant spider 2", 20, 4, 1));
+            enemies.push_back(std::make_shared<enemy::wolf>(10, 5, 1));
+            break;
+        }
+    case 2:
+        {
+            enemies.push_back(std::make_shared<enemy::goblin_warrior>(25, 3, 1));
+            enemies.push_back(std::make_shared<enemy::goblin_archer>(15, 6, 1));
+            break;
+        }
+    case 3:
+        {
+            enemies.push_back(std::make_shared<enemy::giant_spider>(20, 4, 1));
+            enemies.push_back(std::make_shared<enemy::giant_spider>(20, 4, 1));
             break;
         }
     default:
@@ -45,16 +47,18 @@ std::shared_ptr<dungeon_server::domain::encounter> dungeon_server::domain::encou
             throw std::exception("invalid level");
         }
     }
-    
+
+    std::cout << "\nGenerating new encounter 2...";
     return std::make_shared<encounter>(enemies, players_, players_[0]);
 }
 
 void dungeon_server::domain::encounter_manager::end_encounter()
 {
     level_++;
-    
-    if(level_ > max_level_)
-    {        
+    current_encounter = nullptr; 
+
+    if (level_ > max_level_)
+    {
         std::cout << "GAME OVER - PLAYERS WON" << std::endl;
         current_encounter->set_game_over(true);
     }
@@ -62,24 +66,29 @@ void dungeon_server::domain::encounter_manager::end_encounter()
 
 void dungeon_server::domain::encounter_manager::start_encounter()
 {
-    if(level_ > max_level_)
+    if (level_ > max_level_)
         return;
-    
+
     current_encounter = generate_encounter();
 }
 
-void dungeon_server::domain::encounter_manager::go_to_next_turn() const
+bool dungeon_server::domain::encounter_manager::go_to_next_turn(std::string& action_log) const
 {
-    if(current_encounter->players.empty())
+    if (current_encounter->players.empty())
     {
         std::cout << "GAME OVER - PLAYERS LOST" << std::endl;
         encounter_end_callback_(false);
+        return false;
     }
-    else if(current_encounter->enemies.empty())
+    if (current_encounter->enemies.empty())
     {
         std::cout << "ENCOUNTER END - PLAYERS WON" << std::endl;
-        encounter_end_callback_(true);   
+        action_log += "\nALL ENEMIES DEFEATED";
+        
+        encounter_end_callback_(true);
+        return false;
     }
-    else
-        current_encounter->go_to_next_turn();
+    
+    current_encounter->go_to_next_turn();
+    return true;
 }

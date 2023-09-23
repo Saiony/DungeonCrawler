@@ -8,7 +8,7 @@ dungeon_server::game_room::game_room::game_room(std::vector<std::shared_ptr<doma
                                                 const std::function<void(std::shared_ptr<domain::message::emitter_message>)>& send_message_function)
                                                 : players_(std::move(players)),
                                                 encounter_manager_(std::make_shared<domain::encounter_manager>(players_)),
-                                                state_ptr_(std::make_unique<game_room_combat_state>(encounter_manager_))
+                                                state_ptr_(std::make_shared<game_room_combat_state>(encounter_manager_, send_inner_message))
 {
     send_inner_message = send_message_function;
     encounter_manager_->add_encounter_end_listener([this](auto players_won)
@@ -23,6 +23,14 @@ void dungeon_server::game_room::game_room::player_match_start_request(std::share
     send_inner_message(msg);
 }
 
+
+void dungeon_server::game_room::game_room::on_encounter_end(bool players_won)
+{
+    const auto new_state = std::make_shared<game_room_combat_state>(encounter_manager_, send_inner_message);
+    set_state(new_state);
+}
+
+
 void dungeon_server::game_room::game_room::set_state(const std::shared_ptr<base_game_room_state>& state)
 {
     state_ptr_->on_end();
@@ -32,16 +40,10 @@ void dungeon_server::game_room::game_room::set_state(const std::shared_ptr<base_
 
 void dungeon_server::game_room::game_room::handle_player_input(const std::shared_ptr<domain::action::base_action>& action_ptr) const
 {
-    state_ptr_->handle_input(send_inner_message, action_ptr);
+    state_ptr_->handle_input(action_ptr);
 }
 
 void dungeon_server::game_room::game_room::update() const
 {
     state_ptr_->update(send_inner_message);
-}
-
-void dungeon_server::game_room::game_room::on_encounter_end(bool players_won)
-{
-    const auto new_state = std::make_shared<game_room_combat_state>(encounter_manager_);
-    set_state(new_state);
 }

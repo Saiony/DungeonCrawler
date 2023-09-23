@@ -1,9 +1,14 @@
 ﻿#include "Wolf.h"
 #include "NetServer/Domain/Actions/bite_action.h"
 
-dungeon_server::domain::enemy::wolf::wolf(const std::string& name, uint16_t health, uint16_t attack_damage, uint16_t ability_power)
-    : base_enemy(name, health, attack_damage, ability_power, dungeon_common::enums::elemental_property_type::normal)
+dungeon_server::domain::enemy::wolf::wolf(uint16_t health, uint16_t attack_damage, uint16_t ability_power)
+    : base_enemy(health, attack_damage, ability_power, dungeon_common::enums::elemental_property_type::normal)
 {
+}
+
+std::string dungeon_server::domain::enemy::wolf::get_base_name()
+{
+    return "wolf";
 }
 
 void dungeon_server::domain::enemy::wolf::on_execute_turn(const std::shared_ptr<encounter>& encounter_ptr, std::string& action_log)

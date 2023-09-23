@@ -4,9 +4,14 @@
 #include "NetServer/Domain/Actions/sword_slash_action.h"
 #include "NetServer/Utility/randomizer.h"
 
-dungeon_server::domain::enemy::goblin_warrior::goblin_warrior(const std::string& name, uint16_t health, uint16_t attack_damage, uint16_t ability_power)
-    : base_enemy(name, health, attack_damage, ability_power, dungeon_common::enums::elemental_property_type::normal)
+dungeon_server::domain::enemy::goblin_warrior::goblin_warrior(uint16_t health, uint16_t attack_damage, uint16_t ability_power)
+    : base_enemy(health, attack_damage, ability_power, dungeon_common::enums::elemental_property_type::normal)
 {
+}
+
+std::string dungeon_server::domain::enemy::goblin_warrior::get_base_name()
+{
+    return "goblin warrior";
 }
 
 void dungeon_server::domain::enemy::goblin_warrior::on_execute_turn(const std::shared_ptr<encounter>& encounter_ptr, std::string& action_log)

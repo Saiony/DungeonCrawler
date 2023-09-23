@@ -67,9 +67,9 @@ namespace dungeon_common
         {
             static_assert(std::is_standard_layout_v<DataType>, "Data is too complex to be pushed into vector");
 
-            size_t messageSize = msg.body.size();
-            msg.body.resize(messageSize + sizeof(DataType));
-            memcpy(msg.body.data() + messageSize, &data, sizeof(DataType));
+            size_t message_size = msg.body.size();
+            msg.body.resize(message_size + sizeof(DataType));
+            memcpy(msg.body.data() + message_size, &data, sizeof(DataType));
             msg.header.body_size = msg.body.size();
 
             return msg;

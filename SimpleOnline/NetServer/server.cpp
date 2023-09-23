@@ -98,6 +98,7 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
         }
     case dungeon_common::custom_msg_types::encounter_update_response:
         {
+            std::cout << "\nENCOUNTER UPDATE MSG";
             const auto encounter_update = std::dynamic_pointer_cast<domain::message::encounter_update_response>(emitter_msg);
             const auto encounter = encounter_update->encounter_ptr;
             dungeon_common::model::encounter_model encounter_model;
@@ -126,6 +127,8 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
             dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::encounter_update_response);
             answer << encounter_model;
             broadcast_message(answer);
+
+            std::cout << "\nENCOUNTER UPDATE MSG SENT";
 
             if (encounter->game_over)
                 running = false;
@@ -205,7 +208,7 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
 
             //answer
             dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::get_player_classes_response);
-            answer << model;            
+            answer << model;
             message_client(client->get_id(), answer);
             break;
         }
@@ -241,10 +244,11 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
             if (!lobby_model.start_match)
                 return;
 
-            game_room_ptr_ = std::make_unique<game_room::game_room>(players_, [this](const std::shared_ptr<domain::message::emitter_message> emitter_msg)
-            {
-                on_game_room_message(emitter_msg);
-            });
+            game_room_ptr_ = std::make_unique<game_room::game_room>(players_,
+                            [this](const std::shared_ptr<domain::message::emitter_message>& emitter_msg)
+                            {
+                                on_game_room_message(emitter_msg);
+                            });
             break;
         }
     case dungeon_common::custom_msg_types::match_start_request:

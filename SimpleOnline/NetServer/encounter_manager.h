@@ -6,7 +6,7 @@ namespace dungeon_server::domain
     class encounter_manager
     {
     private:
-        const uint8_t max_level_ = 2;
+        const uint8_t max_level_ = 3;
         uint8_t level_;
         std::vector<std::shared_ptr<player>> players_;
         std::function<void(bool)> encounter_end_callback_;
@@ -17,7 +17,7 @@ namespace dungeon_server::domain
 
         explicit encounter_manager(std::vector<std::shared_ptr<player>> players);
         void add_encounter_end_listener(std::function<void(bool)> callback);
-        void go_to_next_turn() const;
+        bool go_to_next_turn(std::string& action_log) const;
         void start_encounter();
         void end_encounter();
     };

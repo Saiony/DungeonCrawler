@@ -8,7 +8,8 @@ namespace dungeon_server::domain::enemy
     protected:
         void on_execute_turn(const std::shared_ptr<encounter>& encounter_ptr, std::string& action_log) override;
     public:
-        giant_spider(const std::string& name, uint16_t health, uint16_t attack_damage, uint16_t ability_power);
+        giant_spider(uint16_t health, uint16_t attack_damage, uint16_t ability_power);
         void on_died(const std::shared_ptr<encounter>& encounter, std::string& action_log) override;
+        std::string get_base_name() override;
     };
 }
