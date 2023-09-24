@@ -21,6 +21,7 @@ namespace dungeon_common
         player_action,
         game_room_broadcast,
         match_start_response,
+        story_response,
     };
     
     template <typename T>

@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include "base_game_room_state.h"
-#include "NetServer/encounter_manager.h"
 #include "NetServer/Domain/Encounter.h"
 #include "NetServer/Domain/Player.h"
 #include "NetServer/Domain/Message/encounter_update_response.h"
@@ -10,16 +9,16 @@ namespace dungeon_server::game_room
     class game_room_combat_state final : public base_game_room_state
     {
     private:
-        const std::function<void(std::shared_ptr<domain::message::emitter_message>)>& send_inner_server_msg_;
         std::shared_ptr<domain::encounter_manager> encounter_manager_;
         std::time_t next_turn_time_;
         const int turn_duration_ = 30;
         bool encounter_finished_ = false;
+        uint8_t level_;
 
     public:
-        explicit game_room_combat_state(std::shared_ptr<domain::encounter_manager> encounter_manager,
-                                        const std::function<void(std::shared_ptr<domain::message::emitter_message>)>& send_inner_server_msg)
-            : send_inner_server_msg_(send_inner_server_msg), encounter_manager_(std::move(encounter_manager))
+        explicit game_room_combat_state(std::shared_ptr<domain::encounter_manager> encounter_manager, const uint8_t level,
+                                        const std::function<void(std::shared_ptr<domain::message::emitter_message>)>& inner_server_msg_callback)
+            : base_game_room_state(inner_server_msg_callback), encounter_manager_(std::move(encounter_manager)), level_(level)
         {
             next_turn_time_ = std::numeric_limits<time_t>::max();
         }
@@ -91,7 +90,7 @@ namespace dungeon_server::game_room
             }
         }
 
-        void update(const std::function<void(std::shared_ptr<domain::message::emitter_message>)>& send_message_function) override
+        void update() override
         {
             const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
             if (now <= next_turn_time_)
@@ -101,14 +100,14 @@ namespace dungeon_server::game_room
             domain::action_log log;
             log.add_log("timeout");
             const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, log);
-            send_message_function(msg);
+            send_inner_server_msg_(msg);
 
             handle_turn();
         }
 
         void on_start() override
         {
-            encounter_manager_->start_encounter();
+            encounter_manager_->start_encounter(level_);
 
             //TODO: this needs to be a match_start_response and the client needs to handle that
             domain::action_log log;
@@ -122,7 +121,7 @@ namespace dungeon_server::game_room
         {
             std::cout << "\nCombat State - On End";
             encounter_finished_ = true;
-            encounter_manager_->end_encounter();
+            encounter_manager_->end_encounter(level_);
         }
 
         void start_timeout_timer()

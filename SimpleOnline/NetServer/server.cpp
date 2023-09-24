@@ -1,6 +1,8 @@
 ﻿#include <memory>
 #include<string>
 #include "server.h"
+
+#include "story_model.h"
 #include "Domain/Encounter.h"
 #include "Domain/player_classes.h"
 #include "Domain/Enemies/Wolf.h"
@@ -9,6 +11,7 @@
 #include "Domain/Message/emitter_message.h"
 #include "Domain/Message/encounter_update_response.h"
 #include "Domain/Message/match_start_response.h"
+#include "Domain/Message/story_response.h"
 #include "Models/action_use_model.h"
 #include "Models/create_player_model.h"
 #include "Models/encounter_model.h"
@@ -139,6 +142,24 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
             if (encounter->game_over)
                 running = false;
 
+            break;
+        }
+    case dungeon_common::custom_msg_types::story_response:
+        {
+            const auto story_response = std::dynamic_pointer_cast<domain::message::story_response>(emitter_msg);
+            dungeon_common::model::story_model model;
+            
+            int i = 0;
+            for (auto& log : story_response->story.get_log())
+            {
+                std::ranges::copy(log, model.story[i]);
+                i++;
+            }
+            
+            dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::story_response);
+            answer << model;
+            broadcast_message(answer);
+            
             break;
         }
     default: break;

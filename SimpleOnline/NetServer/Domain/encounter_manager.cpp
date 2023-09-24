@@ -3,13 +3,13 @@
 #include <iostream>
 #include <utility>
 
-#include "Domain/Enemies/giant_spider.h"
-#include "Domain/Enemies/goblin_archer.h"
-#include "Domain/Enemies/goblin_warrior.h"
-#include "Domain/Enemies/Wolf.h"
+#include "Enemies/giant_spider.h"
+#include "Enemies/goblin_archer.h"
+#include "Enemies/goblin_warrior.h"
+#include "Enemies/Wolf.h"
 
 dungeon_server::domain::encounter_manager::encounter_manager(std::vector<std::shared_ptr<player>> players)
-    : level_(1), players_(std::move(players)), current_encounter(generate_encounter())
+    : players_(std::move(players))
 {
 }
 
@@ -18,12 +18,12 @@ void dungeon_server::domain::encounter_manager::add_encounter_end_listener(std::
     encounter_end_callback_ = std::move(callback);
 }
 
-std::shared_ptr<dungeon_server::domain::encounter> dungeon_server::domain::encounter_manager::generate_encounter() const
+std::shared_ptr<dungeon_server::domain::encounter> dungeon_server::domain::encounter_manager::generate_encounter(const uint8_t level) const
 {
     std::cout << "\nGenerating new encounter...";
     std::vector<std::shared_ptr<base_enemy>> enemies;
 
-    switch (level_)
+    switch (level)
     {
     case 1:
         {
@@ -52,24 +52,23 @@ std::shared_ptr<dungeon_server::domain::encounter> dungeon_server::domain::encou
     return std::make_shared<encounter>(enemies, players_, players_[0]);
 }
 
-void dungeon_server::domain::encounter_manager::end_encounter()
+void dungeon_server::domain::encounter_manager::end_encounter(const uint8_t level)
 {
-    level_++;
     current_encounter = nullptr; 
 
-    if (level_ > max_level_)
+    if (level > max_level_)
     {
         std::cout << "GAME OVER - PLAYERS WON" << std::endl;
         current_encounter->set_game_over(true);
     }
 }
 
-void dungeon_server::domain::encounter_manager::start_encounter()
+void dungeon_server::domain::encounter_manager::start_encounter(const uint8_t level)
 {
-    if (level_ > max_level_)
+    if (level > max_level_)
         return;
 
-    current_encounter = generate_encounter();
+    current_encounter = generate_encounter(level);
 }
 
 bool dungeon_server::domain::encounter_manager::go_to_next_turn(action_log& action_log) const

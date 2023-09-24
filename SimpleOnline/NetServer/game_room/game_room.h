@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <memory>
 
-#include "NetServer/encounter_manager.h"
+#include "NetServer/Domain/encounter_manager.h"
 #include "NetServer/Domain/Actions/base_action.h"
 #include "NetServer/Domain/Message/emitter_message.h"
 #include "states/base_game_room_state.h"
@@ -14,6 +14,7 @@ namespace dungeon_server::game_room
         std::vector<std::shared_ptr<domain::player>> players_;
         std::shared_ptr<domain::encounter_manager> encounter_manager_;
         std::shared_ptr<base_game_room_state> state_ptr_;
+        uint8_t level_;
 
     public:
         game_room(std::vector<std::shared_ptr<domain::player>> players, const std::function<void(std::shared_ptr<domain::message::emitter_message>)>& send_message_function);

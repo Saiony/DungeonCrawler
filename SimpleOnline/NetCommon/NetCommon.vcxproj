@@ -34,6 +34,7 @@
     <ClInclude Include="base_client.h" />
     <ClInclude Include="Models\player_model.h" />
     <ClInclude Include="Models\simple_answer_model.h" />
+    <ClInclude Include="Models\story_model.h" />
     <ClInclude Include="net_common.h" />
     <ClInclude Include="net_connection.h" />
     <ClInclude Include="net_message.h" />
@@ -51,6 +52,7 @@
     <ClCompile Include="Models\player_config_model.cpp" />
     <ClCompile Include="Models\player_model.cpp" />
     <ClCompile Include="Models\simple_answer_model.cpp" />
+    <ClCompile Include="Models\story_model.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

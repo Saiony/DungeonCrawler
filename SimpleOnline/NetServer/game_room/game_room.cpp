@@ -6,9 +6,9 @@
 
 dungeon_server::game_room::game_room::game_room(std::vector<std::shared_ptr<domain::player>> players,
                                                 const std::function<void(std::shared_ptr<domain::message::emitter_message>)>& send_message_function)
-                                                : players_(std::move(players)),
-                                                encounter_manager_(std::make_shared<domain::encounter_manager>(players_)),
-                                                state_ptr_(std::make_shared<game_room_combat_state>(encounter_manager_, send_inner_message))
+    : players_(std::move(players)), encounter_manager_(std::make_shared<domain::encounter_manager>(players_)),
+      state_ptr_(std::make_shared<game_room_combat_state>(encounter_manager_, level_, send_inner_message)),
+      level_(1)
 {
     send_inner_message = send_message_function;
     encounter_manager_->add_encounter_end_listener([this](auto players_won)
@@ -19,6 +19,8 @@ dungeon_server::game_room::game_room::game_room(std::vector<std::shared_ptr<doma
 
 void dungeon_server::game_room::game_room::player_match_start_request(std::shared_ptr<domain::player>& player) const
 {
+    const auto combat_state = std::make_shared<game_room_combat_state>(encounter_manager_, level_, send_inner_message);
+    combat_state->on_start();
     const auto msg = std::make_shared<domain::message::match_start_response>(player, encounter_manager_->current_encounter);
     send_inner_message(msg);
 }
@@ -26,7 +28,8 @@ void dungeon_server::game_room::game_room::player_match_start_request(std::share
 
 void dungeon_server::game_room::game_room::on_encounter_end(bool players_won)
 {
-    const auto new_state = std::make_shared<game_room_combat_state>(encounter_manager_, send_inner_message);
+    level_++;
+    const auto new_state = std::make_shared<game_room_combat_state>(encounter_manager_, level_, send_inner_message);
     set_state(new_state);
 }
 
@@ -45,5 +48,5 @@ void dungeon_server::game_room::game_room::handle_player_input(const std::shared
 
 void dungeon_server::game_room::game_room::update() const
 {
-    state_ptr_->update(send_inner_message);
+    state_ptr_->update();
 }

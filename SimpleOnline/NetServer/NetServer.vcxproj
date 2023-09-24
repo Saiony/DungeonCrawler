@@ -42,6 +42,82 @@
     <ClCompile Include="Domain\Actions\venomous_bite_action.cpp" />
     <ClCompile Include="Domain\action_log.cpp" />
     <ClCompile Include="Domain\Encounter.cpp" />
+    <ClCompile Include="Domain\encounter_manager.cpp">
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>x64\Release\</AssemblerListingLocation>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformationFile>x64\Release\</BrowseInformationFile>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <CompileAs>Default</CompileAs>
+      <ConformanceMode>true</ConformanceMode>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <ErrorReporting>Prompt</ErrorReporting>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableASAN>false</EnableASAN>
+      <EnableFuzzer>false</EnableFuzzer>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <GenerateModuleDependencies>false</GenerateModuleDependencies>
+      <GenerateSourceDependencies>false</GenerateSourceDependencies>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ModuleDependenciesFile>x64\Release\</ModuleDependenciesFile>
+      <ModuleOutputFile>x64\Release\</ModuleOutputFile>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <Optimization>Disabled</Optimization>
+      <ObjectFileName>x64\Release\</ObjectFileName>
+      <CallingConvention>Cdecl</CallingConvention>
+      <ProgramDataBaseFileName>x64\Release\vc143.pdb</ProgramDataBaseFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>x64\Release\NetServer.pch</PrecompiledHeaderOutputFile>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <ShowIncludes>false</ShowIncludes>
+      <SourceDependenciesFile>x64\Release\</SourceDependenciesFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <SpectreMitigation>false</SpectreMitigation>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <SupportJustMyCode>false</SupportJustMyCode>
+      <TrackerLogDirectory>x64\Release\NetServer.tlog\</TrackerLogDirectory>
+      <TranslateIncludes>false</TranslateIncludes>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <XMLDocumentationFileName>x64\Release\</XMLDocumentationFileName>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <IntelJCCErratum>false</IntelJCCErratum>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
+      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;_UNICODE;UNICODE;</PreprocessorDefinitions>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Users\cauec\DungeonCrawler\SimpleOnline\;</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>C:\Users\cauec\SimpleMessageSystem\SimpleOnline\NetCommon;</AdditionalUsingDirectories>
+      <LinkCompiled>true</LinkCompiled>
+    </ClCompile>
     <ClCompile Include="Domain\Enemies\base_enemy.cpp" />
     <ClCompile Include="Domain\Enemies\giant_spider.cpp" />
     <ClCompile Include="Domain\Enemies\goblin_archer.cpp" />
@@ -66,7 +142,8 @@
     <ClCompile Include="Domain\Status\retribution_status.cpp" />
     <ClCompile Include="Domain\Status\stuck_in_spiders_web_status.cpp" />
     <ClCompile Include="Domain\Status\stunned_status.cpp" />
-    <ClCompile Include="encounter_manager.cpp" />
+    <ClCompile Include="Domain\story_log.cpp" />
+    <ClCompile Include="Domain\story_manager.cpp" />
     <ClCompile Include="game_room\game_room.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Utility\randomizer.cpp" />
@@ -95,6 +172,7 @@
     <ClInclude Include="Domain\action_log.h" />
     <ClInclude Include="Domain\base_creature.h" />
     <ClInclude Include="Domain\Encounter.h" />
+    <ClInclude Include="Domain\encounter_manager.h" />
     <ClInclude Include="Domain\Enemies\base_enemy.h" />
     <ClInclude Include="Domain\Enemies\giant_spider.h" />
     <ClInclude Include="Domain\Enemies\goblin_archer.h" />
@@ -108,6 +186,7 @@
     <ClInclude Include="Domain\Message\emitter_message.h" />
     <ClInclude Include="Domain\Message\encounter_update_response.h" />
     <ClInclude Include="Domain\Message\match_start_response.h" />
+    <ClInclude Include="Domain\Message\story_response.h" />
     <ClInclude Include="Domain\player.h" />
     <ClInclude Include="Domain\player_classes.h" />
     <ClInclude Include="Domain\Status\invulnerable_status.h" />
@@ -123,7 +202,8 @@
     <ClInclude Include="Domain\Status\retribution_status.h" />
     <ClInclude Include="Domain\Status\stuck_in_spiders_web_status.h" />
     <ClInclude Include="Domain\Status\stunned_status.h" />
-    <ClInclude Include="encounter_manager.h" />
+    <ClInclude Include="Domain\story_log.h" />
+    <ClInclude Include="Domain\story_manager.h" />
     <ClInclude Include="Enum\offensive_stats_type.h" />
     <ClInclude Include="game_room\game_room.h" />
     <ClInclude Include="game_room\states\base_game_room_state.h" />

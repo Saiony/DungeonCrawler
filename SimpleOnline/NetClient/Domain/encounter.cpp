@@ -28,7 +28,7 @@ dungeon_client::domain::encounter::encounter(std::vector<enemy> enemies, std::ve
     {
         active_creature_ptr = *active_creature_it;
         return;
-    }
+    }    
 }
 
 bool dungeon_client::domain::encounter::check_active_player(const player& player) const
