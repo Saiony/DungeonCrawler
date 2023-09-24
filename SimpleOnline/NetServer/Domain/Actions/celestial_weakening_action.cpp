@@ -36,17 +36,17 @@ float_t dungeon_server::domain::action::celestial_weakening_action::get_offensiv
     return 0.5;
 }
 
-void dungeon_server::domain::action::celestial_weakening_action::use(const std::shared_ptr<encounter>& encounter, std::string& action_log)
+void dungeon_server::domain::action::celestial_weakening_action::use(const std::shared_ptr<encounter>& encounter, action_log& action_log)
 {
     const auto action_owner = encounter->get_creature(action_owner_id);
     const auto target = encounter->get_creature(target_id_);
-    action_log += action_owner->name + " used " + get_name() + " on " + target->name;
+    action_log.add_log(action_owner->name + " used " + get_name() + " on " + target->name);
 
     const auto damage = calculate_final_attack(encounter);
-    const auto duration = 2;
+    constexpr auto duration = 2;
     target->take_damage(damage, action_log, encounter, action_owner_id, dungeon_common::enums::elemental_property_type::holy);
     target->add_status(std::make_shared<attack_lowered_status>(target->public_id, encounter, duration));
 
-    action_log += "\n" + target->name + " 's attack is lowered for " + std::to_string(duration) + " turns";
+    action_log.add_log(target->name + " 's attack is lowered for " + std::to_string(duration) + " turns");
     action_owner->on_attack(encounter, target_id_, action_log);
 }

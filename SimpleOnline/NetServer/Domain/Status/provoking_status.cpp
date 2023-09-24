@@ -16,7 +16,7 @@ dungeon_common::enums::creature_status_type dungeon_server::domain::provoking_st
 }
 
 
-void dungeon_server::domain::provoking_status::on_begin_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log)
+void dungeon_server::domain::provoking_status::on_begin_of_turn(const std::shared_ptr<encounter>& encounter, dungeon_server::domain::action_log& action_log)
 {
     quantity--;
 
@@ -25,7 +25,7 @@ void dungeon_server::domain::provoking_status::on_begin_of_turn(const std::share
         const auto player = encounter->get_player(creature_id_);
         player->aggro -= aggro_increase_;
 
-        action_log += "\n" + player->name + "'s Provoke is no longer active";
+        action_log.add_log(player->name + "'s Provoke is no longer active");
     }
 }
 

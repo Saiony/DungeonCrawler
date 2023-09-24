@@ -20,10 +20,10 @@ namespace dungeon_server::domain::action
         float_t get_damage_variance() override;
         float_t get_offensive_stat_multiplier() override;
         
-        void use(const std::shared_ptr<encounter>& encounter_ptr, std::string& action_log) override;
+        void use(const std::shared_ptr<encounter>& encounter_ptr, action_log& action_log) override;
         void shoot_arrow(const std::shared_ptr<encounter>& encounter,
-                                const std::shared_ptr<base_creature>& action_owner,
-                                const std::shared_ptr<base_creature>& target,
-                                std::string& action_log);
+                         const std::shared_ptr<base_creature>& action_owner,
+                         const std::shared_ptr<base_creature>& target,
+                         action_log& action_log);
     };
 }

@@ -18,7 +18,7 @@ void dungeon_server::domain::poisoned_status::on_overriding_status_added(std::sh
 }
 
 
-void dungeon_server::domain::poisoned_status::on_begin_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log)
+void dungeon_server::domain::poisoned_status::on_begin_of_turn(const std::shared_ptr<encounter>& encounter, dungeon_server::domain::action_log& action_log)
 {
     const auto this_creature = *std::ranges::find_if(encounter->creatures, [this](auto creature)
     {
@@ -26,9 +26,7 @@ void dungeon_server::domain::poisoned_status::on_begin_of_turn(const std::shared
     });
 
     this_creature->take_damage(damage_, action_log, encounter, "", dungeon_common::enums::elemental_property_type::poison);
-    const auto log = " due to poison...";
-    action_log += log;
-    std::cout << log;
+    action_log.add_log(" due to poison...");
 
     quantity--;
 
@@ -36,5 +34,5 @@ void dungeon_server::domain::poisoned_status::on_begin_of_turn(const std::shared
         return;
 
     end_status_(std::make_shared<poisoned_status>(*this));
-    action_log += "\n" + this_creature->name + " is no longer poisoned";
+    action_log.add_log(this_creature->name + " is no longer poisoned");
 }

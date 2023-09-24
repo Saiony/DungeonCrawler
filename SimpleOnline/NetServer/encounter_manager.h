@@ -17,7 +17,7 @@ namespace dungeon_server::domain
 
         explicit encounter_manager(std::vector<std::shared_ptr<player>> players);
         void add_encounter_end_listener(std::function<void(bool)> callback);
-        bool go_to_next_turn(std::string& action_log) const;
+        bool go_to_next_turn(action_log& action_log) const;
         void start_encounter();
         void end_encounter();
     };

@@ -72,7 +72,7 @@ void dungeon_server::domain::encounter_manager::start_encounter()
     current_encounter = generate_encounter();
 }
 
-bool dungeon_server::domain::encounter_manager::go_to_next_turn(std::string& action_log) const
+bool dungeon_server::domain::encounter_manager::go_to_next_turn(action_log& action_log) const
 {
     if (current_encounter->players.empty())
     {
@@ -83,7 +83,7 @@ bool dungeon_server::domain::encounter_manager::go_to_next_turn(std::string& act
     if (current_encounter->enemies.empty())
     {
         std::cout << "ENCOUNTER END - PLAYERS WON" << std::endl;
-        action_log += "\nALL ENEMIES DEFEATED";
+        action_log.add_log("ALL ENEMIES DEFEATED");
         
         encounter_end_callback_(true);
         return false;

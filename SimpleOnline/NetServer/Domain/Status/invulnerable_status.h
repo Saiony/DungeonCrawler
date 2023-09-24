@@ -11,7 +11,7 @@ namespace dungeon_server::domain
         dungeon_common::enums::creature_status_type get_type() override;
         void on_overriding_status_added(std::shared_ptr<base_creature_status> status) override;
         ~invulnerable_status() override;
-        void on_attacked(const std::shared_ptr<encounter>& encounter, std::string& action_log,
+        void on_attacked(const std::shared_ptr<encounter>& encounter, action_log& action_log,
                          const std::string& attacker_id, uint16_t damage, dungeon_common::enums::elemental_property_type) override;
     };
 }

@@ -19,22 +19,21 @@ void dungeon_server::domain::invulnerable_status::on_overriding_status_added(std
 {
 }
 
-void dungeon_server::domain::invulnerable_status::on_attacked(const std::shared_ptr<encounter>& encounter, std::string& action_log,
+void dungeon_server::domain::invulnerable_status::on_attacked(const std::shared_ptr<encounter>& encounter, dungeon_server::domain::action_log& action_log,
                                                               const std::string& attacker_id, uint16_t damage,
                                                               dungeon_common::enums::elemental_property_type elemental_property)
 {
     const auto this_creature = *std::ranges::find_if(encounter->creatures, [this](auto creature)
     {
         return creature->public_id == creature_id_;
-        
     });
-    
-    action_log += "\n" + this_creature->name + " is invulnerable";
+
+    action_log.add_log(this_creature->name + " is invulnerable");
     quantity--;
 
     if (quantity > 0)
         return;
-        
+
     end_status_(std::make_shared<invulnerable_status>(*this));
-    action_log += "\n" + this_creature->name + " is no longer invulnerable";
+    action_log.add_log(this_creature->name + " is no longer invulnerable");
 }

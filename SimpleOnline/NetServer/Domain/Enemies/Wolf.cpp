@@ -11,7 +11,7 @@ std::string dungeon_server::domain::enemy::wolf::get_base_name()
     return "wolf";
 }
 
-void dungeon_server::domain::enemy::wolf::on_execute_turn(const std::shared_ptr<encounter>& encounter_ptr, std::string& action_log)
+void dungeon_server::domain::enemy::wolf::on_execute_turn(const std::shared_ptr<encounter>& encounter_ptr, dungeon_server::domain::action_log& action_log)
 {
     const auto target = get_random_player(encounter_ptr);
     action::bite_action action(dungeon_common::model::action_types::bite, public_id, target->public_id);

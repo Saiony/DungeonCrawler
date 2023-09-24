@@ -20,13 +20,13 @@ std::uint8_t dungeon_server::domain::action::aegis_of_faith_action::get_targets_
     return 1;
 }
 
-void dungeon_server::domain::action::aegis_of_faith_action::use(const std::shared_ptr<encounter>& encounter_ptr, std::string& action_log)
+void dungeon_server::domain::action::aegis_of_faith_action::use(const std::shared_ptr<encounter>& encounter_ptr, action_log& action_log)
 {
     const auto action_owner = encounter_ptr->get_creature(action_owner_id);
     const auto target = encounter_ptr->get_creature(target_id_);
-    action_log += action_owner->name + " used " + get_name() + " on " + target->name;
+    action_log.add_log(action_owner->name + " used " + get_name() + " on " + target->name);
 
     target->add_status(std::make_shared<invulnerable_status>(target_id_));
 
-    action_log += "\n" + target->name + " is invulnerable";
+    action_log.add_log(target->name + " is invulnerable");
 }

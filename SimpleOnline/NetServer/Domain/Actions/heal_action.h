@@ -16,6 +16,6 @@ namespace dungeon_server::domain::action
         enums::offensive_stats_type get_offensive_stat_type() override;
         float_t get_damage_variance() override;
         float_t get_offensive_stat_multiplier() override;
-        void use(const std::shared_ptr<encounter>& encounter_ptr, std::string& action_log) override;
+        void use(const std::shared_ptr<encounter>& encounter_ptr, action_log& action_log) override;
     };
 }

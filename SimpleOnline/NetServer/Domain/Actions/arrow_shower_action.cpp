@@ -38,7 +38,7 @@ float_t dungeon_server::domain::action::arrow_shower_action::get_offensive_stat_
     return 0.8f;
 }
 
-void dungeon_server::domain::action::arrow_shower_action::use(const std::shared_ptr<encounter>& encounter_ptr, std::string& action_log)
+void dungeon_server::domain::action::arrow_shower_action::use(const std::shared_ptr<encounter>& encounter_ptr, action_log& action_log)
 {
     const auto action_owner = encounter_ptr->get_creature(action_owner_id);
 
@@ -61,11 +61,11 @@ void dungeon_server::domain::action::arrow_shower_action::use(const std::shared_
 }
 
 void dungeon_server::domain::action::arrow_shower_action::shoot_arrow(const std::shared_ptr<encounter>& encounter,
-                                                                             const std::shared_ptr<base_creature>& action_owner,
-                                                                             const std::shared_ptr<base_creature>& target,
-                                                                             std::string& action_log)
+                                                                      const std::shared_ptr<base_creature>& action_owner,
+                                                                      const std::shared_ptr<base_creature>& target,
+                                                                      action_log& action_log)
 {
-    action_log += action_owner->name + " used " + get_name() + " on " + target->name;
+    action_log.add_log(action_owner->name + " used " + get_name() + " on " + target->name);
     const auto damage = calculate_final_attack(encounter);
 
     target->take_damage(damage, action_log, encounter, action_owner_id);

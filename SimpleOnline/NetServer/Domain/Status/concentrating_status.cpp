@@ -12,7 +12,7 @@ dungeon_common::enums::creature_status_type dungeon_server::domain::concentratin
 
 void dungeon_server::domain::concentrating_status::on_after_attack(const std::shared_ptr<encounter>& encounter,
                                                                    const std::string& attacked_creature_id,
-                                                                   std::string& action_log)
+                                                                   dungeon_server::domain::action_log& action_log)
 {
     quantity = 0;
 }

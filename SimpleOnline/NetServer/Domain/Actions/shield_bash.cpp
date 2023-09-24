@@ -8,8 +8,8 @@
 dungeon_server::domain::action::shield_bash::~shield_bash() = default;
 
 dungeon_server::domain::action::shield_bash::shield_bash(const dungeon_common::model::action_types& action_type, std::string new_action_owner_id, std::string target_id)
-                                                        : base_action(action_type, std::move(new_action_owner_id)),
-                                                        target_id_(std::move(target_id))
+    : base_action(action_type, std::move(new_action_owner_id)),
+      target_id_(std::move(target_id))
 {
 }
 
@@ -38,21 +38,21 @@ float_t dungeon_server::domain::action::shield_bash::get_offensive_stat_multipli
     return 0.5f;
 }
 
-void dungeon_server::domain::action::shield_bash::use(const std::shared_ptr<encounter>& encounter_ptr, std::string& action_log)
+void dungeon_server::domain::action::shield_bash::use(const std::shared_ptr<encounter>& encounter_ptr, action_log& action_log)
 {
     const auto action_owner = encounter_ptr->get_creature(action_owner_id);
     const auto target = encounter_ptr->get_creature(target_id_);
-    action_log += action_owner->name + " used " + get_name() +" on " +target->name;
+    action_log.add_log(action_owner->name + " used " + get_name() + " on " + target->name);
 
     const auto damage = calculate_final_attack(encounter_ptr);
     target->take_damage(damage, action_log, encounter_ptr, action_owner_id);
 
     const auto stun_chance = static_cast<uint16_t>(utility::randomizer::randomize(0, 100));
-    if(stun_chance > 50)
+    if (stun_chance > 50)
     {
         target->add_status(std::make_shared<stunned_status>(target->public_id));
-        action_log += "\n" + target->name + " is stunned";
+        action_log.add_log(target->name + " is stunned");
     }
-    
-    action_owner->on_attack(encounter_ptr, target_id_, action_log);    
+
+    action_owner->on_attack(encounter_ptr, target_id_, action_log);
 }

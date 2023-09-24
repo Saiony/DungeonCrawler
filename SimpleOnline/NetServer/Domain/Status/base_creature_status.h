@@ -5,6 +5,7 @@
 #include "creature_status_manager.h"
 #include "elemental_property_type.h"
 #include "Enum/creature_status_types.h"
+#include "../action_log.h"
 
 namespace dungeon_server::domain
 {
@@ -24,7 +25,7 @@ namespace dungeon_server::domain
 
         virtual dungeon_common::enums::creature_status_type get_type() = 0;
 
-        virtual void on_begin_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log)
+        virtual void on_begin_of_turn(const std::shared_ptr<encounter>& encounter, action_log& action_log)
         {
         }
 
@@ -33,19 +34,19 @@ namespace dungeon_server::domain
             return -1;
         }
 
-        virtual void on_after_attack(const std::shared_ptr<encounter>& encounter, const std::string& attacked_creature_id, std::string& action_log)
+        virtual void on_after_attack(const std::shared_ptr<encounter>& encounter, const std::string& attacked_creature_id, action_log& action_log)
         {
         }
 
         virtual void on_attacked(const std::shared_ptr<encounter>& encounter,
-                                 std::string& action_log,
+                                 action_log& action_log,
                                  const std::string& attacker_id,
                                  uint16_t damage,
                                  dungeon_common::enums::elemental_property_type)
-        {            
+        {
         }
-
-        virtual void on_end_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log)
+        
+        virtual void on_end_of_turn(const std::shared_ptr<encounter>& encounter, action_log& action_log)
         {
         }
 

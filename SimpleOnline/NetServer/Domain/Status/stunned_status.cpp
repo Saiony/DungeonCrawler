@@ -11,16 +11,16 @@ dungeon_common::enums::creature_status_type dungeon_server::domain::stunned_stat
     return dungeon_common::enums::creature_status_type::stun;
 }
 
-void dungeon_server::domain::stunned_status::on_begin_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log)
+void dungeon_server::domain::stunned_status::on_begin_of_turn(const std::shared_ptr<encounter>& encounter, dungeon_server::domain::action_log& action_log)
 {
-    const auto this_creature = std::ranges::find_if(encounter->creatures, [this](auto creature)
+    const auto this_creature = *std::ranges::find_if(encounter->creatures, [this](auto creature)
     {
         return creature->public_id == creature_id_;
     });
-    action_log += "\n" + (*this_creature)->name + " is stunned";
+    action_log.add_log(this_creature->name + " is stunned");
 }
 
-void dungeon_server::domain::stunned_status::on_end_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log)
+void dungeon_server::domain::stunned_status::on_end_of_turn(const std::shared_ptr<encounter>& encounter, dungeon_server::domain::action_log& action_log)
 {
     quantity--;
 }

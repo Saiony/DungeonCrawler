@@ -16,6 +16,6 @@ namespace dungeon_server::domain::action
         std::uint8_t get_targets_count() override;
         float_t get_damage_variance() override;
         float_t get_offensive_stat_multiplier() override;
-        void use(const std::shared_ptr<encounter>& encounter, std::string& action_log) override;
+        void use(const std::shared_ptr<encounter>& encounter, action_log& action_log) override;
     };
 }

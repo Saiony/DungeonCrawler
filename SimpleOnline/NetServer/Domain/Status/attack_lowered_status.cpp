@@ -21,7 +21,7 @@ void dungeon_server::domain::attack_lowered_status::on_overriding_status_added(c
     quantity = status->quantity;
 }
 
-void dungeon_server::domain::attack_lowered_status::on_end_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log)
+void dungeon_server::domain::attack_lowered_status::on_end_of_turn(const std::shared_ptr<encounter>& encounter, dungeon_server::domain::action_log& action_log)
 {
     quantity--;
 
@@ -31,7 +31,7 @@ void dungeon_server::domain::attack_lowered_status::on_end_of_turn(const std::sh
         this_creature->modify_offensive_stat(enums::offensive_stats_type::ability_power, debuff_value_);
         this_creature->modify_offensive_stat(enums::offensive_stats_type::attack_damage, debuff_value_);
 
-        action_log += "\n" + this_creature->name + " 's attack is no longer lowered";
+        action_log.add_log(this_creature->name + " 's attack is no longer lowered");
         end_status_(std::make_shared<attack_lowered_status>(*this));
     }
 }

@@ -15,7 +15,7 @@ void dungeon_client::scene::level_scene::show()
 {
     client_ptr_->request_match_start([this](auto encounter)
     {
-        print_combat(encounter);        
+        print_combat(encounter);
         handle_player_input(encounter);
     });
 
@@ -45,29 +45,32 @@ void dungeon_client::scene::level_scene::print_combat(const domain::encounter& e
 
     if (!encounter.log.empty())
     {
-        std::cout << encounter.log << std::endl;
-        std::this_thread::sleep_for(std::chrono::seconds(2));
-    }    
+        std::ranges::for_each(encounter.log, [](auto log)
+        {
+            std::cout << log << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+        });
+    }
 
-    if(encounter.game_over)
+    if (encounter.game_over)
     {
         std::this_thread::sleep_for(std::chrono::seconds(2));
         on_game_over(encounter.players_won);
-        return; 
+        return;
     }
-    
+
     if (encounter.check_active_player(client_ptr_->get_player()))
     {
         std::cout << "SKILLS" << std::endl;
         const auto actions = client_ptr_->get_player().actions;
-        for(size_t i = 0; i < actions.size(); i++)
+        for (size_t i = 0; i < actions.size(); i++)
         {
             utility::custom_print::print_aligned("- " + actions[i].name, 20);
 
-            if(i % 2 != 0)
+            if (i % 2 != 0)
                 std::cout << std::endl;
         }
-        
+
         std::cout << "Your turn..." << std::endl;
     }
     else
@@ -89,7 +92,7 @@ void dungeon_client::scene::level_scene::handle_player_input(domain::encounter& 
 
         const auto player_action_ptr = client_ptr_->get_player().get_action(input);
 
-        if(player_action_ptr == nullptr)
+        if (player_action_ptr == nullptr)
         {
             print_combat(encounter);
             std::cout << "[" << input << "] is not on your action list" << std::endl;
@@ -97,7 +100,7 @@ void dungeon_client::scene::level_scene::handle_player_input(domain::encounter& 
             return;
         }
 
-        if(player_action_ptr->needs_target())
+        if (player_action_ptr->needs_target())
             read_action_target(encounter, player_action_ptr);
         else
             client_ptr_->send_action(player_action_ptr->id, "");
@@ -110,13 +113,13 @@ void dungeon_client::scene::level_scene::read_action_target(domain::encounter& e
     client_ptr_->read_input([&](const std::string& target_name)
     {
         const auto target_creature = encounter.get_creature(target_name);
-        if(target_creature == nullptr)
+        if (target_creature == nullptr)
         {
             std::cout << "CREATURE NOT FOUND" << std::endl;
             read_action_target(encounter, player_action_ptr);
             return;
         }
-            
+
         client_ptr_->send_action(player_action_ptr->id, target_creature->public_id);
     });
 }
@@ -124,7 +127,7 @@ void dungeon_client::scene::level_scene::read_action_target(domain::encounter& e
 
 void dungeon_client::scene::level_scene::on_game_over(const bool players_won) const
 {
-    if(players_won)
+    if (players_won)
     {
         game_over_win_scene win_scene;
         win_scene.show();

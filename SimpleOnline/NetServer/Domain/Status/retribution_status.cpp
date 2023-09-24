@@ -19,7 +19,7 @@ void dungeon_server::domain::retribution_status::on_overriding_status_added(std:
     quantity = duration_;
 }
 
-void dungeon_server::domain::retribution_status::on_begin_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log)
+void dungeon_server::domain::retribution_status::on_begin_of_turn(const std::shared_ptr<encounter>& encounter, dungeon_server::domain::action_log& action_log)
 {
     quantity--;
 
@@ -31,17 +31,17 @@ void dungeon_server::domain::retribution_status::on_begin_of_turn(const std::sha
     if (quantity <= 0)
     {
         end_status_(std::make_shared<retribution_status>(*this));
-        action_log += "\n" + this_creature->name + "'s retribution is no longer active";
+        action_log.add_log(this_creature->name + "'s retribution is no longer active");
     }
 }
 
-void dungeon_server::domain::retribution_status::on_attacked(const std::shared_ptr<encounter>& encounter, std::string& action_log,
+void dungeon_server::domain::retribution_status::on_attacked(const std::shared_ptr<encounter>& encounter, dungeon_server::domain::action_log& action_log,
                                                              const std::string& attacker_id, const uint16_t damage,
                                                              const dungeon_common::enums::elemental_property_type elemental_property)
 {
-    if(attacker_id == "")
+    if (attacker_id == "")
         return;
-    
+
     const auto this_creature = *std::ranges::find_if(encounter->creatures, [this](auto creature)
     {
         return creature->public_id == creature_id_;
@@ -53,6 +53,6 @@ void dungeon_server::domain::retribution_status::on_attacked(const std::shared_p
     });
 
     const auto retribution_dmg = static_cast<uint16_t>(static_cast<float_t>(this_creature->get_attack_damage()) * multiplier_);
-    action_log += "\n" + this_creature->name + " counter attacks";
+    action_log.add_log(this_creature->name + " counter attacks");
     attacker->take_damage(retribution_dmg, action_log, encounter, creature_id_, dungeon_common::enums::elemental_property_type::normal);
 }

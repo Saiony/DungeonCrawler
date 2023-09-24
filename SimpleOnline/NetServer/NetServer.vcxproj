@@ -40,6 +40,7 @@
     <ClCompile Include="Domain\Actions\silk_prison_action.cpp" />
     <ClCompile Include="Domain\Actions\sword_slash_action.cpp" />
     <ClCompile Include="Domain\Actions\venomous_bite_action.cpp" />
+    <ClCompile Include="Domain\action_log.cpp" />
     <ClCompile Include="Domain\Encounter.cpp" />
     <ClCompile Include="Domain\Enemies\base_enemy.cpp" />
     <ClCompile Include="Domain\Enemies\giant_spider.cpp" />
@@ -91,6 +92,7 @@
     <ClInclude Include="Domain\Actions\silk_prison_action.h" />
     <ClInclude Include="Domain\Actions\sword_slash_action.h" />
     <ClInclude Include="Domain\Actions\venomous_bite_action.h" />
+    <ClInclude Include="Domain\action_log.h" />
     <ClInclude Include="Domain\base_creature.h" />
     <ClInclude Include="Domain\Encounter.h" />
     <ClInclude Include="Domain\Enemies\base_enemy.h" />

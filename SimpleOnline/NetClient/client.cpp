@@ -1,6 +1,7 @@
 ﻿#include "client.h"
 
 #include "Domain/action.h"
+#include "Domain/action_log.h"
 #include "Domain/player_class.h"
 #include "Domain/player_complete.h"
 #include "Models/action_use_model.h"
@@ -59,7 +60,7 @@ void client::validate_name(const char* name, const std::function<void(model::sim
 void client::get_player_classes(const std::function<void(std::vector<domain::player_class> player_classes)>& callback)
 {
     const message<custom_msg_types> msg(custom_msg_types::get_player_classes);
-    
+
     get_player_classes_callback = callback;
     send(msg);
     wait_message();
@@ -192,20 +193,20 @@ bool client::handle_messages()
         {
             model::player_classes_model response;
             msg >> response;
-            
+
             std::vector<domain::player_class> player_classes;
             std::ranges::for_each(response.classes, [&player_classes](auto player_class_model)
             {
                 player_classes.emplace_back(player_class_model.id, player_class_model.name);
             });
-            
-            if(get_player_classes_callback != nullptr)
+
+            if (get_player_classes_callback != nullptr)
             {
                 get_player_classes_callback(player_classes);
                 get_player_classes_callback = nullptr;
                 return true;
             }
-            
+
             return false;
         }
     case custom_msg_types::create_player:
@@ -262,22 +263,32 @@ bool client::handle_messages()
 
             for (auto& enemy_model : encounter_model.enemies)
             {
-                if(std::strlen(enemy_model.id) > 0)
+                if (std::strlen(enemy_model.id) > 0)
                     enemies.emplace_back(enemy_model.id, enemy_model.name, enemy_model.health, enemy_model.max_health);
             }
 
-            for(auto& player_model : encounter_model.players)
+            for (auto& player_model : encounter_model.players)
             {
-                if(std::strlen(player_model.name) > 0)
+                if (std::strlen(player_model.name) > 0)
                 {
                     domain::player_class player_class(player_model.player_class.id, player_model.player_class.name);
                     players.emplace_back(player_model.id, player_model.name, player_class, player_model.health, player_model.max_health);
                 }
             }
 
-            domain::encounter encounter(enemies, players, encounter_model.active_creature_id, encounter_model.log,
-                                          encounter_model.game_over, encounter_model.players_won);               
-            if(get_encounter_callback != nullptr)
+            std::list<std::string> action_log;
+            for(auto& log_model : encounter_model.log)
+            {
+                if(log_model[0] == '\0')
+                    continue;
+                
+                std::string log(log_model);
+                action_log.push_back(log);
+            }
+
+            domain::encounter encounter(enemies, players, encounter_model.active_creature_id, action_log,
+                                        encounter_model.game_over, encounter_model.players_won);
+            if (get_encounter_callback != nullptr)
             {
                 get_encounter_callback(std::move(encounter));
                 return true;

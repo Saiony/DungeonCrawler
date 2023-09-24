@@ -18,10 +18,9 @@ float_t action::base_action::randomize_damage(const float_t damage, const float_
 
     const float_t min = damage * (1 - damage_variance);
     const float_t max = damage * (1 + damage_variance);
-    std::uniform_real_distribution<float_t> dist6(min, max);
+    std::uniform_real_distribution dist6(min, max);
 
     const auto randomized_value = dist6(rng);
-    std::cout << "[RANDOMIZED]: " << randomized_value << std::endl;
 
     return round(randomized_value);
 }

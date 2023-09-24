@@ -26,10 +26,8 @@ namespace dungeon_server::game_room
 
         void handle_input(const std::shared_ptr<domain::action::base_action>& action) override
         {
-            std::cout << "\nHandle Input";
-            std::string action_log;
+            domain::action_log action_log;
             action->use(encounter_manager_->current_encounter, action_log);
-            std::cout << action_log << "\n-\n";
 
             const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, action_log);
             send_inner_server_msg_(msg);
@@ -56,7 +54,7 @@ namespace dungeon_server::game_room
                 {
                 }
 
-                std::string action_log;
+                domain::action_log action_log;
 
                 enemy_ptr->on_begin_of_turn(encounter_manager_->current_encounter, action_log);
                 enemy_ptr->execute_turn(encounter_manager_->current_encounter, action_log);
@@ -65,7 +63,6 @@ namespace dungeon_server::game_room
                 encounter_manager_->go_to_next_turn(action_log);
 
                 const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, action_log);
-                std::cout << action_log;
                 start_timeout_timer();
                 send_inner_server_msg_(msg);
 
@@ -74,7 +71,7 @@ namespace dungeon_server::game_room
             else if (const auto player_ptr = std::dynamic_pointer_cast<domain::player>(active_creature))
             {
                 std::cout << player_ptr->name << "'s turn" << std::endl;
-                std::string action_log;
+                domain::action_log action_log;
                 active_creature->on_begin_of_turn(encounter_manager_->current_encounter, action_log);
 
                 if (!player_ptr->can_execute_turn())
@@ -101,7 +98,9 @@ namespace dungeon_server::game_room
                 return;
 
             encounter_manager_->current_encounter->go_to_next_turn();
-            const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, "timeout");
+            domain::action_log log;
+            log.add_log("timeout");
+            const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, log);
             send_message_function(msg);
 
             handle_turn();
@@ -112,7 +111,8 @@ namespace dungeon_server::game_room
             encounter_manager_->start_encounter();
 
             //TODO: this needs to be a match_start_response and the client needs to handle that
-            const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, "");
+            domain::action_log log;
+            const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, log);
             send_inner_server_msg_(msg);
 
             start_timeout_timer();

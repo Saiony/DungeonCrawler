@@ -1,6 +1,6 @@
 ﻿#include "player_complete.h"
-
 #include <memory>
+#include "../Utility/string_utility.h"
 
 dungeon_client::domain::player_complete::player_complete(const std::string& id, const std::string& name,
                                                          const player_class& player_class,
@@ -21,7 +21,7 @@ std::shared_ptr<dungeon_client::domain::action> dungeon_client::domain::player_c
 {
     const auto action_it = std::ranges::find_if(actions, [&action_name](auto action)
     {
-        return action.name == action_name;
+        return utility::string_utility::compare_string(action.name, action_name);
     });
     return action_it != std::end(actions) ? std::make_shared<action>(*action_it) : nullptr; 
 }

@@ -14,7 +14,7 @@ std::string dungeon_server::domain::enemy::goblin_warrior::get_base_name()
     return "goblin warrior";
 }
 
-void dungeon_server::domain::enemy::goblin_warrior::on_execute_turn(const std::shared_ptr<encounter>& encounter_ptr, std::string& action_log)
+void dungeon_server::domain::enemy::goblin_warrior::on_execute_turn(const std::shared_ptr<encounter>& encounter_ptr, dungeon_server::domain::action_log& action_log)
 {
     const auto target = get_random_player(encounter_ptr);
     const auto percentage = utility::randomizer::randomize(0, 100);

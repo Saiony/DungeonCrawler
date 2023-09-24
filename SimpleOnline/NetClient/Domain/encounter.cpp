@@ -1,11 +1,12 @@
 ﻿#include "encounter.h"
 
 #include "../Scenes/CharacterCreationScene.h"
+#include "../Utility/string_utility.h"
 
 dungeon_client::domain::encounter::encounter(std::vector<enemy> enemies, std::vector<player> players, const std::string& active_creature_id,
-                                             std::string log, const bool game_over, const bool players_won)
+                                             const std::list<std::string> log, const bool game_over, const bool players_won)
                                              :
-                                             enemies(std::move(enemies)), players(std::move(players)), log(std::move(log)),
+                                             enemies(std::move(enemies)), players(std::move(players)), log(log),
                                              game_over(game_over), players_won(players_won)
 {
     std::ranges::for_each(this->players, [&](auto player)
@@ -39,7 +40,7 @@ std::shared_ptr<dungeon_client::domain::base_creature> dungeon_client::domain::e
 {
     const auto creature_it = std::ranges::find_if(creatures, [&creature_name](auto creature)
     {
-        return creature->name == creature_name;
+        return utility::string_utility::compare_string(creature->name, creature_name);
     });
 
     return creature_it != std::end(creatures) ? *creature_it : nullptr;

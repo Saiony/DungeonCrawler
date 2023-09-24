@@ -13,7 +13,7 @@ dungeon_common::enums::creature_status_type dungeon_server::domain::burning_stat
     return dungeon_common::enums::creature_status_type::burning;
 }
 
-void dungeon_server::domain::burning_status::on_begin_of_turn(const std::shared_ptr<encounter>& encounter, std::string& action_log)
+void dungeon_server::domain::burning_status::on_begin_of_turn(const std::shared_ptr<encounter>& encounter, dungeon_server::domain::action_log& action_log)
 {
     const auto this_creature = *std::ranges::find_if(encounter->creatures, [this](auto creature)
     {
@@ -21,15 +21,13 @@ void dungeon_server::domain::burning_status::on_begin_of_turn(const std::shared_
     });
 
     this_creature->take_damage(damage_, action_log, encounter, "", dungeon_common::enums::elemental_property_type::fire);
-    const auto burn_log = " due to burning...";
-    action_log += burn_log;
-    std::cout << burn_log;
+    action_log.add_log(" due to burning...");
 
     if (quantity > 0)
         return;
 
     end_status_(std::make_shared<burning_status>(*this));
-    action_log += "\n" + this_creature->name + " is no longer burning";
+    action_log.add_log(this_creature->name + " is no longer burning");
 }
 
 void dungeon_server::domain::burning_status::on_overriding_status_added(const std::shared_ptr<base_creature_status> status)

@@ -119,10 +119,16 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
             }
 
             std::ranges::copy(encounter->active_creature->public_id, encounter_model.active_creature_id);
-            std::ranges::copy(encounter_update->log, encounter_model.log);
 
             encounter_model.game_over = encounter->game_over;
             encounter_model.players_won = encounter->players_won;
+
+            int i = 0;
+            for (auto& log : encounter_update->log.get_log())
+            {
+                std::ranges::copy(log, encounter_model.log[i]);
+                i++;
+            }
 
             dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::encounter_update_response);
             answer << encounter_model;
@@ -245,10 +251,10 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
                 return;
 
             game_room_ptr_ = std::make_unique<game_room::game_room>(players_,
-                            [this](const std::shared_ptr<domain::message::emitter_message>& emitter_msg)
-                            {
-                                on_game_room_message(emitter_msg);
-                            });
+                                                                    [this](const std::shared_ptr<domain::message::emitter_message>& emitter_msg)
+                                                                    {
+                                                                        on_game_room_message(emitter_msg);
+                                                                    });
             break;
         }
     case dungeon_common::custom_msg_types::match_start_request:

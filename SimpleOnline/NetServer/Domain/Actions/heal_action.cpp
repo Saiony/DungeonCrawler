@@ -34,12 +34,12 @@ float_t dungeon_server::domain::action::heal_action::get_offensive_stat_multipli
     return 1;
 }
 
-void dungeon_server::domain::action::heal_action::use(const std::shared_ptr<encounter>& encounter_ptr, std::string& action_log)
+void dungeon_server::domain::action::heal_action::use(const std::shared_ptr<encounter>& encounter_ptr, action_log& action_log)
 {
     const auto action_owner = encounter_ptr->get_creature(action_owner_id);
     const auto target = encounter_ptr->get_creature(target_id_);
     const auto value = calculate_final_attack(encounter_ptr);
-    const auto hp_healed = target->heal(value);
-
-    action_log += (action_owner->name + " used " + get_name() + " on " + target->name + "\n" + target->name + " healed " + std::to_string(hp_healed) + " hp");
+    
+    action_log.add_log(action_owner->name + " used " + get_name() + " on " + target->name);
+    const auto hp_healed = target->heal(value, action_log);
 }

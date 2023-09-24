@@ -1,6 +1,8 @@
 ﻿#include "creature_status_manager.h"
 #include <algorithm>
 
+#include "NetServer/Domain/action_log.h"
+
 std::shared_ptr<dungeon_server::domain::base_creature_status> dungeon_server::domain::creature_status_manager::add_status(
     const std::shared_ptr<base_creature_status>& status)
 {
@@ -43,7 +45,7 @@ uint16_t dungeon_server::domain::creature_status_manager::get_attack_multipliers
     return multiplier;
 }
 
-void dungeon_server::domain::creature_status_manager::on_begin_of_turn(std::shared_ptr<encounter> encounter, std::string& action_log)
+void dungeon_server::domain::creature_status_manager::on_begin_of_turn(std::shared_ptr<encounter> encounter, action_log& action_log)
 {
     std::ranges::for_each(statuses_, [&action_log, &encounter](auto status)
     {
@@ -53,7 +55,7 @@ void dungeon_server::domain::creature_status_manager::on_begin_of_turn(std::shar
 
 void dungeon_server::domain::creature_status_manager::on_attack(std::shared_ptr<encounter> encounter,
                                                                 const std::string& attacked_creature_id,
-                                                                std::string& action_log)
+                                                                action_log& action_log)
 {
     std::ranges::for_each(statuses_, [&action_log, &encounter, &attacked_creature_id](auto status)
     {
@@ -62,7 +64,7 @@ void dungeon_server::domain::creature_status_manager::on_attack(std::shared_ptr<
 }
 
 void dungeon_server::domain::creature_status_manager::on_attacked(const std::shared_ptr<encounter>& encounter,
-                                                                  std::string& action_log,
+                                                                  action_log& action_log,
                                                                   const std::string& attacker_id,
                                                                   uint16_t damage,
                                                                   dungeon_common::enums::elemental_property_type elemental_property)
@@ -73,7 +75,7 @@ void dungeon_server::domain::creature_status_manager::on_attacked(const std::sha
     });
 }
 
-void dungeon_server::domain::creature_status_manager::on_end_of_turn(std::shared_ptr<encounter> encounter, std::string& action_log)
+void dungeon_server::domain::creature_status_manager::on_end_of_turn(std::shared_ptr<encounter> encounter, action_log& action_log)
 {
     std::ranges::for_each(statuses_, [&action_log, &encounter](auto status)
     {
