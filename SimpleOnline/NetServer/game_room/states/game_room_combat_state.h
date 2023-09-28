@@ -9,6 +9,8 @@ namespace dungeon_server::game_room
     class game_room_combat_state final : public base_game_room_state
     {
     private:
+        std::function<void()> on_state_ended_callback_;
+        std::function<void()> on_players_lost_callback_;
         std::shared_ptr<domain::encounter_manager> encounter_manager_;
         std::time_t next_turn_time_;
         const int turn_duration_ = 30;
@@ -17,10 +19,20 @@ namespace dungeon_server::game_room
 
     public:
         explicit game_room_combat_state(std::shared_ptr<domain::encounter_manager> encounter_manager, const uint8_t level,
-                                        const std::function<void(std::shared_ptr<domain::message::emitter_message>)>& inner_server_msg_callback)
-            : base_game_room_state(inner_server_msg_callback), encounter_manager_(std::move(encounter_manager)), level_(level)
+                                        const std::function<void(std::shared_ptr<domain::message::emitter_message>)>& inner_server_msg_callback,
+                                        std::function<void()> on_state_ended_callback, std::function<void()> on_players_lost_callback)
+            : base_game_room_state(inner_server_msg_callback),
+              on_state_ended_callback_(std::move(on_state_ended_callback)),
+              on_players_lost_callback_(std::move(on_players_lost_callback)),
+              encounter_manager_(std::move(encounter_manager)),
+              level_(level)
         {
             next_turn_time_ = std::numeric_limits<time_t>::max();
+        }
+
+        dungeon_common::enums::gameplay_state_type get_gameplay_state_type() override
+        {
+            return dungeon_common::enums::gameplay_state_type::combat;
         }
 
         void handle_input(const std::shared_ptr<domain::action::base_action>& action) override
@@ -31,7 +43,11 @@ namespace dungeon_server::game_room
             const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, action_log);
             send_inner_server_msg_(msg);
 
-            encounter_manager_->go_to_next_turn(action_log);
+            if (!encounter_manager_->go_to_next_turn(action_log))
+            {
+                on_state_ended_callback_();
+                return;
+            }
 
             handle_turn();
         }
@@ -59,12 +75,16 @@ namespace dungeon_server::game_room
                 enemy_ptr->execute_turn(encounter_manager_->current_encounter, action_log);
                 enemy_ptr->on_end_of_turn(encounter_manager_->current_encounter, action_log);
 
-                encounter_manager_->go_to_next_turn(action_log);
-
                 const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, action_log);
                 start_timeout_timer();
                 send_inner_server_msg_(msg);
-
+                
+                if (!encounter_manager_->go_to_next_turn(action_log))
+                {
+                    on_state_ended_callback_();
+                    return;
+                }
+                
                 handle_turn();
             }
             else if (const auto player_ptr = std::dynamic_pointer_cast<domain::player>(active_creature))
@@ -76,9 +96,15 @@ namespace dungeon_server::game_room
                 if (!player_ptr->can_execute_turn())
                 {
                     player_ptr->on_end_of_turn(encounter_manager_->current_encounter, action_log);
-                    encounter_manager_->go_to_next_turn(action_log);
+
                     const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, action_log);
                     send_inner_server_msg_(msg);
+                    
+                    if (!encounter_manager_->go_to_next_turn(action_log))
+                    {
+                        on_state_ended_callback_();
+                        return;
+                    }
 
                     handle_turn();
                     return;
@@ -96,20 +122,25 @@ namespace dungeon_server::game_room
             if (now <= next_turn_time_)
                 return;
 
-            encounter_manager_->current_encounter->go_to_next_turn();
-            domain::action_log log;
-            log.add_log("timeout");
-            const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, log);
-            send_inner_server_msg_(msg);
+            domain::action_log action_log;
+            action_log.add_log("timeout");
 
+            const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, action_log);
+            send_inner_server_msg_(msg);
+            
+            if (!encounter_manager_->go_to_next_turn(action_log))
+            {
+                on_state_ended_callback_();
+                return;
+            }
+            
             handle_turn();
         }
 
         void on_start() override
         {
             encounter_manager_->start_encounter(level_);
-
-            //TODO: this needs to be a match_start_response and the client needs to handle that
+            encounter_manager_->current_encounter->subscribe_players_lost([this] { on_players_lost(); });
             domain::action_log log;
             const auto msg = std::make_shared<domain::message::encounter_update_response>(encounter_manager_->current_encounter, log);
             send_inner_server_msg_(msg);
@@ -119,15 +150,17 @@ namespace dungeon_server::game_room
 
         void on_end() override
         {
-            std::cout << "\nCombat State - On End";
-            encounter_finished_ = true;
-            encounter_manager_->end_encounter(level_);
         }
 
         void start_timeout_timer()
         {
             next_turn_time_ = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()) + turn_duration_;
             std::cout << "\nTimer set";
+        }
+
+        void on_players_lost() const
+        {
+            on_players_lost_callback_();
         }
     };
 }

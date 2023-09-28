@@ -30,6 +30,11 @@ encounter::encounter(std::vector<std::shared_ptr<base_enemy>> enemies,
     std::cout << "\nEncounter created";
 }
 
+void encounter::subscribe_players_lost(const std::function<void()>& callback)
+{
+    on_players_lost_callback_ = callback;
+}
+
 void encounter::go_to_next_turn()
 {
     const auto it = std::ranges::find_if(creatures, [this](auto creature)
@@ -46,7 +51,7 @@ void encounter::go_to_next_turn()
 
 void encounter::set_game_over(const bool players_won_encounter)
 {
-    game_over = true;
+    combat_ended = true;
     this->players_won = players_won_encounter;
 }
 
@@ -69,6 +74,23 @@ void encounter::on_creature_died(const std::shared_ptr<base_creature>& creature)
     {
         return enemy->public_id == creature->public_id;
     });
+
+    check_encounter_ended();
+}
+
+void encounter::check_encounter_ended()
+{
+    if (players.empty())
+    {
+        std::cout << "\nGAME OVER - PLAYERS LOST" << std::endl;
+        combat_ended = true;
+        on_players_lost_callback_();
+    }
+    
+    if (enemies.empty())
+    {
+        combat_ended = true;
+    }
 }
 
 void encounter::add_enemy(const std::shared_ptr<base_enemy>& new_enemy)

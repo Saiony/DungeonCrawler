@@ -3,7 +3,7 @@
 
 namespace dungeon_common
 {
-    enum class custom_msg_types : uint32_t
+    enum class custom_msg_types
     {
         unknown = 0,
         server_connection_response,
@@ -16,12 +16,17 @@ namespace dungeon_common
         create_player,
         player_ready,
         player_ready_response,
+        get_gameplay_state,
+        gameplay_state_response,
         match_start_request,
         encounter_update_response,
         player_action,
         game_room_broadcast,
         match_start_response,
+        story_request,
         story_response,
+        confirm_story_read,
+        story_read_response,
     };
     
     template <typename T>

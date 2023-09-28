@@ -8,9 +8,7 @@ namespace dungeon_server::domain::action
     private:
         std::string target_id_{};
     public:
-        aegis_of_faith_action(const dungeon_common::model::action_types& action_type, const std::string& new_action_owner_id,
-                              const std::string& target_id);
-
+        aegis_of_faith_action(const dungeon_common::model::action_types& action_type, const std::string& new_action_owner_id, std::string target_id);
         ~aegis_of_faith_action() override;
         std::string get_name() override;
         std::uint8_t get_targets_count() override;

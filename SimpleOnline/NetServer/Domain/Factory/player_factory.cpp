@@ -46,7 +46,7 @@ uint16_t get_player_hp(const dungeon_server::domain::player_class& player_class)
     case dungeon_common::enums::player_class_type::archer:
         return 12;
     case dungeon_common::enums::player_class_type::mage:
-        return 100;
+        return 10;
     default:
         return -1;
     }

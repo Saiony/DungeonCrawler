@@ -4,10 +4,10 @@
 #include "../Utility/string_utility.h"
 
 dungeon_client::domain::encounter::encounter(std::vector<enemy> enemies, std::vector<player> players, const std::string& active_creature_id,
-                                             const std::list<std::string> log, const bool game_over, const bool players_won)
+                                             const std::list<std::string>& log, const bool combat_ended)
                                              :
                                              enemies(std::move(enemies)), players(std::move(players)), log(log),
-                                             game_over(game_over), players_won(players_won)
+                                             combat_ended(combat_ended)
 {
     std::ranges::for_each(this->players, [&](auto player)
     {

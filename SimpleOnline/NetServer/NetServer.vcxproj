@@ -208,6 +208,8 @@
     <ClInclude Include="game_room\game_room.h" />
     <ClInclude Include="game_room\states\base_game_room_state.h" />
     <ClInclude Include="game_room\states\game_room_combat_state.h" />
+    <ClInclude Include="game_room\states\game_room_game_over_lose_state.h" />
+    <ClInclude Include="game_room\states\game_room_game_over_win_state.h" />
     <ClInclude Include="game_room\states\game_room_story_state.h" />
     <ClInclude Include="server.h">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>

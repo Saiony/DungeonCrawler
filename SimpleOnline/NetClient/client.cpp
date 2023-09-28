@@ -1,9 +1,15 @@
 ﻿#include "client.h"
 
+#include "gameplay_state_model.h"
+#include "story_model.h"
+#include "story_read_model.h"
 #include "Domain/action.h"
 #include "Domain/action_log.h"
+#include "Domain/gameplay_state.h"
 #include "Domain/player_class.h"
 #include "Domain/player_complete.h"
+#include "Domain/story.h"
+#include "Domain/story_read.h"
 #include "Models/action_use_model.h"
 #include "Models/create_player_model.h"
 #include "Models/encounter_model.h"
@@ -102,6 +108,14 @@ void client::send_action(const model::action_types action_id, const std::string&
     wait_message();
 }
 
+void client::request_next_state(const std::function<void(domain::gameplay_state)>& callback)
+{
+    get_gameplay_state_callback = callback;
+    const message<custom_msg_types> msg(custom_msg_types::get_gameplay_state);
+    send(msg);
+    wait_message();
+}
+
 void client::request_match_start(const std::function<void(domain::encounter)>& callback)
 {
     get_encounter_callback = callback;
@@ -113,6 +127,22 @@ void client::request_match_start(const std::function<void(domain::encounter)>& c
 domain::player_complete client::get_player() const
 {
     return *player_ptr_;
+}
+
+void client::request_story(const std::function<void(domain::story)>& callback)
+{
+    get_story_callback = callback;
+    const message<custom_msg_types> msg(custom_msg_types::story_request);
+    send(msg);
+    wait_message();
+}
+
+void client::send_story_read(const std::function<void(domain::story_read)>& callback)
+{
+    send_story_read_callback = callback;
+    const message<custom_msg_types> msg(custom_msg_types::confirm_story_read);
+    send(msg);
+    wait_message();
 }
 
 void client::read_input(const std::function<void(std::string input)>& callback)
@@ -253,6 +283,22 @@ bool client::handle_messages()
             msg >> response;
             return false;
         }
+    case custom_msg_types::gameplay_state_response:
+        {
+            model::gameplay_state_model response;
+            msg >> response;
+
+            domain::gameplay_state state(response.state);
+
+            if (get_gameplay_state_callback != nullptr)
+            {
+                get_gameplay_state_callback(state);
+                get_gameplay_state_callback = nullptr;
+                return true;
+            }
+
+            return false;
+        }
     case custom_msg_types::encounter_update_response:
         {
             model::encounter_model encounter_model;
@@ -287,13 +333,54 @@ bool client::handle_messages()
             }
 
             domain::encounter encounter(enemies, players, encounter_model.active_creature_id, action_log,
-                                        encounter_model.game_over, encounter_model.players_won);
+                                        encounter_model.combat_ended);
             if (get_encounter_callback != nullptr)
             {
-                get_encounter_callback(std::move(encounter));
+                get_encounter_callback(encounter);
                 return true;
             }
 
+            return false;
+        }
+    case custom_msg_types::story_response:
+        {
+            model::story_model story_model;
+            msg >> story_model;
+
+            std::list<std::string> stories;
+            for(auto& story_log_model : story_model.story)
+            {
+                if(story_log_model[0] == '\0')
+                    continue;
+                
+                std::string log(story_log_model);
+                stories.push_back(log);
+            }
+
+            domain::story story(stories);
+
+            if (get_story_callback != nullptr)
+            {
+                get_story_callback(story);
+                get_story_callback = nullptr;
+                return true;
+            }
+            
+            return false;
+        }
+    case custom_msg_types::story_read_response:
+        {
+            model::story_read_model story_read_model;
+            msg >> story_read_model;
+
+            domain::story_read story_read(story_read_model.everyone_read);
+            
+            if (send_story_read_callback != nullptr)
+            {
+                send_story_read_callback(story_read);
+                return true;
+            }
+            
             return false;
         }
     default:

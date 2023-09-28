@@ -4,7 +4,7 @@
 
 namespace dungeon_server::game_room
 {
-    class game_room_story_state final : base_game_room_state
+    class game_room_story_state final : public base_game_room_state
     {
     private:
         uint8_t level_;
@@ -15,16 +15,48 @@ namespace dungeon_server::game_room
         {
         }
 
+        dungeon_common::enums::gameplay_state_type get_gameplay_state_type() override
+        {
+            return dungeon_common::enums::gameplay_state_type::story;
+        }
+
+        domain::story_log generate_story() const
+        {
+            domain::story_log story;
+
+            switch (level_)
+            {
+            case 1:
+                {
+                    story.add_log("HELLO WORLD 1");
+                    break;
+                }
+            case 2:
+                {
+                    story.add_log("HELLO WORLD 2");
+                    break;
+                }
+            case 3:
+                {
+                    story.add_log("HELLO WORLD 3");
+                    break;
+                }
+            default:
+                {
+                    break;
+                }
+            }
+
+            return story;
+        }
+
         void update() override
         {
         }
 
         void on_start() override
         {
-            domain::story_log story;
-            story.add_log("HELLO WORLD");
-
-            const auto msg = std::make_shared<domain::message::story_response>(story);
+            const auto msg = std::make_shared<domain::message::story_response>(generate_story());
             send_inner_server_msg_(msg);
         }
 

@@ -21,7 +21,7 @@ void dungeon_server::domain::burning_status::on_begin_of_turn(const std::shared_
     });
 
     this_creature->take_damage(damage_, action_log, encounter, "", dungeon_common::enums::elemental_property_type::fire);
-    action_log.add_log(" due to burning...");
+    action_log.add_log("due to burning...");
 
     if (quantity > 0)
         return;

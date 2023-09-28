@@ -13,11 +13,6 @@ dungeon_server::domain::encounter_manager::encounter_manager(std::vector<std::sh
 {
 }
 
-void dungeon_server::domain::encounter_manager::add_encounter_end_listener(std::function<void(bool)> callback)
-{
-    encounter_end_callback_ = std::move(callback);
-}
-
 std::shared_ptr<dungeon_server::domain::encounter> dungeon_server::domain::encounter_manager::generate_encounter(const uint8_t level) const
 {
     std::cout << "\nGenerating new encounter...";
@@ -52,17 +47,6 @@ std::shared_ptr<dungeon_server::domain::encounter> dungeon_server::domain::encou
     return std::make_shared<encounter>(enemies, players_, players_[0]);
 }
 
-void dungeon_server::domain::encounter_manager::end_encounter(const uint8_t level)
-{
-    current_encounter = nullptr; 
-
-    if (level > max_level_)
-    {
-        std::cout << "GAME OVER - PLAYERS WON" << std::endl;
-        current_encounter->set_game_over(true);
-    }
-}
-
 void dungeon_server::domain::encounter_manager::start_encounter(const uint8_t level)
 {
     if (level > max_level_)
@@ -73,20 +57,8 @@ void dungeon_server::domain::encounter_manager::start_encounter(const uint8_t le
 
 bool dungeon_server::domain::encounter_manager::go_to_next_turn(action_log& action_log) const
 {
-    if (current_encounter->players.empty())
-    {
-        std::cout << "GAME OVER - PLAYERS LOST" << std::endl;
-        encounter_end_callback_(false);
+    if(current_encounter->combat_ended)
         return false;
-    }
-    if (current_encounter->enemies.empty())
-    {
-        std::cout << "ENCOUNTER END - PLAYERS WON" << std::endl;
-        action_log.add_log("ALL ENEMIES DEFEATED");
-        
-        encounter_end_callback_(true);
-        return false;
-    }
     
     current_encounter->go_to_next_turn();
     return true;

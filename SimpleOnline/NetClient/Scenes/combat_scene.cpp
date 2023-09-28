@@ -1,4 +1,4 @@
-﻿#include "LevelScene.h"
+﻿#include "combat_scene.h"
 #include <iostream>
 #include <chrono>
 
@@ -6,12 +6,12 @@
 #include "game_over_win_scene.h"
 #include "../Utility/custom_print.h"
 
-dungeon_client::scene::level_scene::level_scene(const std::shared_ptr<client>& client_ptr)
+dungeon_client::scene::combat_scene::combat_scene(const std::shared_ptr<client>& client_ptr)
 {
     client_ptr_ = client_ptr;
 }
 
-void dungeon_client::scene::level_scene::show()
+void dungeon_client::scene::combat_scene::show()
 {
     client_ptr_->request_match_start([this](auto encounter)
     {
@@ -24,7 +24,7 @@ void dungeon_client::scene::level_scene::show()
     }
 }
 
-void dungeon_client::scene::level_scene::print_combat(const domain::encounter& encounter) const
+void dungeon_client::scene::combat_scene::print_combat(const domain::encounter& encounter) const
 {
     system("CLS");
     std::cout << "--- GAME SCENE ---" << std::endl << std::endl;
@@ -52,10 +52,10 @@ void dungeon_client::scene::level_scene::print_combat(const domain::encounter& e
         });
     }
 
-    if (encounter.game_over)
+    if (encounter.combat_ended)
     {
         std::this_thread::sleep_for(std::chrono::seconds(2));
-        on_game_over(encounter.players_won);
+        on_combat_ended();
         return;
     }
 
@@ -79,7 +79,7 @@ void dungeon_client::scene::level_scene::print_combat(const domain::encounter& e
     std::cout << std::endl;
 }
 
-void dungeon_client::scene::level_scene::handle_player_input(domain::encounter& encounter) const
+void dungeon_client::scene::combat_scene::handle_player_input(domain::encounter& encounter) const
 {
     client_ptr_->read_input([this, &encounter](const std::string& input)
     {
@@ -107,7 +107,7 @@ void dungeon_client::scene::level_scene::handle_player_input(domain::encounter& 
     });
 }
 
-void dungeon_client::scene::level_scene::read_action_target(domain::encounter& encounter, const std::shared_ptr<domain::action> player_action_ptr) const
+void dungeon_client::scene::combat_scene::read_action_target(domain::encounter& encounter, const std::shared_ptr<domain::action> player_action_ptr) const
 {
     std::cout << "Type the target: " << std::endl;
     client_ptr_->read_input([&](const std::string& target_name)
@@ -125,16 +125,17 @@ void dungeon_client::scene::level_scene::read_action_target(domain::encounter& e
 }
 
 
-void dungeon_client::scene::level_scene::on_game_over(const bool players_won) const
+void dungeon_client::scene::combat_scene::on_combat_ended() const
 {
-    if (players_won)
-    {
-        game_over_win_scene win_scene;
-        win_scene.show();
-    }
-    else
-    {
-        game_over_loss_scene loss_scene;
-        loss_scene.show();
-    }
+    on_scene_ended_callback_();
+    // if (players_won)
+    // {
+    //     game_over_win_scene win_scene;
+    //     win_scene.show();
+    // }
+    // else
+    // {
+    //     game_over_loss_scene loss_scene;
+    //     loss_scene.show();
+    // }
 }

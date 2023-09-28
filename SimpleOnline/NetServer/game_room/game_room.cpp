@@ -1,52 +1,87 @@
 ﻿#include "game_room.h"
-#include "net_message.h"
 #include "NetServer/Domain/Message/match_start_response.h"
 #include "states/base_game_room_state.h"
 #include "states/game_room_combat_state.h"
+#include "states/game_room_game_over_lose_state.h"
+#include "states/game_room_game_over_win_state.h"
+#include "states/game_room_story_state.h"
 
 dungeon_server::game_room::game_room::game_room(std::vector<std::shared_ptr<domain::player>> players,
                                                 const std::function<void(std::shared_ptr<domain::message::emitter_message>)>& send_message_function)
-    : players_(std::move(players)), encounter_manager_(std::make_shared<domain::encounter_manager>(players_)),
-      state_ptr_(std::make_shared<game_room_combat_state>(encounter_manager_, level_, send_inner_message)),
-      level_(1)
+    : players_(std::move(players)),
+      encounter_manager_(std::make_shared<domain::encounter_manager>(players_)),
+      state_ptr(std::make_shared<game_room_story_state>(level_, send_inner_message))
 {
     send_inner_message = send_message_function;
-    encounter_manager_->add_encounter_end_listener([this](auto players_won)
+}
+
+void dungeon_server::game_room::game_room::story_request() const
+{
+    if (!std::dynamic_pointer_cast<game_room_story_state>(state_ptr))
+        throw std::exception("Invalid message for current state");
+
+    state_ptr->on_start();
+}
+
+void dungeon_server::game_room::game_room::go_to_next_state()
+{
+    if(game_over_)
     {
-        on_encounter_end(players_won);
-    });
+        const auto new_state = std::make_shared<game_room_game_over_lose_state>(send_inner_message);
+        set_state(new_state);     
+    }
+    else if(level_ > max_level_)
+    {
+        const auto new_state = std::make_shared<game_room_game_over_win_state>(send_inner_message);
+        set_state(new_state);        
+    }
+    else if (std::dynamic_pointer_cast<game_room_story_state>(state_ptr))
+    {
+        const auto new_state = std::make_shared<game_room_combat_state>(encounter_manager_, level_, send_inner_message,
+                                                                        [this]() { on_state_ended(); },
+                                                                        [this](){ on_players_lost(); });
+        set_state(new_state);
+    }
+    else if (auto combat_state = std::dynamic_pointer_cast<game_room_combat_state>(state_ptr))
+    {
+        level_++;
+        const auto new_state = std::make_shared<game_room_story_state>(level_, send_inner_message);
+        set_state(new_state);
+    }
+}
+
+void dungeon_server::game_room::game_room::set_state(const std::shared_ptr<base_game_room_state>& state)
+{
+    state_ptr->on_end();
+    state_ptr = state;
 }
 
 void dungeon_server::game_room::game_room::player_match_start_request(std::shared_ptr<domain::player>& player) const
 {
-    const auto combat_state = std::make_shared<game_room_combat_state>(encounter_manager_, level_, send_inner_message);
-    combat_state->on_start();
+    if (!std::dynamic_pointer_cast<game_room_combat_state>(state_ptr))
+        throw std::exception("Invalid message for current state");
+
+    state_ptr->on_start();
     const auto msg = std::make_shared<domain::message::match_start_response>(player, encounter_manager_->current_encounter);
     send_inner_message(msg);
 }
-
-
-void dungeon_server::game_room::game_room::on_encounter_end(bool players_won)
-{
-    level_++;
-    const auto new_state = std::make_shared<game_room_combat_state>(encounter_manager_, level_, send_inner_message);
-    set_state(new_state);
-}
-
-
-void dungeon_server::game_room::game_room::set_state(const std::shared_ptr<base_game_room_state>& state)
-{
-    state_ptr_->on_end();
-    state_ptr_ = state;
-    state_ptr_->on_start();
-}
-
 void dungeon_server::game_room::game_room::handle_player_input(const std::shared_ptr<domain::action::base_action>& action_ptr) const
 {
-    state_ptr_->handle_input(action_ptr);
+    state_ptr->handle_input(action_ptr);
 }
 
 void dungeon_server::game_room::game_room::update() const
 {
-    state_ptr_->update();
+    state_ptr->update();
+}
+
+
+void dungeon_server::game_room::game_room::on_state_ended()
+{
+    go_to_next_state();
+}
+
+void dungeon_server::game_room::game_room::on_players_lost()
+{
+    game_over_ = true;
 }

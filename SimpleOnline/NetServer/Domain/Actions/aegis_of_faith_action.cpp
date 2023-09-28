@@ -3,7 +3,7 @@
 #include "NetServer/Domain/Status/invulnerable_status.h"
 
 dungeon_server::domain::action::aegis_of_faith_action::aegis_of_faith_action(const dungeon_common::model::action_types& action_type,
-                                                                             const std::string& new_action_owner_id, const std::string& target_id)
+                                                                             const std::string& new_action_owner_id, std::string target_id)
     : base_action(action_type, new_action_owner_id), target_id_(std::move(target_id))
 {
 }

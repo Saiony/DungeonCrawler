@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include <memory>
+
+#include "gameplay_state_type.h"
 #include "NetServer/Domain/Actions/base_action.h"
 
 namespace dungeon_server::game_room
@@ -9,6 +11,8 @@ namespace dungeon_server::game_room
     protected:
         const std::function<void(std::shared_ptr<domain::message::emitter_message>)>& send_inner_server_msg_;
     public:
+        virtual ~base_game_room_state() = default;
+
         explicit base_game_room_state(const std::function<void(std::shared_ptr<domain::message::emitter_message>)>& send_inner_server_msg_callback)
             : send_inner_server_msg_(send_inner_server_msg_callback)
         {
@@ -29,5 +33,7 @@ namespace dungeon_server::game_room
         virtual void on_end()
         {
         }
+
+        virtual dungeon_common::enums::gameplay_state_type get_gameplay_state_type() = 0;
     };
 }

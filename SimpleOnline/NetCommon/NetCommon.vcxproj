@@ -21,10 +21,12 @@
   <ItemGroup>
     <ClInclude Include="Enum\action_target_types.h" />
     <ClInclude Include="Enum\creature_status_types.h" />
+    <ClInclude Include="Enum\gameplay_state_type.h" />
     <ClInclude Include="Enum\player_class_types.h" />
     <ClInclude Include="Enum\elemental_property_type.h" />
     <ClInclude Include="error_code_type.h" />
     <ClInclude Include="Models\create_player_model.h" />
+    <ClInclude Include="Models\gameplay_state_model.h" />
     <ClInclude Include="Models\player_action_model.h" />
     <ClInclude Include="Models\action_use_model.h" />
     <ClInclude Include="Models\encounter_model.h" />
@@ -35,6 +37,7 @@
     <ClInclude Include="Models\player_model.h" />
     <ClInclude Include="Models\simple_answer_model.h" />
     <ClInclude Include="Models\story_model.h" />
+    <ClInclude Include="Models\story_read_model.h" />
     <ClInclude Include="net_common.h" />
     <ClInclude Include="net_connection.h" />
     <ClInclude Include="net_message.h" />
@@ -45,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Models\create_player_model.cpp" />
+    <ClCompile Include="Models\gameplay_state_model.cpp" />
     <ClCompile Include="Models\player_action_model.cpp" />
     <ClCompile Include="Models\action_use_model.cpp" />
     <ClCompile Include="Models\encounter_model.cpp" />
@@ -53,6 +57,7 @@
     <ClCompile Include="Models\player_model.cpp" />
     <ClCompile Include="Models\simple_answer_model.cpp" />
     <ClCompile Include="Models\story_model.cpp" />
+    <ClCompile Include="Models\story_read_model.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

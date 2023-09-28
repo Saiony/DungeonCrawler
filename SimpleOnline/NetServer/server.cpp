@@ -2,7 +2,9 @@
 #include<string>
 #include "server.h"
 
+#include "gameplay_state_model.h"
 #include "story_model.h"
+#include "story_read_model.h"
 #include "Domain/Encounter.h"
 #include "Domain/player_classes.h"
 #include "Domain/Enemies/Wolf.h"
@@ -92,8 +94,7 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
             }
 
             std::ranges::copy(encounter->active_creature->public_id, encounter_model.active_creature_id);
-            encounter_model.game_over = false;
-            encounter_model.players_won = false;
+            encounter_model.combat_ended = false;
             dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::encounter_update_response);
             answer << encounter_model;
             message_client(match_start_msg_ptr->player->private_id, answer);
@@ -123,8 +124,7 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
 
             std::ranges::copy(encounter->active_creature->public_id, encounter_model.active_creature_id);
 
-            encounter_model.game_over = encounter->game_over;
-            encounter_model.players_won = encounter->players_won;
+            encounter_model.combat_ended = encounter->combat_ended;
 
             int i = 0;
             for (auto& log : encounter_update->log.get_log())
@@ -139,27 +139,24 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
 
             std::cout << "\nENCOUNTER UPDATE MSG SENT";
 
-            if (encounter->game_over)
-                running = false;
-
             break;
         }
     case dungeon_common::custom_msg_types::story_response:
         {
             const auto story_response = std::dynamic_pointer_cast<domain::message::story_response>(emitter_msg);
             dungeon_common::model::story_model model;
-            
+
             int i = 0;
             for (auto& log : story_response->story.get_log())
             {
                 std::ranges::copy(log, model.story[i]);
                 i++;
             }
-            
+
             dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::story_response);
             answer << model;
             broadcast_message(answer);
-            
+
             break;
         }
     default: break;
@@ -276,6 +273,36 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
                                                                     {
                                                                         on_game_room_message(emitter_msg);
                                                                     });
+            break;
+        }
+    case dungeon_common::custom_msg_types::get_gameplay_state:
+        {
+            auto state = game_room_ptr_->state_ptr->get_gameplay_state_type();
+            dungeon_common::model::gameplay_state_model model(state);
+
+            dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::gameplay_state_response);
+            answer << model;
+            message_client(client->get_id(), answer);
+
+            break;
+        }
+    case dungeon_common::custom_msg_types::story_request:
+        {
+            std::cout << "\nSTORY REQUEST";
+            game_room_ptr_->story_request();
+
+            break;
+        }
+    case dungeon_common::custom_msg_types::confirm_story_read:
+        {
+            std::cout << "\nCONFIRM STORY READ";
+            dungeon_common::model::story_read_model model(true); // TODO:seila oq
+            dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::story_read_response);
+            answer << model;
+            message_client(client->get_id(), answer);
+            
+            game_room_ptr_->go_to_next_state();           
+
             break;
         }
     case dungeon_common::custom_msg_types::match_start_request:

@@ -1,7 +1,8 @@
 ﻿#include "LobbyScene.h"
-#include "LevelScene.h"
+#include "combat_scene.h"
 #include <iostream>
 
+#include "gameplay_scene.h"
 #include "../Utility/custom_print.h"
 
 using namespace dungeon_client::scene;
@@ -61,8 +62,8 @@ void lobby_scene::start_match(const domain::lobby& lobby) const
         this_thread::sleep_for(1.5s);
     }
     
-    level_scene level_scene(client_ptr_);
-    level_scene.show();
+    gameplay_scene gameplay_scene(client_ptr_);
+    gameplay_scene.show();
 }
 
 void lobby_scene::print_lobby(domain::lobby lobby) const
