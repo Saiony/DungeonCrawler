@@ -35,7 +35,7 @@ void dungeon_client::scene::gameplay_scene::request_new_state()
         case dungeon_common::enums::gameplay_state_type::story:
             {
                 story_scene story_scene(client_ptr_);
-                story_scene.subscribe_on_end([this]() { on_state_ended(); });
+                story_scene.subscribe_on_end([this] { on_state_ended(); });
                 story_scene.show();
                 return;
             }

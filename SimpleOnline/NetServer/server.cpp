@@ -13,6 +13,7 @@
 #include "Domain/Message/emitter_message.h"
 #include "Domain/Message/encounter_update_response.h"
 #include "Domain/Message/match_start_response.h"
+#include "Domain/Message/story_read_response.h"
 #include "Domain/Message/story_response.h"
 #include "Models/action_use_model.h"
 #include "Models/create_player_model.h"
@@ -155,8 +156,19 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
 
             dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::story_response);
             answer << model;
-            broadcast_message(answer);
+            message_client(story_response->player->private_id, answer);
 
+
+            break;
+        }
+    case dungeon_common::custom_msg_types::story_read_response:
+        {
+            const auto story_response = std::dynamic_pointer_cast<domain::message::story_read_response>(emitter_msg);
+            dungeon_common::model::story_read_model model(story_response->everyone_read);
+            dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::story_read_response);
+            answer << model;
+            
+            broadcast_message(answer);
             break;
         }
     default: break;
@@ -288,20 +300,23 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
         }
     case dungeon_common::custom_msg_types::story_request:
         {
-            std::cout << "\nSTORY REQUEST";
-            game_room_ptr_->story_request();
+            auto player = *std::ranges::find_if(players_, [&client](auto p)
+            {
+                return p->private_id == client->get_id();
+            });
+            
+            game_room_ptr_->request_story(player);
 
             break;
         }
     case dungeon_common::custom_msg_types::confirm_story_read:
         {
-            std::cout << "\nCONFIRM STORY READ";
-            dungeon_common::model::story_read_model model(true); // TODO:seila oq
-            dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::story_read_response);
-            answer << model;
-            message_client(client->get_id(), answer);
+            auto player = *std::ranges::find_if(players_, [&client](auto p)
+            {
+                return p->private_id == client->get_id();
+            });
             
-            game_room_ptr_->go_to_next_state();           
+            game_room_ptr_->set_story_read(player);
 
             break;
         }

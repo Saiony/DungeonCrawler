@@ -8,9 +8,10 @@ namespace dungeon_server::domain::message
     {
     public:
         story_log story;
+        std::shared_ptr<player> player;
 
-        explicit story_response(story_log story)
-            : story(std::move(story))
+        explicit story_response(story_log story, std::shared_ptr<domain::player> player)
+            : story(std::move(story)), player(std::move(player))
         {
         }
 

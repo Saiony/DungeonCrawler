@@ -131,6 +131,7 @@ domain::player_complete client::get_player() const
 
 void client::request_story(const std::function<void(domain::story)>& callback)
 {
+    std::cout << "\nREQUEST STORY";
     get_story_callback = callback;
     const message<custom_msg_types> msg(custom_msg_types::story_request);
     send(msg);
