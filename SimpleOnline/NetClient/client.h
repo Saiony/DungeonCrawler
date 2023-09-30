@@ -45,6 +45,7 @@ namespace dungeon_client
         domain::player_complete get_player() const;
         void request_story(const std::function<void(domain::story)>& callback);
         void send_story_read(const std::function<void(domain::story_read)>& callback);
+        void request_bonfire_story_teller(const std::function<void(domain::player)>& callback);
 
         std::function<void(std::string input)> player_input_callback;
         std::function<void(dungeon_common::model::simple_answer_model)> connection_callback;
@@ -56,5 +57,6 @@ namespace dungeon_client
         std::function<void(domain::encounter)> get_encounter_callback;
         std::function<void(domain::story)> get_story_callback;
         std::function<void(domain::story_read)> send_story_read_callback;        
+        std::function<void(domain::player)> get_bonfire_story_teller_callback;
     };
 }

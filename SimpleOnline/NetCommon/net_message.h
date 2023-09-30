@@ -27,6 +27,8 @@ namespace dungeon_common
         story_response,
         confirm_story_read,
         story_read_response,
+        bonfire_story_teller_request,
+        bonfire_story_teller_response,
     };
     
     template <typename T>

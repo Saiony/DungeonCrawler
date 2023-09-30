@@ -1,5 +1,6 @@
 ﻿#include "client.h"
 
+#include "bonfire_story_teller_model.h"
 #include "gameplay_state_model.h"
 #include "story_model.h"
 #include "story_read_model.h"
@@ -131,7 +132,6 @@ domain::player_complete client::get_player() const
 
 void client::request_story(const std::function<void(domain::story)>& callback)
 {
-    std::cout << "\nREQUEST STORY";
     get_story_callback = callback;
     const message<custom_msg_types> msg(custom_msg_types::story_request);
     send(msg);
@@ -142,6 +142,14 @@ void client::send_story_read(const std::function<void(domain::story_read)>& call
 {
     send_story_read_callback = callback;
     const message<custom_msg_types> msg(custom_msg_types::confirm_story_read);
+    send(msg);
+    wait_message();
+}
+
+void client::request_bonfire_story_teller(const std::function<void(domain::player)>& callback)
+{
+    get_bonfire_story_teller_callback = callback;
+    const message<custom_msg_types> msg(custom_msg_types::bonfire_story_teller_request);
     send(msg);
     wait_message();
 }
@@ -379,6 +387,23 @@ bool client::handle_messages()
             if (send_story_read_callback != nullptr)
             {
                 send_story_read_callback(story_read);
+                return true;
+            }
+            
+            return false;
+        }
+        case custom_msg_types::bonfire_story_teller_response:
+        {
+            model::bonfire_story_teller_model model;
+            msg >> model;
+
+            auto story_teller_model = model.story_teller;
+            domain::player_class player_class(story_teller_model.player_class.id, story_teller_model.player_class.name);
+            domain::player story_teller(story_teller_model.id, story_teller_model.name, player_class, story_teller_model.health, story_teller_model.max_health);
+            
+            if (get_bonfire_story_teller_callback != nullptr)
+            {
+                get_bonfire_story_teller_callback(story_teller);
                 return true;
             }
             

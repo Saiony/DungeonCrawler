@@ -159,6 +159,7 @@
     <ClCompile Include="Domain\story_read.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scenes\BaseScene.cpp" />
+    <ClCompile Include="Scenes\bonfire_scene.cpp" />
     <ClCompile Include="Scenes\CharacterCreationScene.cpp" />
     <ClCompile Include="Scenes\gameplay_scene.cpp" />
     <ClCompile Include="Scenes\game_over_loss_scene.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="Domain\story.h" />
     <ClInclude Include="Domain\story_read.h" />
     <ClInclude Include="Scenes\BaseScene.h" />
+    <ClInclude Include="Scenes\bonfire_scene.h" />
     <ClInclude Include="Scenes\CharacterCreationScene.h" />
     <ClInclude Include="Scenes\gameplay_scene.h" />
     <ClInclude Include="Scenes\game_over_loss_scene.h" />

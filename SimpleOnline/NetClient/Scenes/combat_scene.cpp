@@ -128,14 +128,4 @@ void dungeon_client::scene::combat_scene::read_action_target(domain::encounter& 
 void dungeon_client::scene::combat_scene::on_combat_ended() const
 {
     on_scene_ended_callback_();
-    // if (players_won)
-    // {
-    //     game_over_win_scene win_scene;
-    //     win_scene.show();
-    // }
-    // else
-    // {
-    //     game_over_loss_scene loss_scene;
-    //     loss_scene.show();
-    // }
 }

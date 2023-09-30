@@ -4,6 +4,7 @@ using namespace dungeon_server;
 
 int main()
 {
+    //std::locale::global(std::locale("en_US.UTF-8"));
     server server(14414);
     server.start();
 

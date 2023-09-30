@@ -30,6 +30,7 @@ namespace dungeon_server::game_room
         void set_state(const std::shared_ptr<base_game_room_state>& state);
         void handle_player_input(const std::shared_ptr<domain::action::base_action>& action_ptr) const;
         void set_story_read(const std::shared_ptr<domain::player>& player) const;
+        void request_bonfire_story_teller(const std::shared_ptr<domain::player>& player) const;
         void update() const;
     };
 }

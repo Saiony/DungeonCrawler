@@ -18,10 +18,9 @@ void dungeon_client::scene::story_scene::print_story(domain::story story) const
     std::ranges::for_each(story.get_log(), [](auto log)
     {
         std::cout << log << std::endl;
-        std::this_thread::sleep_for(std::chrono::seconds(2));
+        std::this_thread::sleep_for(std::chrono::seconds(4));
     });
 
-    std::cout << "\nEND OF STORY";
     std::this_thread::sleep_for(std::chrono::seconds(2));
     client_ptr_->send_story_read([this](auto story_read)
     {

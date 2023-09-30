@@ -1,5 +1,6 @@
 ﻿#include "gameplay_scene.h"
 
+#include "bonfire_scene.h"
 #include "combat_scene.h"
 #include "game_over_loss_scene.h"
 #include "game_over_win_scene.h"
@@ -25,6 +26,13 @@ void dungeon_client::scene::gameplay_scene::request_new_state()
     {
         switch (answer.state)
         {
+        case dungeon_common::enums::gameplay_state_type::story:
+            {
+                story_scene story_scene(client_ptr_);
+                story_scene.subscribe_on_end([this] { on_state_ended(); });
+                story_scene.show();
+                return;
+            }
         case dungeon_common::enums::gameplay_state_type::combat:
             {
                 combat_scene combat_scene(client_ptr_);
@@ -32,11 +40,10 @@ void dungeon_client::scene::gameplay_scene::request_new_state()
                 combat_scene.show();
                 return;
             }
-        case dungeon_common::enums::gameplay_state_type::story:
+        case dungeon_common::enums::gameplay_state_type::bonfire:
             {
-                story_scene story_scene(client_ptr_);
-                story_scene.subscribe_on_end([this] { on_state_ended(); });
-                story_scene.show();
+                bonfire_scene bonfire_scene(client_ptr_);
+                bonfire_scene.show();
                 return;
             }
         case dungeon_common::enums::gameplay_state_type::game_over_win:

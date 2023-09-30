@@ -1,6 +1,7 @@
 ﻿#include "game_room.h"
 #include "NetServer/Domain/Message/match_start_response.h"
 #include "states/base_game_room_state.h"
+#include "states/game_room_bonfire_state.h"
 #include "states/game_room_combat_state.h"
 #include "states/game_room_game_over_lose_state.h"
 #include "states/game_room_game_over_win_state.h"
@@ -37,6 +38,12 @@ void dungeon_server::game_room::game_room::go_to_next_state()
     }
     else if (auto combat_state = std::dynamic_pointer_cast<game_room_combat_state>(state_ptr))
     {
+        const auto new_state = std::make_shared<game_room_bonfire_state>(players_, send_inner_message,
+                                                                         [this] { on_state_ended(); });
+        set_state(new_state);
+    }
+    else if (auto bonfire_state = std::dynamic_pointer_cast<game_room_bonfire_state>(state_ptr))
+    {
         level_++;
         const auto new_state = std::make_shared<game_room_story_state>(level_, players_, send_inner_message,
                                                                        [this] { on_state_ended(); });
@@ -68,7 +75,7 @@ void dungeon_server::game_room::game_room::handle_player_input(const std::shared
 void dungeon_server::game_room::game_room::request_story(const std::shared_ptr<domain::player>& player) const
 {
     const auto story_state = std::dynamic_pointer_cast<game_room_story_state>(state_ptr);
-    
+
     if (!story_state)
         throw std::exception("Invalid message for current state");
 
@@ -78,18 +85,27 @@ void dungeon_server::game_room::game_room::request_story(const std::shared_ptr<d
 void dungeon_server::game_room::game_room::set_story_read(const std::shared_ptr<domain::player>& player) const
 {
     const auto story_state = std::dynamic_pointer_cast<game_room_story_state>(state_ptr);
-    
+
     if (!story_state)
         throw std::exception("Invalid message for current state");
 
     story_state->confirm_story_read(player);
 }
 
+void dungeon_server::game_room::game_room::request_bonfire_story_teller(const std::shared_ptr<domain::player>& player) const
+{
+    const auto bonfire_state = std::dynamic_pointer_cast<game_room_bonfire_state>(state_ptr);
+
+    if (!bonfire_state)
+        throw std::exception("Invalid message for current state");
+
+    bonfire_state->request_story_teller(player);
+}
+
 void dungeon_server::game_room::game_room::update() const
 {
     state_ptr->update();
 }
-
 
 void dungeon_server::game_room::game_room::on_state_ended()
 {
