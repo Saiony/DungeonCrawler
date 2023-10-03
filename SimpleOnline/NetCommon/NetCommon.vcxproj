@@ -21,12 +21,16 @@
   <ItemGroup>
     <ClInclude Include="Enum\action_target_types.h" />
     <ClInclude Include="Enum\creature_status_types.h" />
+    <ClInclude Include="Enum\creature_stat_types.h" />
     <ClInclude Include="Enum\gameplay_state_type.h" />
     <ClInclude Include="Enum\player_class_types.h" />
     <ClInclude Include="Enum\elemental_property_type.h" />
     <ClInclude Include="error_code_type.h" />
+    <ClInclude Include="Models\bonfire_story_model.h" />
+    <ClInclude Include="Models\bonfire_story_result_model.h" />
     <ClInclude Include="Models\bonfire_story_teller_model.h" />
     <ClInclude Include="Models\create_player_model.h" />
+    <ClInclude Include="Models\creature_stats_model.h" />
     <ClInclude Include="Models\gameplay_state_model.h" />
     <ClInclude Include="Models\player_action_model.h" />
     <ClInclude Include="Models\action_use_model.h" />
@@ -48,8 +52,11 @@
     <ClInclude Include="Utility\guid_generator.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Models\bonfire_story_model.cpp" />
+    <ClCompile Include="Models\bonfire_story_result_model.cpp" />
     <ClCompile Include="Models\bonfire_story_teller_model.cpp" />
     <ClCompile Include="Models\create_player_model.cpp" />
+    <ClCompile Include="Models\creature_stats_model.cpp" />
     <ClCompile Include="Models\gameplay_state_model.cpp" />
     <ClCompile Include="Models\player_action_model.cpp" />
     <ClCompile Include="Models\action_use_model.cpp" />

@@ -55,6 +55,7 @@ void dungeon_server::game_room::game_room::set_state(const std::shared_ptr<base_
 {
     state_ptr->on_end();
     state_ptr = state;
+    state_ptr->on_start();
 }
 
 void dungeon_server::game_room::game_room::player_match_start_request(std::shared_ptr<domain::player>& player) const
@@ -100,6 +101,18 @@ void dungeon_server::game_room::game_room::request_bonfire_story_teller(const st
         throw std::exception("Invalid message for current state");
 
     bonfire_state->request_story_teller(player);
+}
+
+void dungeon_server::game_room::game_room::send_bonfire_story(const std::shared_ptr<domain::player>& player,
+                                                              const dungeon_common::enums::creature_stat_types stat_id,
+                                                              const std::string& story)
+{
+    const auto bonfire_state = std::dynamic_pointer_cast<game_room_bonfire_state>(state_ptr);
+
+    if (!bonfire_state)
+        throw std::exception("Invalid message for current state");
+
+    bonfire_state->receive_story(player, stat_id, story);
 }
 
 void dungeon_server::game_room::game_room::update() const

@@ -41,6 +41,7 @@
     <ClCompile Include="Domain\Actions\sword_slash_action.cpp" />
     <ClCompile Include="Domain\Actions\venomous_bite_action.cpp" />
     <ClCompile Include="Domain\action_log.cpp" />
+    <ClCompile Include="Domain\creature_stat.cpp" />
     <ClCompile Include="Domain\Encounter.cpp" />
     <ClCompile Include="Domain\encounter_manager.cpp">
       <AssemblerOutput>NoListing</AssemblerOutput>
@@ -171,6 +172,7 @@
     <ClInclude Include="Domain\Actions\venomous_bite_action.h" />
     <ClInclude Include="Domain\action_log.h" />
     <ClInclude Include="Domain\base_creature.h" />
+    <ClInclude Include="Domain\creature_stat.h" />
     <ClInclude Include="Domain\Encounter.h" />
     <ClInclude Include="Domain\encounter_manager.h" />
     <ClInclude Include="Domain\Enemies\base_enemy.h" />
@@ -183,6 +185,7 @@
     <ClInclude Include="Domain\Factory\player_factory.h" />
     <ClInclude Include="Domain\Lobby\lobby_domain.h" />
     <ClInclude Include="Domain\Lobby\player_lobby_domain.h" />
+    <ClInclude Include="Domain\Message\bonfire_story_result_response.h" />
     <ClInclude Include="Domain\Message\bonfire_story_teller_response.h" />
     <ClInclude Include="Domain\Message\story_read_response.h" />
     <ClInclude Include="Domain\Message\emitter_message.h" />

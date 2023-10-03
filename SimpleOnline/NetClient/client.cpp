@@ -1,11 +1,14 @@
 ﻿#include "client.h"
 
+#include "bonfire_story_model.h"
+#include "bonfire_story_result_model.h"
 #include "bonfire_story_teller_model.h"
 #include "gameplay_state_model.h"
 #include "story_model.h"
 #include "story_read_model.h"
 #include "Domain/action.h"
 #include "Domain/action_log.h"
+#include "Domain/bonfire_story_telling.h"
 #include "Domain/gameplay_state.h"
 #include "Domain/player_class.h"
 #include "Domain/player_complete.h"
@@ -146,10 +149,20 @@ void client::send_story_read(const std::function<void(domain::story_read)>& call
     wait_message();
 }
 
-void client::request_bonfire_story_teller(const std::function<void(domain::player)>& callback)
+void client::request_bonfire_story_teller(const std::function<void(domain::bonfire_story_telling)>& callback)
 {
     get_bonfire_story_teller_callback = callback;
     const message<custom_msg_types> msg(custom_msg_types::bonfire_story_teller_request);
+    send(msg);
+    wait_message();
+}
+
+void client::send_bonfire_story(const domain::creature_stats& stat, const std::string& story)
+{
+    const model::bonfire_story_model model(stat.id, story);
+    message<custom_msg_types> msg(custom_msg_types::bonfire_story);
+    msg << model;
+    
     send(msg);
     wait_message();
 }
@@ -332,11 +345,11 @@ bool client::handle_messages()
             }
 
             std::list<std::string> action_log;
-            for(auto& log_model : encounter_model.log)
+            for (auto& log_model : encounter_model.log)
             {
-                if(log_model[0] == '\0')
+                if (log_model[0] == '\0')
                     continue;
-                
+
                 std::string log(log_model);
                 action_log.push_back(log);
             }
@@ -357,11 +370,11 @@ bool client::handle_messages()
             msg >> story_model;
 
             std::list<std::string> stories;
-            for(auto& story_log_model : story_model.story)
+            for (auto& story_log_model : story_model.story)
             {
-                if(story_log_model[0] == '\0')
+                if (story_log_model[0] == '\0')
                     continue;
-                
+
                 std::string log(story_log_model);
                 stories.push_back(log);
             }
@@ -374,7 +387,7 @@ bool client::handle_messages()
                 get_story_callback = nullptr;
                 return true;
             }
-            
+
             return false;
         }
     case custom_msg_types::story_read_response:
@@ -383,29 +396,47 @@ bool client::handle_messages()
             msg >> story_read_model;
 
             domain::story_read story_read(story_read_model.everyone_read);
-            
+
             if (send_story_read_callback != nullptr)
             {
                 send_story_read_callback(story_read);
                 return true;
             }
-            
+
             return false;
         }
-        case custom_msg_types::bonfire_story_teller_response:
+    case custom_msg_types::bonfire_story_teller_response:
         {
             model::bonfire_story_teller_model model;
             msg >> model;
 
             auto story_teller_model = model.story_teller;
             domain::player_class player_class(story_teller_model.player_class.id, story_teller_model.player_class.name);
-            domain::player story_teller(story_teller_model.id, story_teller_model.name, player_class, story_teller_model.health, story_teller_model.max_health);
-            
+            domain::player story_teller(story_teller_model.id, story_teller_model.name, player_class,
+                                        story_teller_model.health, story_teller_model.max_health);
+
+            std::vector<domain::creature_stats> player_stats;
+            std::ranges::for_each(model.player_stats, [&player_stats](auto stats)
+            {
+                player_stats.emplace_back(stats.id, stats.name);
+            });
+
+            domain::bonfire_story_telling story_telling(story_teller, model.max_characters, player_stats);
+
             if (get_bonfire_story_teller_callback != nullptr)
             {
-                get_bonfire_story_teller_callback(story_teller);
+                get_bonfire_story_teller_callback(story_telling);
                 return true;
             }
+
+            return false;
+        }
+    case custom_msg_types::bonfire_story_result_response:
+        {
+            model::bonfire_story_result_model model;
+            msg >> model;
+
+            //TODO: receber msg
             
             return false;
         }

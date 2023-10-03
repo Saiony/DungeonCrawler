@@ -2,6 +2,8 @@
 #include<string>
 #include "server.h"
 
+#include "bonfire_story_model.h"
+#include "bonfire_story_result_model.h"
 #include "bonfire_story_teller_model.h"
 #include "gameplay_state_model.h"
 #include "story_model.h"
@@ -11,6 +13,7 @@
 #include "Domain/Enemies/Wolf.h"
 #include "Domain/Factory/action_factory.h"
 #include "Domain/Factory/player_factory.h"
+#include "Domain/Message/bonfire_story_result_response.h"
 #include "Domain/Message/bonfire_story_teller_response.h"
 #include "Domain/Message/emitter_message.h"
 #include "Domain/Message/encounter_update_response.h"
@@ -179,11 +182,34 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
             dungeon_common::model::player_model player_model(story_teller->public_id, story_teller->name, player_class_model,
                                                              story_teller->health, story_teller->max_health);
 
-            dungeon_common::model::bonfire_story_teller_model model(player_model);
+            std::vector<creature_stats_model> player_stats_model;
+            std::ranges::for_each(response->stats, [&player_stats_model](auto stat)
+            {
+                player_stats_model.emplace_back(stat.id, stat.name);
+            });
+            
+            dungeon_common::model::bonfire_story_teller_model model(player_model, response->max_characters, player_stats_model);
             dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::bonfire_story_teller_response);
             answer << model;
 
             message_client(response->client->private_id, answer);
+            break;
+        }
+    case dungeon_common::custom_msg_types::bonfire_story_result_response:
+        {
+            const auto response = std::dynamic_pointer_cast<domain::message::bonfire_story_result_response>(emitter_msg);
+
+            auto story_teller = response->story_teller;
+            dungeon_common::model::player_class_model player_class_model(story_teller->player_class.id, story_teller->player_class.name);
+            dungeon_common::model::player_model player_model(story_teller->public_id, story_teller->name, player_class_model,
+                                                             story_teller->health, story_teller->max_health);
+            dungeon_common::model::bonfire_story_model story_model(response->upgraded_stat, response->story);            
+            dungeon_common::model::bonfire_story_result_model model(story_model, player_model, response->story);
+
+            dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::bonfire_story_result_response);
+            answer << model;
+            broadcast_message(answer);
+            
             break;
         }
     default: break;
@@ -363,6 +389,19 @@ void server::on_message(const std::shared_ptr<dungeon_common::connection<dungeon
 
             game_room_ptr_->request_bonfire_story_teller(player);
 
+            break;
+        }
+    case dungeon_common::custom_msg_types::bonfire_story:
+        {
+            auto player = *std::ranges::find_if(players_, [&client](auto p)
+            {
+                return p->private_id == client->get_id();
+            });
+
+            dungeon_common::model::bonfire_story_model model;
+            msg >> model;
+
+            game_room_ptr_->send_bonfire_story(player, model.stat_id, model.story);            
             break;
         }
     default:

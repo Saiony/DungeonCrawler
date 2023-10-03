@@ -18,14 +18,14 @@ namespace dungeon_server::domain
     class base_creature
     {
     private:
-        uint16_t base_ad_;
         int16_t ad_modifier_;
-
-        uint16_t base_ap_;
         int16_t ap_modifier_;
+
         dungeon_common::enums::elemental_property_type original_elemental_property_;
         std::function<void(const std::shared_ptr<base_creature>&)> on_died_callback_;
     protected:
+        uint16_t base_ad_;
+        uint16_t base_ap_;
         std::shared_ptr<creature_status_manager> status_manager_;
     public:
         std::string public_id;

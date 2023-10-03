@@ -35,6 +35,57 @@ std::vector<dungeon_common::model::action_types> get_player_actions(const dungeo
     return actions;
 }
 
+uint8_t get_hp_per_lvl(const dungeon_server::domain::player_class& player_class)
+{
+    switch (player_class.id)
+    {
+    case dungeon_common::enums::player_class_type::warrior:
+        return 4;
+    case dungeon_common::enums::player_class_type::cleric:
+        return 2;
+    case dungeon_common::enums::player_class_type::archer:
+        return 2;
+    case dungeon_common::enums::player_class_type::mage:
+        return 2;
+    default:
+        return -1;
+    }
+}
+
+uint8_t get_ad_per_lvl(const dungeon_server::domain::player_class& player_class)
+{
+    switch (player_class.id)
+    {
+    case dungeon_common::enums::player_class_type::warrior:
+        return 2;
+    case dungeon_common::enums::player_class_type::cleric:
+        return 1;
+    case dungeon_common::enums::player_class_type::archer:
+        return 3;
+    case dungeon_common::enums::player_class_type::mage:
+        return 1;
+    default:
+        return -1;
+    }
+}
+
+uint8_t get_ap_per_lvl(const dungeon_server::domain::player_class& player_class)
+{
+    switch (player_class.id)
+    {
+    case dungeon_common::enums::player_class_type::warrior:
+        return 1;
+    case dungeon_common::enums::player_class_type::cleric:
+        return 3;
+    case dungeon_common::enums::player_class_type::archer:
+        return 2;
+    case dungeon_common::enums::player_class_type::mage:
+        return 3;
+    default:
+        return -1;
+    }
+}
+
 uint16_t get_player_hp(const dungeon_server::domain::player_class& player_class)
 {
     switch (player_class.id)
@@ -96,7 +147,14 @@ std::shared_ptr<dungeon_server::domain::player> dungeon_server::domain::factory:
     const auto ad = get_player_attack_damage(player_class);
     const auto ap = get_player_ability_power(player_class);
 
-    player player(player_id, player_name, player_class, hp, ad, ap, get_player_actions(player_class),
-                  dungeon_common::enums::elemental_property_type::normal);
+    const auto ad_per_lvl = get_ad_per_lvl(player_class);
+    const auto ap_per_lvl = get_ap_per_lvl(player_class);
+    const auto hp_per_lvl = get_hp_per_lvl(player_class);
+
+    player player(player_id, player_name, player_class,
+                  hp, ad, ap,
+                  ad_per_lvl, ap_per_lvl, hp_per_lvl,
+                  get_player_actions(player_class), dungeon_common::enums::elemental_property_type::normal);
+
     return std::make_shared<class player>(player);
 }

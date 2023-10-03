@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "emitter_message.h"
+#include "NetServer/Domain/creature_stat.h"
 
 namespace dungeon_server::domain::message
 {
@@ -9,9 +10,13 @@ namespace dungeon_server::domain::message
     public:
         std::shared_ptr<player> client;
         std::shared_ptr<player> story_teller;
+        uint16_t max_characters;
+        std::vector<creature_stat> stats;
 
-        explicit bonfire_story_teller_response(std::shared_ptr<player> client, std::shared_ptr<player> story_teller)
-            : client(std::move(client)), story_teller(std::move(story_teller))
+        explicit bonfire_story_teller_response(std::shared_ptr<player> client, std::shared_ptr<player> story_teller, const uint16_t max_characters,
+                                               std::vector<creature_stat> stats)
+            : client(std::move(client)), story_teller(std::move(story_teller)),
+              max_characters(max_characters), stats(std::move(stats))
         {
         }
 

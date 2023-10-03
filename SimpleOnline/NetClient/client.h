@@ -5,6 +5,7 @@
 #include <functional>
 #include <functional>
 
+#include "Domain/bonfire_story_telling.h"
 #include "Domain/encounter.h"
 #include "Domain/gameplay_state.h"
 #include "Domain/lobby.h"
@@ -45,7 +46,8 @@ namespace dungeon_client
         domain::player_complete get_player() const;
         void request_story(const std::function<void(domain::story)>& callback);
         void send_story_read(const std::function<void(domain::story_read)>& callback);
-        void request_bonfire_story_teller(const std::function<void(domain::player)>& callback);
+        void request_bonfire_story_teller(const std::function<void(domain::bonfire_story_telling)>& callback);
+        void send_bonfire_story(const domain::creature_stats& stat, const std::string& story);
 
         std::function<void(std::string input)> player_input_callback;
         std::function<void(dungeon_common::model::simple_answer_model)> connection_callback;
@@ -57,6 +59,7 @@ namespace dungeon_client
         std::function<void(domain::encounter)> get_encounter_callback;
         std::function<void(domain::story)> get_story_callback;
         std::function<void(domain::story_read)> send_story_read_callback;        
-        std::function<void(domain::player)> get_bonfire_story_teller_callback;
+        std::function<void(domain::bonfire_story_telling)> get_bonfire_story_teller_callback;
+        std::function<void(domain::bonfire_story_telling)> bonfire_story_result_callback;
     };
 }

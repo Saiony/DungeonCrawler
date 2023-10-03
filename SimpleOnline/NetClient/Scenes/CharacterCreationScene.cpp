@@ -3,6 +3,7 @@
 
 #include "LobbyScene.h"
 #include "../../NetServer/Domain/Player.h"
+#include "../Utility/custom_print.h"
 
 using namespace dungeon_client::scene;
 using namespace dungeon_common;
@@ -24,7 +25,7 @@ void character_creation_scene::create_character()
 }
 
 void character_creation_scene::create_name()
-{
+{ 
     std::cout << "Adventurer, what's your name?" << std::endl;
 
     client_ptr_->read_input([this](std::string input)

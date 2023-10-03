@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <memory>
 
+#include "bonfire_story_model.h"
 #include "NetServer/Domain/encounter_manager.h"
 #include "NetServer/Domain/Actions/base_action.h"
 #include "NetServer/Domain/Message/emitter_message.h"
@@ -31,6 +32,7 @@ namespace dungeon_server::game_room
         void handle_player_input(const std::shared_ptr<domain::action::base_action>& action_ptr) const;
         void set_story_read(const std::shared_ptr<domain::player>& player) const;
         void request_bonfire_story_teller(const std::shared_ptr<domain::player>& player) const;
+        void send_bonfire_story(const std::shared_ptr<domain::player>& player, dungeon_common::enums::creature_stat_types stat_id, const std::string& story);
         void update() const;
     };
 }

@@ -12,6 +12,6 @@ namespace dungeon_common::model
         enums::player_class_type player_class_type{};
 
         create_player_model() = default;
-        create_player_model(const std::string& name_string, const enums::player_class_type player_class_type);
+        create_player_model(const std::string& name_string, enums::player_class_type player_class_type);
     };
 }
