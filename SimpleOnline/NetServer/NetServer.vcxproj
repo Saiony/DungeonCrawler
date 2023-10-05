@@ -185,7 +185,7 @@
     <ClInclude Include="Domain\Factory\player_factory.h" />
     <ClInclude Include="Domain\Lobby\lobby_domain.h" />
     <ClInclude Include="Domain\Lobby\player_lobby_domain.h" />
-    <ClInclude Include="Domain\Message\bonfire_story_result_response.h" />
+    <ClInclude Include="Domain\Message\bonfire_result_response.h" />
     <ClInclude Include="Domain\Message\bonfire_story_teller_response.h" />
     <ClInclude Include="Domain\Message\story_read_response.h" />
     <ClInclude Include="Domain\Message\emitter_message.h" />

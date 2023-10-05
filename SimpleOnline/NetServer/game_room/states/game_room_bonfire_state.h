@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "base_game_room_state.h"
-#include "NetServer/Domain/Message/bonfire_story_result_response.h"
+#include "NetServer/Domain/Message/bonfire_result_response.h"
 #include "NetServer/Domain/Message/bonfire_story_teller_response.h"
 #include "NetServer/Utility/randomizer.h"
 
@@ -44,7 +44,10 @@ namespace dungeon_server::game_room
         {
         }
 
-        std::vector<creature_stat> get_upgradable_stats() const
+        //TODO: criar var e inicializar no start.
+        //Ao requisitar, somente retornamos
+        //Dessa forma, podemos criar um metodo get_upgradable_stats(creature_stat_types)
+        std::vector<creature_stat> get_upgradable_stats() const 
         {
             std::vector<creature_stat> stats
             {
@@ -55,7 +58,7 @@ namespace dungeon_server::game_room
 
             return stats;
         }
-        
+
 
         void increment_players_stat(dungeon_common::enums::creature_stat_types stat_id, domain::action_log& log)
         {
@@ -82,8 +85,15 @@ namespace dungeon_server::game_room
             domain::action_log log;
             increment_players_stat(stat_id, log);
 
-            const auto msg = std::make_shared<domain::message::bonfire_story_result_response>(client, stat_id, log, story);
+            auto xa = get_upgradable_stats();
+            auto creature_stat = *std::ranges::find_if(xa, [&stat_id](auto stat)
+            {
+                return stat.id == stat_id;
+            });
+
+            const auto msg = std::make_shared<domain::message::bonfire_result_response>(client, creature_stat, log, story);
             send_inner_server_msg_(msg);
+            on_state_ended_callback_();
         }
     };
 }

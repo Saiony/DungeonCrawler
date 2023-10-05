@@ -43,6 +43,7 @@ void dungeon_client::scene::gameplay_scene::request_new_state()
         case dungeon_common::enums::gameplay_state_type::bonfire:
             {
                 bonfire_scene bonfire_scene(client_ptr_);
+                bonfire_scene.subscribe_on_end([this] { on_state_ended(); });
                 bonfire_scene.show();
                 return;
             }

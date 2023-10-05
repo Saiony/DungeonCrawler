@@ -27,7 +27,7 @@
     <ClInclude Include="Enum\elemental_property_type.h" />
     <ClInclude Include="error_code_type.h" />
     <ClInclude Include="Models\bonfire_story_model.h" />
-    <ClInclude Include="Models\bonfire_story_result_model.h" />
+    <ClInclude Include="Models\bonfire_result_model.h" />
     <ClInclude Include="Models\bonfire_story_teller_model.h" />
     <ClInclude Include="Models\create_player_model.h" />
     <ClInclude Include="Models\creature_stats_model.h" />
@@ -53,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Models\bonfire_story_model.cpp" />
-    <ClCompile Include="Models\bonfire_story_result_model.cpp" />
+    <ClCompile Include="Models\bonfire_result_model.cpp" />
     <ClCompile Include="Models\bonfire_story_teller_model.cpp" />
     <ClCompile Include="Models\create_player_model.cpp" />
     <ClCompile Include="Models\creature_stats_model.cpp" />

@@ -39,7 +39,12 @@ void dungeon_client::scene::bonfire_scene::show()
     {
         if (story_telling.story_teller.public_id != client_ptr_->get_player().public_id)
         {
-            std::cout << "Story teller: " + story_telling.story_teller.name;
+            client_ptr_->subscribe_bonfire_result([this](auto callback)
+            {
+                print_bonfire_result(callback);
+            });
+
+            std::cout << "Story teller: " + story_telling.story_teller.name << std::endl;
             handle_wrong_player_input();
             return;
         }
@@ -123,7 +128,6 @@ void dungeon_client::scene::bonfire_scene::print_story_request(const domain::bon
         }
     }
 
-    
     handle_story_input(story_telling);
 }
 
@@ -137,6 +141,37 @@ void dungeon_client::scene::bonfire_scene::handle_story_input(const domain::bonf
             handle_story_input(story_telling);
         }
 
-        client_ptr_->send_bonfire_story(chosen_stat_, input);        
+        client_ptr_->send_bonfire_story(chosen_stat_, input, [this](auto callback)
+        {
+            print_bonfire_result(callback);
+        });
     });
+}
+
+void dungeon_client::scene::bonfire_scene::print_bonfire_result(const domain::bonfire_result& bonfire_result) const
+{
+    print_header();
+    std::cout << "\n" + bonfire_result.story_teller.name + " clears the throat and says...\n";
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    std::cout << bonfire_result.story << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+
+    print_header();
+    std::cout << "\nEveryone feels more motivated after this:" << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    std::cout << "\t-HP recovered" << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    std::cout << "\t-" + bonfire_result.upgraded_stat.name + " increased" << std::endl << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+
+    std::ranges::for_each(bonfire_result.level_up_log, [](auto log)
+    {
+        std::cout << log << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+    });
+
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    std::cout << "\nThe bonfire is extinguished and you continue your journey..." << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+    on_scene_ended_callback_();
 }

@@ -1,13 +1,14 @@
 ﻿#include "client.h"
 
 #include "bonfire_story_model.h"
-#include "bonfire_story_result_model.h"
+#include "bonfire_result_model.h"
 #include "bonfire_story_teller_model.h"
 #include "gameplay_state_model.h"
 #include "story_model.h"
 #include "story_read_model.h"
 #include "Domain/action.h"
 #include "Domain/action_log.h"
+#include "Domain/bonfire_result.h"
 #include "Domain/bonfire_story_telling.h"
 #include "Domain/gameplay_state.h"
 #include "Domain/player_class.h"
@@ -157,14 +158,22 @@ void client::request_bonfire_story_teller(const std::function<void(domain::bonfi
     wait_message();
 }
 
-void client::send_bonfire_story(const domain::creature_stats& stat, const std::string& story)
+void client::send_bonfire_story(const domain::creature_stats& stat, const std::string& story,
+                                const std::function<void(domain::bonfire_result)>& callback)
 {
+    subscribe_bonfire_result(callback);
+    
     const model::bonfire_story_model model(stat.id, story);
     message<custom_msg_types> msg(custom_msg_types::bonfire_story);
     msg << model;
-    
+
     send(msg);
     wait_message();
+}
+
+void client::subscribe_bonfire_result(const std::function<void(domain::bonfire_result)>& callback)
+{
+    bonfire_story_result_callback = callback;
 }
 
 void client::read_input(const std::function<void(std::string input)>& callback)
@@ -431,13 +440,36 @@ bool client::handle_messages()
 
             return false;
         }
-    case custom_msg_types::bonfire_story_result_response:
+    case custom_msg_types::bonfire_result_response:
         {
-            model::bonfire_story_result_model model;
+            model::bonfire_result_model model;
             msg >> model;
 
-            //TODO: receber msg
-            
+            domain::creature_stats upgraded_stat(model.upgraded_stat.id, model.upgraded_stat.name);
+            auto story_teller_model = model.story_teller;
+            domain::player_class player_class(story_teller_model.player_class.id, story_teller_model.player_class.name);
+            domain::player story_teller(story_teller_model.id, story_teller_model.name, player_class,
+                                        story_teller_model.health, story_teller_model.max_health);
+
+            std::list<std::string> story_log;
+            for (auto& log_model : model.level_up_log)
+            {
+                if (log_model[0] == '\0')
+                    continue;
+
+                std::string log(log_model);
+                story_log.push_back(log);
+            }
+
+
+            domain::bonfire_result bonfire_result(story_teller, upgraded_stat, story_log, model.story);
+
+            if (bonfire_story_result_callback != nullptr)
+            {
+                bonfire_story_result_callback(bonfire_result);
+                return true;
+            }
+
             return false;
         }
     default:

@@ -148,6 +148,7 @@
     <ClCompile Include="client.cpp" />
     <ClCompile Include="Domain\action.cpp" />
     <ClCompile Include="Domain\action_log.cpp" />
+    <ClCompile Include="Domain\bonfire_result.cpp" />
     <ClCompile Include="Domain\bonfire_story_telling.cpp" />
     <ClCompile Include="Domain\creature_stats.cpp" />
     <ClCompile Include="Domain\encounter.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="Domain\action.h" />
     <ClInclude Include="Domain\action_log.h" />
     <ClInclude Include="Domain\base_creature.h" />
+    <ClInclude Include="Domain\bonfire_result.h" />
     <ClInclude Include="Domain\bonfire_story_telling.h" />
     <ClInclude Include="Domain\creature_stats.h" />
     <ClInclude Include="Domain\encounter.h" />

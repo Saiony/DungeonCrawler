@@ -16,6 +16,7 @@ namespace dungeon_client::scene
         void print_story_request(const domain::bonfire_story_telling& story_telling);
         void handle_story_input(const domain::bonfire_story_telling& story_telling);
     public:
+        void print_bonfire_result(const domain::bonfire_result& bonfire_result) const;
         explicit bonfire_scene(std::shared_ptr<client> client_ptr);
         void show() override;
     };

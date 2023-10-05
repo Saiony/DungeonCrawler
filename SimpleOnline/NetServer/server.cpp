@@ -3,7 +3,7 @@
 #include "server.h"
 
 #include "bonfire_story_model.h"
-#include "bonfire_story_result_model.h"
+#include "bonfire_result_model.h"
 #include "bonfire_story_teller_model.h"
 #include "gameplay_state_model.h"
 #include "story_model.h"
@@ -13,7 +13,7 @@
 #include "Domain/Enemies/Wolf.h"
 #include "Domain/Factory/action_factory.h"
 #include "Domain/Factory/player_factory.h"
-#include "Domain/Message/bonfire_story_result_response.h"
+#include "Domain/Message/bonfire_result_response.h"
 #include "Domain/Message/bonfire_story_teller_response.h"
 #include "Domain/Message/emitter_message.h"
 #include "Domain/Message/encounter_update_response.h"
@@ -195,18 +195,26 @@ void server::on_game_room_message(const std::shared_ptr<domain::message::emitter
             message_client(response->client->private_id, answer);
             break;
         }
-    case dungeon_common::custom_msg_types::bonfire_story_result_response:
+    case dungeon_common::custom_msg_types::bonfire_result_response:
         {
-            const auto response = std::dynamic_pointer_cast<domain::message::bonfire_story_result_response>(emitter_msg);
+            const auto response = std::dynamic_pointer_cast<domain::message::bonfire_result_response>(emitter_msg);
 
             auto story_teller = response->story_teller;
             dungeon_common::model::player_class_model player_class_model(story_teller->player_class.id, story_teller->player_class.name);
             dungeon_common::model::player_model player_model(story_teller->public_id, story_teller->name, player_class_model,
                                                              story_teller->health, story_teller->max_health);
-            dungeon_common::model::bonfire_story_model story_model(response->upgraded_stat, response->story);            
-            dungeon_common::model::bonfire_story_result_model model(story_model, player_model, response->story);
 
-            dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::bonfire_story_result_response);
+            creature_stats_model creature_stat_model(response->upgraded_stat.id, response->upgraded_stat.name);
+            dungeon_common::model::bonfire_result_model model(player_model, creature_stat_model, response->story);
+
+            int i = 0;
+            for (auto& log : response->level_up_log.get_log())
+            {
+                std::ranges::copy(log, model.level_up_log[i]);
+                i++;
+            }
+
+            dungeon_common::message<dungeon_common::custom_msg_types> answer(dungeon_common::custom_msg_types::bonfire_result_response);
             answer << model;
             broadcast_message(answer);
             

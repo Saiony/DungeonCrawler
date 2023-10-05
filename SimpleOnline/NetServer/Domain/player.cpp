@@ -21,19 +21,19 @@ void dungeon_server::domain::player::level_up(const dungeon_common::enums::creat
     {
     case dungeon_common::enums::creature_stat_types::attack_damage:
         {
-            log.add_log(name + " - [AD] " + std::to_string(base_ad_) + "->" + std::to_string(base_ad_ + ad_per_level));
+            log.add_log(name + " [AD] " + std::to_string(base_ad_) + " -> " + std::to_string(base_ad_ + ad_per_level));
             base_ad_ += ad_per_level;
             break;
         }
     case dungeon_common::enums::creature_stat_types::ability_power:
         {
-            log.add_log(name + " - [AP] " + std::to_string(base_ap_) + "->" + std::to_string(base_ap_ + ap_per_level));
+            log.add_log(name + " [AP] " + std::to_string(base_ap_) + " -> " + std::to_string(base_ap_ + ap_per_level));
             base_ap_ += ap_per_level;
             break;
         }
     case dungeon_common::enums::creature_stat_types::max_health:
         {
-            log.add_log(name + " - [HP] " + std::to_string(health) + "->" + std::to_string(health + hp_per_level));
+            log.add_log(name + " [HP] " + std::to_string(health) + " -> " + std::to_string(health + hp_per_level));
             health += hp_per_level;
             break;
         }
