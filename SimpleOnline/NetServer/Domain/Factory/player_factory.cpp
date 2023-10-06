@@ -131,7 +131,7 @@ uint16_t get_player_ability_power(const dungeon_server::domain::player_class& pl
     case dungeon_common::enums::player_class_type::archer:
         return 2;
     case dungeon_common::enums::player_class_type::mage:
-        return 50;
+        return 5;
     default:
         return -1;
     }

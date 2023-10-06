@@ -39,24 +39,25 @@ namespace dungeon_server::game_room
             case 1:
                 {
                     story.add_log("CHAPTER 1 - The Beginning");
-                    // story.add_log("It's a peaceful night, no stars in the sky and no wind to shake the trees of the forest");
-                    // story.add_log("In front of you, a shadow grows taller...");
-                    // story.add_log("You know what it is, this was your goal for months");
-                    // story.add_log("The Dragon Mountain");
-                    // story.add_log("Lair of the Necromancer");
-                    // story.add_log("...");
-                    // story.add_log("But you are tired from your long journey, and the mountain can wait a little longer");
-                    // story.add_log("A tent is raised and a fire is lit");
-                    // story.add_log("You sleep quiet with your belly full of grilled fish");
-                    // story.add_log("...");
-                    // story.add_log("You wake up in the middle of the night");
-                    // story.add_log("Something's wrong...");
-                    // story.add_log("You see a shadow with narrow yellow eyes lurking behind the trees");
-                    // story.add_log("A hungry wolf attacks you!!");
+                    story.add_log("It's a peaceful night, no stars in the sky and no wind to shake the trees of the forest");
+                    story.add_log("In front of you, a shadow grows taller...");
+                    story.add_log("You know what it is, this was your goal for months");
+                    story.add_log("The Dragon Mountain");
+                    story.add_log("Lair of the Necromancer");
+                    story.add_log("...");
+                    story.add_log("But you are tired from your long journey, and the mountain can wait a little longer");
+                    story.add_log("A tent is raised and a fire is lit");
+                    story.add_log("You sleep quiet with your belly full of grilled fish");
+                    story.add_log("...");
+                    story.add_log("You wake up in the middle of the night");
+                    story.add_log("Something's wrong...");
+                    story.add_log("You see a shadow with narrow yellow eyes lurking behind the trees");
+                    story.add_log("A hungry wolf attacks you!!");
                     break;
                 }
             case 2:
                 {
+                    story.add_log("CHAPTER 2 - Into the dungeon");
                     story.add_log("HELLO WORLD 2");
                     break;
                 }

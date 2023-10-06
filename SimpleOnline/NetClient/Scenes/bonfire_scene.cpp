@@ -117,9 +117,9 @@ void dungeon_client::scene::bonfire_scene::print_story_request(const domain::bon
         }
     case dungeon_common::enums::creature_stat_types::max_health:
         {
-            std::cout << "- max health 1" << std::endl;
-            std::cout << "- max health 2" << std::endl;
-            std::cout << "- max health 3" << std::endl;
+            std::cout << "- A time you almost died" << std::endl;
+            std::cout << "- When you found the cure of a disease" << std::endl;
+            std::cout << "- When you needed to be resilient" << std::endl;
             break;
         }
     default:
